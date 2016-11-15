@@ -46,3 +46,4 @@ let clause_adjacence : Logic.literal list list = [];;
 
 let produce_contraints seeds adj : Logic.literal list list =
   (clause_existence seeds @ clause_unicity seeds @ clause_adjacence);;
+  
