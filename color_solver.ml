@@ -19,7 +19,7 @@ let c0 = Graphics.green;;
 let c1 = Graphics.blue;;
 let c2 = Graphics.red;;
 let c3 = Graphics.black;;
-let colors_set : Graphics.color list = [c0; c1; c1; c3];;
+let colors_set : Graphics.color list = [c0; c1; c2; c3];;
 
 let list_to_indices (ls : 'a list) : int list =
   let rec aux ls' i =
@@ -31,16 +31,18 @@ let list_to_indices (ls : 'a list) : int list =
 let clause_existence seeds : Logic.literal list list = 
   let aux i = List.map (fun c -> (true, (i, c))) colors_set
   in (List.map (fun i -> aux i) (list_to_indices seeds));;
- 
-let clause_unicity : Logic.literal list list = [];;
 
-(*let clause_unicity : Logic.literal list list =
-  let aux i c =
-    let other_colors = filter (fun x -> x <> c) colors_set in
-   (Logic.Var (i, c) => (Logic.Or (Not (i, c),))) in
-  List.map aux colors_set;;*)
+let clausal_or_distribution c (cs : Logic.literal list) : Logic.literal list list =
+  List.map (fun x -> c::[x]) cs;;
+ 
+let clause_unicity seeds : Logic.literal list list =
+  let phi i c =
+    let other_colors = List.filter (fun x -> x <> c) colors_set in
+    clausal_or_distribution (false, (i, c)) (List.map (fun c -> (false, (i, c))) other_colors)
+  in let big_psy i = List.flatten (List.map (fun c -> phi i c) colors_set)
+  in List.flatten (List.map big_psy (list_to_indices seeds));;
 
 let clause_adjacence : Logic.literal list list = [];;
 
 let produce_contraints seeds adj : Logic.literal list list =
-  (clause_existence seeds @ clause_unicity @ clause_adjacence);;
+  (clause_existence seeds @ clause_unicity seeds @ clause_adjacence);;
