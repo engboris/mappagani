@@ -1,5 +1,4 @@
 #load "sat_solver.cmo";;
-#load "propositional_logic.cmo";;
 #load "graphics.cma";;
 
 module Variables = struct
@@ -8,7 +7,6 @@ module Variables = struct
 end;;
 
 module Sat = Sat_solver.Make(Variables);;
-module Logic = Propositional_logic.Make(Variables);;
 
 (* _________________________________________ 
 	    CONTRAINTS FORMULA GENERATION
