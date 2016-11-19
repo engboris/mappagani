@@ -40,3 +40,5 @@ let cases_f = [
   (f 0 0 0, 5);
   (f 10 10 10, 30);
 ];;
+
+test "fonction f" cases_f;;
