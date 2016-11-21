@@ -10,7 +10,7 @@ mappagani.exe: voronoi.cmo mappagani.cmo
 %.cmo: %.ml
 		$(CC) -c $<
 
-%.ml: %.mmi
+%.ml: %.mli
 		$(CC) -c $<
 
 clean:
