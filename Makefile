@@ -1,14 +1,13 @@
 CC=ocamlc
 LIBS=graphics.cma
 EXEC=mappagani.exe
-SRC=voronoi.cmo mappagani.cmo
 
 all: $(EXEC)
 
-mappagani.exe: %.cmo
-		$(CC) $(LIBS) -o $@ $(SRC)
+mappagani.exe: voronoi.cmo mappagani.cmo
+		$(CC) $(LIBS) -o $@ $^
 
-%.cmo: %ml %.mli
+%.cmo: %.ml %.mli
 		$(CC) -c $<
 
 clean:
