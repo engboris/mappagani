@@ -3,8 +3,8 @@ open Graphics;;
 module VoronoiModule =
 struct
 
-type seed = { c : color option; x : int; y : int };;
-type voronoi = { dim : int * int; seeds : seed array };;
+type seed = { c : color option; x : int; y : int }
+type voronoi = { dim : int * int; seeds : seed array }
 
 let distance_euclide (x1, y1) (x2,y2) =
   let x = (x1 - x2) * (x1 - x2) in

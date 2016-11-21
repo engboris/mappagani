@@ -1,17 +1,19 @@
-CC=ocamlc
+CAMLC=ocamlc
 LIBS=graphics.cma
 EXEC=mappagani.exe
 
 all: $(EXEC)
 
-mappagani.exe: voronoi.cmo mappagani.cmo
-		$(CC) $(LIBS) -o $@ $^
+$(EXEC): voronoi.cmo mappagani.cmo
+		$(CAMLC) $(LIBS) -o $@ $^
+
+%.cmo: %.mli %.ml
+	$(CAMLC) -c $^
 
 %.cmo: %.ml
-		$(CC) -c $<
+	$(CAMLC) -c $^
 
-%.ml: %.mli
-		$(CC) -c $<
+.PHONY: clean mrproper
 
 clean:
 		rm -rf *.cmi
