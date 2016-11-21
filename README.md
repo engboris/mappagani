@@ -28,3 +28,6 @@ Il est aussi possible de mettre fin au jeu (considéré comme un abandon) en aff
 ## Problèmes techniques
 
 Pour tout éventuel problèmes pour ou pendant l'exécution du programme, veuillez contacter les développeurs ou ouvrir une discussion dans la section 'Issues' du projet Github.
+
+## TODO
+voronoi.ml -> draw_voronoi -> améliorer le try/catch lors du parcours des pixels 
