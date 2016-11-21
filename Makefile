@@ -5,7 +5,7 @@ SRC=voronoi.cmo mappagani.cmo
 
 all: $(EXEC)
 
-mappagani.exe: 
+mappagani.exe: %.ml
 		$(CC) $(LIBS) -o $@ $(SRC)
 
 %.mli:
