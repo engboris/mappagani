@@ -7,7 +7,10 @@ all: $(EXEC)
 mappagani.exe: voronoi.cmo mappagani.cmo
 		$(CC) $(LIBS) -o $@ $^
 
-%.cmo: %.ml %.mli
+%.cmo: %.ml
+		$(CC) -c $<
+
+%.ml: %cmi
 		$(CC) -c $<
 
 clean:
