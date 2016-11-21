@@ -1,11 +1,10 @@
-#load "graphics.cma";;
-
 open Graphics;;
 
+module Voronoi =
+struct
+
 type seed = { c : color option; x : int; y : int }
-type voronoi = {dim : int * int; seeds : seed array}
-
-
+type voronoi = { dim : int * int; seeds : seed array }
 
 let distance_euclide (x1, y1) (x2,y2) =
   let x = (x1 - x2) * (x1 - x2) in
@@ -38,9 +37,6 @@ let indice_of_min array =
   aux 1 array.(0) 0;;
 
 
-
-
-
 let seed_of_pixel (i,j) f v =
   indice_of_min (Array.map (fun s -> f (i,j) (s.x, s.y)) v.seeds);;
 
@@ -64,7 +60,36 @@ let print_matrix m =
   done;;
 
 
+let frontiere m i j =
+  let v = m.(i).(j) in
+	  if(v != m.(i-1).(j) ||
+	     v != m.(i+1).(j) ||
+	     v != m.(i).(j-1) ||
+	     v != m.(i).(j+1)) then
+	    true
+	  else
+	    false;;
+
+let getCouleur (c:color option) = match c with
+  | None -> white
+  | Some a -> a;;
 
 
+let draw_voronoi m v =
+  auto_synchronize false;
+  set_color black;
+  let maxX = Array.length m in
+  let maxY = Array.length m.(0) in
+  for i = 0 to maxX - 1 do
+    for j = maxY-1 downto 0 do
+      let b = try (frontiere m i j) with | Invalid_argument "index out of bounds" -> true in
+      if(b) then
+	(set_color black;
+	plot i j)
+      else
+	set_color (getCouleur (v.seeds.(m.(i).(j)).c));
+        plot i j
+    done;
+  done; synchronize ();;
 
-
+end

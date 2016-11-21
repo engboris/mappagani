@@ -1,9 +1,7 @@
 open Graphics;;
+open Voronoi;;
 
-type seed = { c : color option; x : int; y : int }
-type voronoi = {dim : int * int; seeds : seed array}
-
-let v4 =  {
+let v4 : Voronoi.voronoi =  {
     dim = 800,800;
     seeds = [|
               {c = None; x=100; y=75};
@@ -43,7 +41,7 @@ let v4 =  {
 
 let border_x map_x : int = map_x / 2;;
 
-let generate_voronoi () : voronoi = v4;;
+let generate_voronoi () : Voronoi.voronoi = v4;;
 
 (* _______________________
        MAIN FUNCTION
@@ -55,6 +53,9 @@ let main () =
   let screen_y = map_y in
   open_graph (" "^(string_of_int screen_x)^"x"^(string_of_int screen_y));
   fill_rect 0 0 map_x map_y;
+  let m = Voronoi.regions_voronoi Voronoi.distance_euclide v4 in
+  Voronoi.draw_voronoi m v4;
   read_line ();;
 
 main ();;
+
