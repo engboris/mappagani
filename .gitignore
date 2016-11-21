@@ -1,3 +1,8 @@
+### Exe
+
+*.exe
+mappagani
+
 ### OCaml ###
 *.annot
 *.cmo
