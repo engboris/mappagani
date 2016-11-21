@@ -5,13 +5,10 @@ SRC=voronoi.cmo mappagani.cmo
 
 all: $(EXEC)
 
-mappagani.exe: %.ml
+mappagani.exe: %.cmo
 		$(CC) $(LIBS) -o $@ $(SRC)
 
-%.mli:
-		$(CC) -c $<
-
-%.ml: %.mli
+%.cmo: %ml %.mli
 		$(CC) -c $<
 
 clean:
