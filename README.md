@@ -21,7 +21,7 @@ Il est aussi possible de mettre fin au jeu (considéré comme un abandon) en aff
  - Linux : https://www.gnu.org/software/make/
  - Windows : http://gnuwin32.sourceforge.net/packages/make.htm (d'autres alternatives plus récentes peuvent exister)
 
-2. Ouvrez un terminal (Invite de commande 'cmd' sous Windows) et déplacez vous dans le repertoire contenant les fichiers du projet 'Mappagani'.
+2. Ouvrir un terminal (Invite de commande 'cmd' sous Windows) et déplacez vous dans le repertoire contenant les fichiers du projet 'Mappagani'.
 
 3. Entrer et exécuter la commande <code>make</code>.
 
