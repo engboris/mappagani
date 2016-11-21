@@ -98,3 +98,19 @@ let v4 =  {
     }
 
 (*ADD other voronoi of 30/40 seeds, for example taken from the web-site*)
+
+
+let v2 = {
+    dim = 30, 30;
+    seeds = [|
+	      { c= Some red; x=0; y=0};
+	      { c = Some green; x = 30; y = 30};
+	      { c = Some blue; x = 15 ; y = 15};
+	      { c = None ; x = 30; y = 0};
+	      { c = None; x = 0; y = 30}|]};;
+
+let m1 = regions_voronoi distance_euclide v2;;
+let m2 = regions_voronoi distance_taxicab v2;;
+
+print_matrix m1;;
+print_matrix m2;;
