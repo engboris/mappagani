@@ -1,11 +1,8 @@
-#load "sat_solver.cmo";;
-#load "graphics.cma";;
-
 open Graphics
 
 module Variables = struct
   type t = (int * Graphics.color)
-  let compare (i1, c1) (i2, c2) = if i1 > i2 then 1 else if i1 = i2 then 0 else -1   
+  let compare (i1, c1) (i2, c2) = if i1 > i2 then 1 else if i1 = i2 then 0 else -1
 end;;
 
 module Sat = Sat_solver.Make(Variables);;
@@ -24,7 +21,7 @@ let v1 = {
   |]
 };;
 
-(* _________________________________________ 
+(* _________________________________________
 	    CONTRAINTS FORMULA GENERATION
    _________________________________________ *)
 
@@ -43,7 +40,7 @@ let seeds_to_indices seeds : int list =
   in aux 0;;
 
 (* ----------- Existence ----------- *)
-let clause_existence seeds : Sat.literal list list = 
+let clause_existence seeds : Sat.literal list list =
   let aux i = (List.map (fun c -> (true, (i, c))) colors_set)
   in (List.map (fun i -> aux i) (seeds_to_indices seeds));;
 
@@ -73,7 +70,7 @@ let clause_adjacence seeds (adj : bool array array) : Sat.literal list list =
 let produce_constraints seeds (adj : bool array array) : Sat.literal list list =
   (clause_existence seeds) @ (clause_unicity seeds) @ (clause_adjacence seeds adj);;
 
-(* _________________________________________ 
+(* _________________________________________
 	    		RESOLUTION
    _________________________________________ *)
 
