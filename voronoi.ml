@@ -128,21 +128,17 @@ let adjacents_to i adj =
 
 let rec fill_seeds voronoi list_color = match list_color with
 | [] -> voronoi
-| (i, c)::t -> voronoi.seeds.(i) <- c; fill_seeds voronoi t;;
+| (i, c')::t ->
+  voronoi.seeds.(i) <- {c=Some c'; x=voronoi.seeds.(i).x; y=voronoi.seeds.(i).y};
+  fill_seeds voronoi t;;
 
 
 let get_list_couleurs seeds = 
-  let size = Array.length seeds in
-  let rec aux i result = 
-    if( i >= size ) then result
-    else if (seeds.(i).c <> None) then (aux (i+1) (seeds.(i).c::result))
-  else (aux (i+1) result)
-  in
-  aux 1 [];;   
+  let l = Array.length seeds in
+  let rec aux i = 
+    if (i >= l) then []
+    else if (seeds.(i).c <> None) then (getCouleur seeds.(i).c)::(aux (i+1))
+  else aux (i+1)
+  in aux 0;;   
 
 end
-
-
-
-
-

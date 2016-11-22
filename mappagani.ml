@@ -52,14 +52,15 @@ let generate_voronoi () : voronoi = v4;;
 
 let main () =
   let voronoi_main = generate_voronoi () in
+  let colors_set = get_list_couleurs voronoi_main.seeds in
   let (map_x, map_y) = voronoi_main.dim in
   let screen_x = map_x + (border_x map_x) in
   let screen_y = map_y in
   open_graph (" "^(string_of_int screen_x)^"x"^(string_of_int screen_y));
   let regions = regions_voronoi distance_euclide v4 in
   draw_voronoi regions voronoi_main;
-  (* let coloring = generate_coloring distance_euclide voronoi_main (get_list_couleurs voronoi_main.seeds) in
-  draw_voronoi (regions (fill_seeds coloring)); *)
+  let coloring = generate_coloring distance_euclide voronoi_main colors_set in
+  draw_voronoi regions (fill_seeds voronoi_main coloring);
   read_line ();;
 
 main ();;

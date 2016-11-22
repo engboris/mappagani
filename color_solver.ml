@@ -64,13 +64,13 @@ let rec extract_coloring results : Variables.t list =
     else
       extract_coloring rs;;
 
-let generate_coloring distanceF voronoi colors_set : Variables.t list option =
+let generate_coloring distanceF voronoi colors_set : Variables.t list =
   let adj = adjacences_voronoi voronoi (regions_voronoi distanceF voronoi) in
   let solving = Sat.solve (produce_constraints voronoi.seeds adj colors_set) in
   match solving with
-  | None -> None
+  | None -> failwith "Error : no solution."
   | Some results ->
     let extraction = extract_coloring results in
     match extraction with
-    | [] -> None
-    | _ -> Some extraction;;
+    | [] -> failwith "Error : no solution."
+    | _ -> extraction;;

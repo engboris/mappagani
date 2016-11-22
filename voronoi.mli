@@ -13,4 +13,6 @@ sig
   val frontiere : 'a array array -> int -> int -> bool
   val getCouleur : Graphics.color option -> Graphics.color
   val draw_voronoi : int array array -> voronoi -> unit
+  val get_list_couleurs : seed array -> Graphics.color list
+  val fill_seeds : voronoi -> (int * Graphics.color) list -> voronoi
 end
