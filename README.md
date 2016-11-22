@@ -31,3 +31,19 @@ Pour tout éventuel problèmes pour ou pendant l'exécution du programme, veuill
 
 ## TODO
 voronoi.ml -> draw_voronoi -> améliorer le try/catch lors du parcours des pixels 
+
+## Programme Extrémiste de Peaufinage (PEP)
+
+- Jeux de test complets
+- Factoriser le code (pas de répétitions)
+- Utiliser la syntaxe let..in pour plus de clarté
+- Supprimer les espaces en trop (entre les fonctions notamment)
+- Corriger l'indentation
+- Commenter le code : en français
+- Identifiants des variables et fonctions explicites et en anglais
+- Renommage plus approprié pour tous les identifiants
+- Rendre la syntaxe plus claire en générale (saut de ligne avant les match..with)
+- Ajout d'exceptions et gestion des exceptions plus stricte
+- En-tête de commentaire générale pour tous les fichiers + description/spécification
+- Mettre des annotations de typage si cela apporte de la précision
+- Ne pas écrire de lignes trop longues (découper si besoin)
