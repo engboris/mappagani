@@ -2,6 +2,7 @@ open Graphics;;
 
 module Voronoi = Voronoi.VoronoiModule;;
 open Voronoi;;
+open Color_solver;;
 
 let v4 : voronoi = {
   dim = 800,800;
@@ -57,6 +58,8 @@ let main () =
   open_graph (" "^(string_of_int screen_x)^"x"^(string_of_int screen_y));
   let regions = regions_voronoi distance_euclide v4 in
   draw_voronoi regions voronoi_main;
+  (* let coloring = generate_coloring distance_euclide voronoi_main (get_list_couleurs voronoi_main.seeds) in
+  draw_voronoi (regions (fill_seeds coloring)); *)
   read_line ();;
 
 main ();;

@@ -10,9 +10,6 @@ end;;
 
 module Sat = Sat_solver.Make(Variables);;
 
-let adjacences_voronoi voronoi regions : bool array array = [||];;
-let adjacents_to i adj = [];;
-
 (* _________________________________________
 	    CONTRAINTS FORMULA GENERATION
    _________________________________________ *)

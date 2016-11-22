@@ -3,8 +3,8 @@ open Graphics;;
 module VoronoiModule =
 struct
 
-type seed = { c : color option; x : int; y : int }
-type voronoi = { dim : int * int; seeds : seed array }
+type seed = { c : color option; x : int; y : int };;
+type voronoi = { dim : int * int; seeds : seed array };;
 
 let distance_euclide (x1, y1) (x2,y2) =
   let x = (x1 - x2) * (x1 - x2) in
@@ -92,4 +92,57 @@ let draw_voronoi m v =
     done;
   done; synchronize ();;
 
+
+
+
+
+  (************************************)
+
+let adjacences_voronoi voronoi regions =
+  let n = Array.length voronoi.seeds in 
+  let b = Array.make_matrix n n false in 
+  let maxI = Array.length regions in 
+  let maxJ = Array.length regions.(0) in 
+  for h = 0 to n-1 do 
+    for k = 0 to n-1 do 
+      for i = 0 to maxI-1 do 
+        for j = 0 to maxJ-1 do
+          if(regions.(i).(j) = h && (k = regions.(i-1).(j) ||
+       k = regions.(i+1).(j) ||
+      k = regions.(i).(j-1) ||
+       k = regions.(i).(j+1))) then 
+          b.(h).(k) <- true
+        done
+      done
+    done
+  done; b;;
+
+let adjacents_to i adj = 
+  let l = Array.length adj in
+  let rec aux j tab  =
+    if(j >= l) then tab
+    else if (adj.(i).(j)) then j::tab
+    else aux (i+1) tab in
+  aux 0 [];;
+
+
+let rec fill_seeds voronoi list_color = match list_color with
+| [] -> voronoi
+| (i, c)::t -> voronoi.seeds.(i) <- c; fill_seeds voronoi t;;
+
+
+let get_list_couleurs seeds = 
+  let size = Array.length seeds in
+  let rec aux i result = 
+    if( i >= size ) then result
+    else if (seeds.(i).c <> None) then (aux (i+1) (seeds.(i).c::result))
+  else (aux (i+1) result)
+  in
+  aux 1 [];;   
+
 end
+
+
+
+
+
