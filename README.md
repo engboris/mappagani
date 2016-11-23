@@ -15,7 +15,7 @@ Il est aussi possible de mettre fin au jeu (considéré comme un abandon) en aff
 - Un rapport de quelques pages (au plus 5) au format PDF décrivant le projet ainsi que les extensions réalisées, expliquant et justifiant les choix de conception ou d’implémentation
 - Tout autre fichier nécessaire à la compilation et à l'exécution : fichiers d’exemples, Makefile
 
-## Installation
+## Installation et utilisation
 
 1. Télécharger la version la plus récente de *GNU Make*
  - Linux : https://www.gnu.org/software/make/
@@ -25,16 +25,13 @@ Il est aussi possible de mettre fin au jeu (considéré comme un abandon) en aff
 
 3. Entrer et exécuter la commande <code>make</code>.
 
-## Problèmes techniques
-
-Pour tout éventuel problèmes pour ou pendant l'exécution du programme, veuillez contacter les développeurs ou ouvrir une discussion dans la section 'Issues' du projet Github.
-
 ## TODO
 - voronoi.ml -> draw_voronoi -> améliorer le try/catch lors du parcours des pixels [Kostia]
 - Réparer la fonction get_list_couleurs : supprimer les doublons, il doit y avoir exactement 4 couleurs [Kostia]
 - Réparer la fonction get_list_couleurs : combler avec des couleurs pour en avoir 4 [Kostia]
 - Réparer la fonction adjacences_voronoi : s'assurer qu'elle produit les bons résultats [Kostia]
 - Sépération des pixels des régions dans plusieurs listes : pour pouvoir colorier qu'une seule région [Kostia]
+- Fonction check_coloring qui parcours les seeds et leurs voisins et s'arrête puis renvoie true s'il existe un seed qui a un voisin de la même couleur. S'il n'en existe pas on retourne true [Kostia]
 
 ## Programme Extrémiste de Peaufinage (PEP)
 
