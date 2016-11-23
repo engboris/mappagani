@@ -74,7 +74,6 @@ let main () =
     let e = wait_next_event[Button_down] in
     let m = wait_next_event[Mouse_motion] in
     let x_mouse = e.mouse_x and y_mouse = e.mouse_y in
-    print_coord m.mouse_x m.mouse_y;
     check_buttons x_mouse y_mouse [button_quit];
     if (coord_in_surface x_mouse y_mouse (0, 0) (map_x, map_y)) then
       let owner = regions.(x_mouse).(y_mouse) in
