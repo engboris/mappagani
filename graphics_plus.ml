@@ -1,7 +1,7 @@
 open Graphics;;
 
 (* _________________________________________
-	    		   BUTTONS
+                  BUTTONS
    _________________________________________ *)
 
 type button = {
@@ -21,9 +21,12 @@ let button_hovercolor = cyan;;
 let create_menu_button c s a =
   {coord = c; size = (200, 30); text = s; action = a};;
 
-let coord_in_button x y button : bool =
-  let (blx, bly) = button.coord and (l, h) = button.size in
-  (x > blx && x < blx+l && y > bly && y < bly+h);;
+let coord_in_surface x y pos size : bool =
+  let (blx, bly) = pos and (l, h) = size in
+  (x > blx && x < blx+l && y > bly && y < bly+h);;	
+
+let coord_in_button x y button : bool = 
+  coord_in_surface x y button.coord button.size;;
 
 let draw_button_primitive background button =
   let (blx, bly) = button.coord and (l, h) = button.size in

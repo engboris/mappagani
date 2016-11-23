@@ -11,7 +11,7 @@ end;;
 module Sat = Sat_solver.Make(Variables);;
 
 (* _________________________________________
-	      CONTRAINTS FORMULA GENERATION
+                 GENERATION
    _________________________________________ *)
 
 let seeds_to_indices seeds : int list =
@@ -51,7 +51,7 @@ let produce_constraints seeds adj colors_set : Sat.literal list list =
   (clause_adjacence seeds adj colors_set);;
 
 (* _________________________________________
-	    		       RESOLUTION
+                 RESOLUTION
    _________________________________________ *)
 
 let rec extract_coloring results : Variables.t list =
@@ -73,3 +73,4 @@ let generate_coloring distanceF voronoi colors_set : Variables.t list =
     match extraction with
     | [] -> failwith "Error : no solution."
     | _ -> extraction;;
+    
