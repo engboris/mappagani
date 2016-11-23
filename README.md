@@ -32,6 +32,7 @@ Pour tout éventuel problèmes pour ou pendant l'exécution du programme, veuill
 ## TODO
 - voronoi.ml -> draw_voronoi -> améliorer le try/catch lors du parcours des pixels [Kostia]
 - Réparer la fonction get_list_couleurs : supprimer les doublons, il doit y avoir exactement 4 couleurs [Kostia]
+- Réparer la fonction get_list_couleurs : combler avec des couleurs pour en avoir 4
 
 ## Programme Extrémiste de Peaufinage (PEP)
 
