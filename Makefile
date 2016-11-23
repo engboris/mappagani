@@ -4,7 +4,7 @@ EXEC=mappagani.exe
 
 all: $(EXEC)
 
-$(EXEC): voronoi.cmo sat_solver.cmo color_solver.cmo mappagani.cmo
+$(EXEC): voronoi.cmo sat_solver.cmo color_solver.cmo graphics_plus.cmo mappagani.cmo
 		$(CAMLC) $(LIBS) -o $@ $^
 
 %.cmo: %.mli %.ml

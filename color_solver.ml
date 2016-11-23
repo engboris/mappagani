@@ -11,7 +11,7 @@ end;;
 module Sat = Sat_solver.Make(Variables);;
 
 (* _________________________________________
-	    CONTRAINTS FORMULA GENERATION
+	      CONTRAINTS FORMULA GENERATION
    _________________________________________ *)
 
 let seeds_to_indices seeds : int list =
@@ -38,7 +38,6 @@ let clause_unicity seeds colors_set : Sat.literal list list =
   in List.flatten (List.map big_psi (seeds_to_indices seeds));;
 
 (* ----------- Adjacence ----------- *)
-
 let clause_adjacence seeds (adj : bool array array) colors_set : Sat.literal list list =
   let psi i c =
     let adj_to_i = adjacents_to i adj in
@@ -52,7 +51,7 @@ let produce_constraints seeds adj colors_set : Sat.literal list list =
   (clause_adjacence seeds adj colors_set);;
 
 (* _________________________________________
-	    		RESOLUTION
+	    		       RESOLUTION
    _________________________________________ *)
 
 let rec extract_coloring results : Variables.t list =
