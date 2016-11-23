@@ -99,6 +99,10 @@ let v4 =  {
 
 (*ADD other voronoi of 30/40 seeds, for example taken from the web-site*)
 
+let listVoronoi = [v1;v2;v3;v4];;
+let randomVoroine listVoronoi = 
+  Random.init 1234;
+  List.nth listVoronoi (Random.int (List.length listVoronoi));;
 
 let v2 = {
     dim = 30, 30;

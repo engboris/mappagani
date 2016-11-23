@@ -47,10 +47,10 @@ let seed_of_pixel (i,j) fonction voronoi =
   indice_of_min (Array.map (fun s -> fonction (i,j) (s.x, s.y)) voronoi.seeds);;
 
 
-let regions_voronoi fonction vornoi =
-  let m = Array.make_matrix (fst v.dim) (snd v.dim) 0 in
-  for i = 0 to (fst v.dim -1) do
-    for j = 0  to (snd v.dim -1) do
+let regions_voronoi fonction voronoi =
+  let m = Array.make_matrix (fst voronoi.dim) (snd voronoi.dim) 0 in
+  for i = 0 to (fst voronoi.dim -1) do
+    for j = 0  to (snd voronoi.dim -1) do
       m.(i).(j) <- seed_of_pixel (i,j) fonction voronoi
     done
   done;m;;
@@ -87,7 +87,7 @@ let draw_voronoi matrix voronoi =
 	(set_color black;
 	plot i j)
       else
-	set_color (getCouleur (voronoi.seeds.(m.(i).(j)).c));
+	set_color (getCouleur (voronoi.seeds.(matrix.(i).(j)).c));
         plot i j
     done;
   done; synchronize ();;
