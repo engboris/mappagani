@@ -98,6 +98,15 @@ let draw_voronoi m v =
 
   (************************************)
 
+  let frontiere2 k m i j =
+    if(k = m.(i-1).(j) ||
+       k = m.(i+1).(j) ||
+       k = m.(i).(j-1) ||
+       k = m.(i).(j+1)) then
+      true
+    else
+      false;;
+
 let adjacences_voronoi voronoi regions =
   let n = Array.length voronoi.seeds in 
   let b = Array.make_matrix n n false in 
@@ -107,10 +116,8 @@ let adjacences_voronoi voronoi regions =
     for k = 0 to n-1 do 
       for i = 0 to maxI-1 do 
         for j = 0 to maxJ-1 do
-          if(regions.(i).(j) = h && (k = regions.(i-1).(j) ||
-       k = regions.(i+1).(j) ||
-      k = regions.(i).(j-1) ||
-       k = regions.(i).(j+1))) then 
+          let tmp = try (frontiere2 k regions i j) with | Invalid_argument "index out of bounds" -> true in 
+          if(regions.(i).(j) = h && (tmp)) then 
           b.(h).(k) <- true
         done
       done
