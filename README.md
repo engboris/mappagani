@@ -15,7 +15,7 @@ Il est aussi possible de mettre fin au jeu (considéré comme un abandon) en aff
 - Un rapport de quelques pages (au plus 5) au format PDF décrivant le projet ainsi que les extensions réalisées, expliquant et justifiant les choix de conception ou d’implémentation
 - Tout autre fichier nécessaire à la compilation et à l'exécution : fichiers d’exemples, Makefile
 
-## Installation
+## Installation et utilisation
 
 1. Télécharger la version la plus récente de *GNU Make*
  - Linux : https://www.gnu.org/software/make/
@@ -24,10 +24,6 @@ Il est aussi possible de mettre fin au jeu (considéré comme un abandon) en aff
 2. Ouvrir un terminal (Invite de commande 'cmd' sous Windows) et déplacez vous dans le repertoire contenant les fichiers du projet 'Mappagani'.
 
 3. Entrer et exécuter la commande <code>make</code>.
-
-## Problèmes techniques
-
-Pour tout éventuel problèmes pour ou pendant l'exécution du programme, veuillez contacter les développeurs ou ouvrir une discussion dans la section 'Issues' du projet Github.
 
 ## TODO
 - voronoi.ml -> draw_voronoi -> améliorer le try/catch lors du parcours des pixels [Kostia]
