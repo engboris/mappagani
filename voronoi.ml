@@ -6,6 +6,20 @@ struct
 type seed = { c : color option; x : int; y : int };;
 type voronoi = { dim : int * int; seeds : seed array };;
 
+
+(***** Fonction d'affiche mode console pour des tests *****)
+
+let print_matrix m =
+  let maxX = Array.length m in
+  let maxY = Array.length m.(0) in
+  for i = 0 to maxX -1 do
+    for j = 0 to maxY -1 do
+      print_int m.(i).(j); print_string " ";
+    done;
+  print_string "\n";
+  done;;
+
+(***** Fonctions de distance *****)
 let distance_euclide (x1, y1) (x2,y2) =
   let x = (x1 - x2) * (x1 - x2) in
   let y = (y1 - y2) * (y1 - y2) in
@@ -17,16 +31,8 @@ let distance_taxicab (x1, y1) (x2,y2) =
   let y = abs (y1 - y2) in
   x + y;;
 
-(*
-Param :
-f = fonction de calcul de distance (euclide ou texilab)
-v = type voronoi
-m = la matrice résultat
-(i,j) couple des coordonnées du pixel
+(***** Calcul de la matrice des regions *****)
 
-Renvoi une matrice de taille v.dim qui a, pour chaque valeurs l'indice du seed
-le plus proche dans v.array
-*)
 
 let indice_of_min array =
   let l = Array.length array in
@@ -37,27 +43,20 @@ let indice_of_min array =
   aux 1 array.(0) 0;;
 
 
-let seed_of_pixel (i,j) f v =
-  indice_of_min (Array.map (fun s -> f (i,j) (s.x, s.y)) v.seeds);;
+let seed_of_pixel (i,j) fonction voronoi =
+  indice_of_min (Array.map (fun s -> fonction (i,j) (s.x, s.y)) voronoi.seeds);;
 
 
-let regions_voronoi f v =
+let regions_voronoi fonction vornoi =
   let m = Array.make_matrix (fst v.dim) (snd v.dim) 0 in
   for i = 0 to (fst v.dim -1) do
     for j = 0  to (snd v.dim -1) do
-      m.(i).(j) <- seed_of_pixel (i,j) f v
+      m.(i).(j) <- seed_of_pixel (i,j) fonction voronoi
     done
   done;m;;
 
-let print_matrix m =
-  let maxX = Array.length m in
-  let maxY = Array.length m.(0) in
-  for i = 0 to maxX -1 do
-    for j = 0 to maxY -1 do
-      print_int m.(i).(j); print_string " ";
-    done;
-  print_string "\n";
-  done;;
+
+(***** Affichage de la carte depuis un Voronoi *****)
 
 
 let frontiere m i j =
@@ -75,19 +74,20 @@ let getCouleur (c:color option) = match c with
   | Some a -> a;;
 
 
-let draw_voronoi m v =
+(*TODO : fixme*)
+let draw_voronoi matrix voronoi =
   auto_synchronize false;
   set_color black;
-  let maxX = Array.length m in
-  let maxY = Array.length m.(0) in
+  let maxX = Array.length matrix in
+  let maxY = Array.length matrix.(0) in
   for i = 0 to maxX - 1 do
     for j = maxY-1 downto 0 do
-      let b = try (frontiere m i j) with | Invalid_argument "index out of bounds" -> true in
+      let b = try (frontiere matrix i j) with | Invalid_argument "index out of bounds" -> true in
       if(b) then
 	(set_color black;
 	plot i j)
       else
-	set_color (getCouleur (v.seeds.(m.(i).(j)).c));
+	set_color (getCouleur (voronoi.seeds.(m.(i).(j)).c));
         plot i j
     done;
   done; synchronize ();;
@@ -96,7 +96,7 @@ let draw_voronoi m v =
 
 
 
-  (************************************)
+  (***** Calcul de la matrice d'adjacences *****)
 
   let frontiere2 k m i j =
     if(k = m.(i-1).(j) ||
@@ -124,6 +124,9 @@ let adjacences_voronoi voronoi regions =
     done
   done; b;;
 
+
+(***** Autre fonction utile pour la partie logique *****)
+
 let adjacents_to i adj = 
   let l = Array.length adj in
   let rec aux j tab  =
@@ -147,5 +150,7 @@ let get_list_couleurs seeds =
     else if (seeds.(i).c <> None) then (getCouleur seeds.(i).c)::(aux (i+1))
   else aux (i+1)
   in aux 0;;   
+
+
 
 end
