@@ -15,4 +15,5 @@ sig
   val draw_voronoi : int array array -> voronoi -> unit
   val get_list_couleurs : seed array -> Graphics.color list
   val fill_seeds : voronoi -> (int * Graphics.color) list -> voronoi
+  val generator_color_set : voronoi -> Graphics.color list
 end

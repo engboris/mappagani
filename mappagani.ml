@@ -37,7 +37,7 @@ let v2 = {
 
 let border_x : int = 300;;
 
-let generate_voronoi () : voronoi = v1;;
+let generate_voronoi () : voronoi = v2;;
 
 (* _________________________________________
                MAIN FUNCTION
@@ -77,7 +77,7 @@ let main () =
   (* Settings *)
   let state = ref Play in
   let voronoi_main = generate_voronoi () in
-  let colors_set = get_list_couleurs voronoi_main.seeds in
+  let colors_set = generator_color_set voronoi_main in
   let (map_x, map_y) = voronoi_main.dim in
   let screen_x = map_x + border_x in
   let screen_y = map_y in
@@ -104,6 +104,8 @@ let main () =
   let regions = regions_voronoi distance_taxicab voronoi_main in
   draw_voronoi regions voronoi_main;
   update_current_color black (0, screen_y) (map_x, map_y);
+  let coloring = generate_coloring distance_euclide voronoi_main colors_set in
+  draw_voronoi regions (fill_seeds voronoi_main coloring);
   while (!state <> Quit) do
     synchronize ();
     let e = wait_next_event[Button_down] in
