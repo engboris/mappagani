@@ -32,17 +32,20 @@ let rec check_buttons x y buttons =
   match buttons with
   | [] -> ()
   | h::t ->
-    if coord_in_button x y h then
-      (h.action (); check_buttons x y t)
-    else
-      (check_buttons x y t);;
+     if (coord_in_button x y h) then
+       (h.action (); check_buttons x y t)
+     else
+       (check_buttons x y t);;
 
 let update_current_color c board_pos board_size =
   let rec_y = 20 in
   let (x, y) = board_pos in
   let (l, h) = board_size in
   set_color c;
-  fill_rect (x+l) (y-rec_y) (border_x) rec_y;;
+  fill_rect (x+l) (y-rec_y) (border_x) rec_y;
+  set_color white;
+  moveto (x+l+3) (y-rec_y+2);
+  draw_string "Current color";;
 
 let print_coord x y =
   moveto 100 100;
@@ -53,6 +56,7 @@ let print_coord x y =
 
 (* ----------- Main ----------- *)
 let main () =
+  auto_synchronize false;
   (* Settings *)
   let state = ref Play in
   let voronoi_main = generate_voronoi () in
@@ -64,15 +68,27 @@ let main () =
   open_graph (" "^(string_of_int screen_x)^"x"^(string_of_int screen_y));
   (* Buttons *)
   let button_quit =
-    create_menu_button (screen_x-250, 50) "Quitter" (fun () -> state := Quit) in
+    create_menu_button (screen_x-250, 15) "Quitter" (fun () -> state := Quit) in
   draw_button button_quit;
+  let button_reset =
+    create_menu_button (top_of button_quit) "Recommencer" (fun () -> state := Quit) in
+  draw_button button_reset;
+  let button_newgame =
+    create_menu_button (top_of button_reset) "Nouvelle carte" (fun () -> state := Quit) in
+  draw_button button_newgame;
+  let button_solution =
+    create_menu_button (top_of button_newgame) "Solution" (fun () -> state := Quit) in
+  draw_button button_solution;
+  let button_valider =
+    create_menu_button (top_of button_solution) "Valider coloriage" (fun () -> state := Quit) in
+  draw_button button_valider;
   (* Main loop *)
-  let regions = regions_voronoi distance_euclide voronoi_main in
+  let regions = regions_voronoi distance_taxicab voronoi_main in
   draw_voronoi regions voronoi_main;
   update_current_color black (0, screen_y) (map_x, map_y);
-  while (!state <> Quit) do 
+  while (!state <> Quit) do
+    synchronize ();
     let e = wait_next_event[Button_down] in
-    let m = wait_next_event[Mouse_motion] in
     let x_mouse = e.mouse_x and y_mouse = e.mouse_y in
     check_buttons x_mouse y_mouse [button_quit];
     if (coord_in_surface x_mouse y_mouse (0, 0) (map_x, map_y)) then
