@@ -61,14 +61,13 @@ let regions_voronoi fonction voronoi =
 
 let frontiere m i j =
   let v = m.(i).(j) in
-  if(i != 0)
-	  if(v != m.(i-1).(j) ||
-	     v != m.(i+1).(j) ||
-	     v != m.(i).(j-1) ||
-	     v != m.(i).(j+1)) then
-	    true
-	  else
-	    false;;
+     if(v <> m.(i-1).(j) ||
+          v <> m.(i+1).(j) ||
+	  v <> m.(i).(j-1) ||
+	  v <> m.(i).(j+1)) then
+     true
+    else
+     false;;
 
 let getCouleur (c:color option) = match c with
   | None -> white
@@ -120,15 +119,23 @@ let adjacences_voronoi voronoi regions =
       for i = 0 to maxI-1 do 
         for j = 0 to maxJ-1 do
           (* let tmp = try (frontiere2 k regions i j) with | Invalid_argument "index out of bounds" -> false in *)
-          if((regions.(i).(j) = h) && (tmpfrontiere2 k regions i j)) then 
-           b.(h).(k) <- true
-        done
-      done
-    done
+          if((regions.(i).(j) = h) && (frontiere2 k regions i j)) then 
+            b.(h).(k) <- true
+          else ()
+        done;
+      done;
+    done;
   done; b;;
 
 
 (***** Autre fonction utile pour la partie logique *****)
+
+let rec insert value list = match l with
+  | [] -> value::[]
+  | h::t -> if(h = value) then h::t
+            else if (x < h) then value::h::t
+            else h::(insert value t);;
+  
 
 let adjacents_to i adj = 
   let l = Array.length adj in
@@ -146,9 +153,18 @@ let rec fill_seeds voronoi list_color = match list_color with
   fill_seeds voronoi t;;
 
 
-let generator_color_set listColor = 
+let generator_color_set list_color = 
   let color_set = [black; white; red; green; blue; yellow; cyan; magenta] in
-  print_string "TODO";;
+  let rec supprime_double = 
+  match list_color with
+  | [] -> []
+  | h::t -> insert h delete_double t in
+  let rec rajoute_couleurs list color_set = match color_set with
+    | [] -> failwith "plus de 4 couleurs"
+    | h::t -> if(List.length list = 4) then list
+              else
+              rajoute_couleurs (insert h list) t;;
+
 
 let get_list_couleurs seeds = 
   let l = Array.length seeds in
