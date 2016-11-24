@@ -61,6 +61,7 @@ let regions_voronoi fonction voronoi =
 
 let frontiere m i j =
   let v = m.(i).(j) in
+  if(i != 0)
 	  if(v != m.(i-1).(j) ||
 	     v != m.(i+1).(j) ||
 	     v != m.(i).(j-1) ||
@@ -78,8 +79,10 @@ let getCouleur (c:color option) = match c with
 let draw_voronoi matrix voronoi =
   auto_synchronize false;
   set_color black;
+  let n = Array.length voronoi.seeds in
   let maxX = Array.length matrix in
   let maxY = Array.length matrix.(0) in
+  let n = Array.make_matrix n n false in
   for i = 0 to maxX - 1 do
     for j = maxY-1 downto 0 do
       let b = try (frontiere matrix i j) with | Invalid_argument "index out of bounds" -> true in
@@ -98,14 +101,14 @@ let draw_voronoi matrix voronoi =
 
   (***** Calcul de la matrice d'adjacences *****)
 
-  let frontiere2 k m i j =
-    if(k = m.(i-1).(j) ||
-       k = m.(i+1).(j) ||
-       k = m.(i).(j-1) ||
-       k = m.(i).(j+1)) then
-      true
-    else
-      false;;
+let frontiere2 k m i j =
+  ((i-1 > 0) && (m.(i-1).(j) = k))
+  || ((i+1 < Array.length m ) && (m.(i+1).(j) = k))
+  || ((j-1 > 0) && (m.(i).(j-1) = k))
+  || ((j+1 < Array.length m.(0)) && (m.(i).(j+1) = k));;
+  
+ 
+  
 
 let adjacences_voronoi voronoi regions =
   let n = Array.length voronoi.seeds in 
@@ -116,8 +119,8 @@ let adjacences_voronoi voronoi regions =
     for k = 0 to n-1 do 
       for i = 0 to maxI-1 do 
         for j = 0 to maxJ-1 do
-          let tmp = try (frontiere2 k regions i j) with | Invalid_argument "index out of bounds" -> false in 
-          if((regions.(i).(j) = h) && (tmp)) then 
+          (* let tmp = try (frontiere2 k regions i j) with | Invalid_argument "index out of bounds" -> false in *)
+          if((regions.(i).(j) = h) && (tmpfrontiere2 k regions i j)) then 
            b.(h).(k) <- true
         done
       done
