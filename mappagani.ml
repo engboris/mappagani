@@ -16,6 +16,23 @@ let v1 = {
   |]
 };;
 
+let v2 = {
+  dim = 600,600;
+  seeds = [|
+    {c = None; x=100; y=100};
+    {c = Some red; x=125; y=550};
+    {c = None; x=250; y=50};
+    {c = Some blue; x=150; y=250};
+    {c = None; x=250; y=300};
+    {c = None; x=300; y=500};
+    {c = Some red; x=400; y=100};
+    {c = None; x=450; y=450};
+    {c = None; x=500; y=250};
+    {c = Some yellow; x=575; y=350};
+    {c = Some green; x=300; y=300};
+    {c = None; x=75; y=470};
+  |]};;
+
 (* Parameters *)
 
 let border_x : int = 300;;
@@ -45,7 +62,7 @@ let update_current_color c board_pos board_size =
   fill_rect (x+l) (y-rec_y) (border_x) rec_y;
   set_color white;
   moveto (x+l+3) (y-rec_y+2);
-  draw_string "Current color";;
+  draw_string "Couleur choisie";;
 
 let print_coord x y =
   moveto 100 100;
@@ -68,7 +85,7 @@ let main () =
   open_graph (" "^(string_of_int screen_x)^"x"^(string_of_int screen_y));
   (* Buttons *)
   let button_quit =
-    create_menu_button (screen_x-250, 15) "Quitter" (fun () -> state := Quit) in
+    create_menu_button (screen_x-250, 10) "Quitter" (fun () -> state := Quit) in
   draw_button button_quit;
   let button_reset =
     create_menu_button (top_of button_quit) "Recommencer" (fun () -> state := Quit) in
@@ -77,7 +94,8 @@ let main () =
     create_menu_button (top_of button_reset) "Nouvelle carte" (fun () -> state := Quit) in
   draw_button button_newgame;
   let button_solution =
-    create_menu_button (top_of button_newgame) "Solution" (fun () -> state := Quit) in
+    let (tpbnx, tpbny) = top_of button_reset in
+    create_menu_button (tpbnx, tpbny+40) "Solution" (fun () -> state := Quit) in
   draw_button button_solution;
   let button_valider =
     create_menu_button (top_of button_solution) "Valider coloriage" (fun () -> state := Quit) in
