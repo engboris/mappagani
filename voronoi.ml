@@ -116,9 +116,9 @@ let adjacences_voronoi voronoi regions =
     for k = 0 to n-1 do 
       for i = 0 to maxI-1 do 
         for j = 0 to maxJ-1 do
-          let tmp = try (frontiere2 k regions i j) with | Invalid_argument "index out of bounds" -> true in 
-          if(regions.(i).(j) = h && (tmp)) then 
-          b.(h).(k) <- true
+          let tmp = try (frontiere2 k regions i j) with | Invalid_argument "index out of bounds" -> false in 
+          if((regions.(i).(j) = h) && (tmp)) then 
+           b.(h).(k) <- true
         done
       done
     done
@@ -142,6 +142,10 @@ let rec fill_seeds voronoi list_color = match list_color with
   voronoi.seeds.(i) <- {c=Some c'; x=voronoi.seeds.(i).x; y=voronoi.seeds.(i).y};
   fill_seeds voronoi t;;
 
+
+let generator_color_set listColor = 
+  let color_set = [black; white; red; green; blue; yellow; cyan; magenta] in
+  print_string "TODO";;
 
 let get_list_couleurs seeds = 
   let l = Array.length seeds in
