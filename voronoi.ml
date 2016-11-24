@@ -142,7 +142,7 @@ let adjacents_to i adj =
   let l = Array.length adj in
   let rec aux j tab  =
     if(j >= l) then tab
-    else if (adj.(i).(j)) then aux (j+1) j::tab
+    else if (adj.(i).(j)) then aux (j+1) (j::tab)
     else aux (j+1) tab in
   aux 0 [];;
 
