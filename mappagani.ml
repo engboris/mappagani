@@ -5,7 +5,9 @@ open Voronoi;;
 open Color_solver;;
 open Graphics_plus;;
 
-(* Parameters *)
+(* _________________________________________
+               PARAMETERS
+   _________________________________________ *)
 
 let window_title = "Mappagani";;
 let selected_color_label = "Couleur choisie";;
@@ -18,15 +20,6 @@ let generate_voronoi () : voronoi = Examples.select_voronoi ();;
    _________________________________________ *)
 
 type program_state = Play | Quit | End;;
-
-let rec check_buttons x y buttons =
-  match buttons with
-  | [] -> ()
-  | h::t ->
-     if (coord_in_button x y h) then
-       (h.action (); check_buttons x y t)
-     else
-       (check_buttons x y t);;
 
 let update_current_color c board_pos board_size =
   let rec_y = 20 in
@@ -45,10 +38,25 @@ let print_coord x y =
   set_color black;
   draw_string (""^(string_of_int x)^";"^(string_of_int y));;
 
+(* ----------- Buttons checking ----------- *)
+
+let rec check_buttons x y buttons =
+match buttons with
+| [] -> ()
+| h::t ->
+   if (coord_in_button x y h) then
+     (h.action (); check_buttons x y t)
+   else
+     (check_buttons x y t);;
+
+(* ----------- Game ----------- *)
+
+let game () = ();;
+
 (* ----------- Main ----------- *)
 let main () =
   auto_synchronize false;
-  (* Settings *)
+  (* Working context *)
   let state = ref Play in
   let voronoi_main = generate_voronoi () in
   let regions = regions_voronoi distance_taxicab voronoi_main in
@@ -56,23 +64,21 @@ let main () =
   let (map_x, map_y) = voronoi_main.dim in
   let screen_x = map_x + border_x in
   let screen_y = map_y in
+  (* Settings *)
   set_window_title window_title;
   open_graph (" "^(string_of_int screen_x)^"x"^(string_of_int screen_y));
   (* Buttons *)
-  let button_quit =
-    create_menu_button (screen_x-250, 10) "Quitter" (fun () -> state := Quit) in
+  let button_quit = create_menu_button (screen_x-250, 10) "Quitter" (fun () -> state := Quit) in
   draw_button button_quit;
-  let button_reset =
-    create_menu_button (top_of button_quit) "Recommencer" (fun () -> state := Quit) in
+  let button_reset = create_menu_button (top_of button_quit) "Recommencer" (fun () -> state := Quit) in
   draw_button button_reset;
-  let button_newgame =
-    create_menu_button (top_of button_reset) "Nouvelle carte" (fun () -> state := Quit) in
+  let button_newgame = create_menu_button (top_of button_reset) "Nouvelle carte" (fun () -> state := Quit) in
   draw_button button_newgame;
   let button_solution =
     let (tpbnx, tpbny) = top_of button_reset in
     let coloring = generate_coloring distance_euclide voronoi_main colors_set in
-    let action_solution = (fun () -> (draw_voronoi regions (fill_seeds voronoi_main coloring)); state := End) in
-    create_menu_button (tpbnx, tpbny+40) "Solution" action_solution in
+    let ac_solution = (fun () -> (draw_voronoi regions (fill_seeds voronoi_main coloring)); state := End) in
+    create_menu_button (tpbnx, tpbny+40) "Solution" ac_solution in
   draw_button button_solution;
   let button_valider =
     create_menu_button (top_of button_solution) "Valider coloriage" (fun () -> state := Quit) in
@@ -84,6 +90,7 @@ let main () =
     synchronize ();
     let e = wait_next_event[Button_down] in
     let x_mouse = e.mouse_x and y_mouse = e.mouse_y in
+    (* Buttons linking *)
     check_buttons x_mouse y_mouse [button_quit; button_solution];
     if (coord_in_surface x_mouse y_mouse (0, 0) (map_x, map_y)) then
       let owner = regions.(x_mouse).(y_mouse) in
