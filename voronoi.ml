@@ -120,7 +120,7 @@ let adjacences_voronoi voronoi regions =
       for i = 0 to maxI-1 do 
         for j = 0 to maxJ-1 do
           (* let tmp = try (frontiere2 k regions i j) with | Invalid_argument "index out of bounds" -> false in *)
-          if((regions.(i).(j) = h) && (frontiere2 k regions i j)) then 
+          if((regions.(i).(j) = h) && (frontiere2 k regions i j) && h <> k) then 
             b.(h).(k) <- true
           else ()
         done;
@@ -142,7 +142,7 @@ let adjacents_to i adj =
   let l = Array.length adj in
   let rec aux j tab  =
     if(j >= l) then tab
-    else if (adj.(i).(j)) then j::tab
+    else if (adj.(i).(j)) then aux (i+1) (j::tab)
     else aux (i+1) tab in
   aux 0 [];;
 
