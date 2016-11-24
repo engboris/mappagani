@@ -45,10 +45,22 @@ let clause_adjacence seeds (adj : bool array array) colors_set : Sat.literal lis
   in let big_psi i = List.flatten (List.map (fun c -> psi i c) colors_set)
   in List.flatten (List.map big_psi (seeds_to_indices seeds));;
 
+(* ----------- Presence ----------- *)
+let clause_presence seeds : Sat.literal list list =
+  let l = Array.length seeds in
+  let rec aux i =
+    if (i >= l) then []
+    else 
+      match seeds.(i).c with
+      | None -> aux (i+1)
+      | Some c -> [(true, (i, getCouleur seeds.(i).c))] :: (aux (i+1))
+  in aux 0;;
+
 let produce_constraints seeds adj colors_set : Sat.literal list list =
   (clause_existence seeds colors_set) @
   (clause_unicity seeds colors_set) @
-  (clause_adjacence seeds adj colors_set);;
+  (clause_adjacence seeds adj colors_set) @
+  (clause_presence seeds);;
 
 (* _________________________________________
                  RESOLUTION
