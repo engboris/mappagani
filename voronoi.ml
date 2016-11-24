@@ -167,7 +167,7 @@ let get_list_couleurs seeds =
 
 let generator_color_set voronoi =
   let list_color = get_list_couleurs voronoi.seeds in
-  let color_set = [black; white; red; green; blue; yellow; cyan; magenta] in
+  let color_set = [yellow; magenta; cyan; red; blue; green;black; white;] in
   let rec supprime_double list = 
   match list with
   | [] -> []
