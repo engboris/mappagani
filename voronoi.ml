@@ -1,6 +1,6 @@
 open Graphics;;
-(* #load "graphics.cma";; *)
-
+(*  #load "graphics.cma";; 
+ *)
 module VoronoiModule =
 struct
 
@@ -84,14 +84,13 @@ let getCouleur (c:color option) = match c with
 let draw_voronoi matrix voronoi =
   auto_synchronize false;
   set_color black;
-  let n = Array.length voronoi.seeds in
-  let maxX = Array.length matrix in
+(*   let n = Array.length voronoi.seeds in
+ *)  let maxX = Array.length matrix in
   let maxY = Array.length matrix.(0) in
-  let n = Array.make_matrix n n false in
-  for i = 0 to maxX - 1 do
+(*   let n = Array.make_matrix n n false in
+ *)  for i = 0 to maxX - 1 do
     for j = maxY-1 downto 0 do
-      let b = try (frontiere matrix i j) with | Invalid_argument "index out of bounds" -> true in
-      if(b) then
+      if((frontiere matrix i j)) then
 	(set_color black;
 	plot i j)
       else
