@@ -62,13 +62,18 @@ let regions_voronoi fonction voronoi =
 
 let frontiere m i j =
   let v = m.(i).(j) in
-     if(v <> m.(i-1).(j) ||
+    ((i-1 > 0) && (m.(i-1).(j) <> v))
+  || ((i+1 < Array.length m ) && (m.(i+1).(j) <> v))
+  || ((j-1 > 0) && (m.(i).(j-1) <> v))
+  || ((j+1 < Array.length m.(0)) && (m.(i).(j+1) <> v));;
+
+    (*  if(v <> m.(i-1).(j) ||
           v <> m.(i+1).(j) ||
 	  v <> m.(i).(j-1) ||
 	  v <> m.(i).(j+1)) then
      true
     else
-     false;;
+     false;; *)
 
 let getCouleur (c:color option) = match c with
   | None -> white
