@@ -1,6 +1,4 @@
 open Graphics;;
-
-module Voronoi = Voronoi.VoronoiModule;;
 open Voronoi;;
 
 module Variables = struct
