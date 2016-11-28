@@ -1,5 +1,5 @@
 open Graphics;;
-open Voronoi.VoronoiModule;;
+open Voronoi;;
 
 (*some examples of voronoi*)
 let v1 = {

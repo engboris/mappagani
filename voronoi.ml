@@ -1,8 +1,6 @@
 open Graphics;;
 (*  #load "graphics.cma";; 
  *)
-module VoronoiModule =
-struct
 
 type seed = { c : color option; x : int; y : int };;
 type voronoi = { dim : int * int; seeds : seed array };;
@@ -183,5 +181,3 @@ let generator_color_set voronoi =
               rajoute_couleurs (insert h list) t in 
   rajoute_couleurs (supprime_double list_color) color_set;;
 
-
-end
