@@ -10,6 +10,9 @@ end;;
 
 module Sat = Sat_solver.Make(Variables);;
 
+(* ----------- Exceptions ----------- *)
+exception NoSolution;;
+
 (* _________________________________________
                  GENERATION
    _________________________________________ *)
@@ -79,10 +82,10 @@ let generate_coloring distanceF voronoi colors_set : Variables.t list =
   let adj = adjacences_voronoi voronoi (regions_voronoi distanceF voronoi) in
   let solving = Sat.solve (produce_constraints voronoi.seeds adj colors_set) in
   match solving with
-  | None -> failwith "Error : no solution."
+  | None -> raise NoSolution
   | Some results ->
     let extraction = extract_coloring results in
     match extraction with
-    | [] -> failwith "Error : no solution."
+    | [] -> raise NoSolution
     | _ -> extraction;;
     
