@@ -47,9 +47,11 @@ let seed_of_pixel (i,j) fonction voronoi =
 
 
 let regions_voronoi fonction voronoi =
-  let m = Array.make_matrix (fst voronoi.dim) (snd voronoi.dim) 0 in
-  for i = 0 to (fst voronoi.dim -1) do
-    for j = 0  to (snd voronoi.dim -1) do
+  let dimX = fst voronoi.dim in
+  let dimY = snd voronoi.dim in
+  let m = Array.make_matrix dimX dimY 0 in
+  for i = 0 to dimX-1 do
+    for j = 0  to dimY-1 do
       m.(i).(j) <- seed_of_pixel (i,j) fonction voronoi
     done
   done;m;;
@@ -65,14 +67,6 @@ let frontiere m i j =
   || ((j-1 > 0) && (m.(i).(j-1) <> v))
   || ((j+1 < Array.length m.(0)) && (m.(i).(j+1) <> v));;
 
-    (*  if(v <> m.(i-1).(j) ||
-          v <> m.(i+1).(j) ||
-	  v <> m.(i).(j-1) ||
-	  v <> m.(i).(j+1)) then
-     true
-    else
-     false;; *)
-
 let getCouleur (c:color option) = match c with
   | None -> white
   | Some a -> a;;
@@ -82,11 +76,9 @@ let getCouleur (c:color option) = match c with
 let draw_voronoi matrix voronoi =
   auto_synchronize false;
   set_color black;
-(*   let n = Array.length voronoi.seeds in
- *)  let maxX = Array.length matrix in
+  let maxX = Array.length matrix in
   let maxY = Array.length matrix.(0) in
-(*   let n = Array.make_matrix n n false in
- *)  for i = 0 to maxX - 1 do
+  for i = 0 to maxX - 1 do
     for j = maxY-1 downto 0 do
       if((frontiere matrix i j)) then
 	(set_color black;
@@ -107,9 +99,7 @@ let frontiere2 k m i j =
   ((i-1 > 0) && (m.(i-1).(j) = k))
   || ((i+1 < Array.length m ) && (m.(i+1).(j) = k))
   || ((j-1 > 0) && (m.(i).(j-1) = k))
-  || ((j+1 < Array.length m.(0)) && (m.(i).(j+1) = k));;
-  
- 
+  || ((j+1 < Array.length m.(0)) && (m.(i).(j+1) = k));; 
   
 
 let adjacences_voronoi voronoi regions =
@@ -121,7 +111,6 @@ let adjacences_voronoi voronoi regions =
     for k = 0 to n-1 do 
       for i = 0 to maxI-1 do 
         for j = 0 to maxJ-1 do
-          (* let tmp = try (frontiere2 k regions i j) with | Invalid_argument "index out of bounds" -> false in *)
           if((regions.(i).(j) = h) && (frontiere2 k regions i j) && h <> k) then 
             b.(h).(k) <- true
           else ()
