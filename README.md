@@ -32,6 +32,7 @@ Il est aussi possible de mettre fin au jeu (considéré comme un abandon) en aff
 - Réparer la fonction adjacences_voronoi : s'assurer qu'elle produit les bons résultats [Kostia] [A tester]
 - Sépération des pixels des régions dans plusieurs listes : pour pouvoir colorier qu'une seule région [Kostia]
 - Fonction check_coloring qui parcours les seeds et leurs voisins et s'arrête puis renvoie true s'il existe un seed qui a un voisin de la même couleur. S'il n'en existe pas on retourne true [Kostia]
+- Mieux découper logiquement le fichier voronoi.ml [Kostia]
 
 ## Programme Extrémiste de Peaufinage (PEP)
 
