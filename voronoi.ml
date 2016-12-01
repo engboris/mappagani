@@ -165,7 +165,7 @@ let generator_color_set voronoi =
   | h::t -> insert h (supprime_double t) in
   let rec rajoute_couleurs list color_set = match color_set with
     | [] -> failwith "plus de 4 couleurs"
-    | hs::t -> if(List.length list = 4) then list
+    | h::t -> if(List.length list = 4) then list
               else
               rajoute_couleurs (insert h list) t in 
   rajoute_couleurs (supprime_double list_color) color_set;;
