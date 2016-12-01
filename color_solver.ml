@@ -76,7 +76,7 @@ let rec extract_coloring results : Variables.t list =
     else
       extract_coloring rs;;
 
-let generate_coloring distanceF voronoi colors_set : Variables.t list =
+let generate_coloring distanceF voronoi colors_set : (int * Graphics.color) list =
   let adj = adjacences_voronoi voronoi (regions_voronoi distanceF voronoi) in
   let solving = Sat.solve (produce_constraints voronoi.seeds adj colors_set) in
   match solving with

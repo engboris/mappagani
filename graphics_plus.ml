@@ -11,15 +11,22 @@ type button = {
   action : unit -> unit
 };;
 
-(* ----------- Parameters ----------- *)
-let button_background = white;;
-let button_textcolor = black;;
-let button_bordercolor = black;;
+(* ----------- Style ----------- *)
+let background_color = 0x333536;;
+let button_background = 0x333536;;
+let button_textcolor = white;;
+let button_bordercolor = 0x57cdff;;
 let button_hovercolor = cyan;;
+
+let default_width_menu_buttons = 200;;
+let default_height_menu_buttons = 30;;
 
 (* ----------- Functions ----------- *)
 let create_menu_button c s a =
-  {coord = c; size = (200, 30); text = s; action = a};;
+  {coord = c;
+   size = (default_width_menu_buttons, default_height_menu_buttons);
+   text = s;
+   action = a};;
 
 let coord_in_surface x y pos size : bool =
   let (blx, bly) = pos and (l, h) = size in
@@ -47,6 +54,11 @@ let top_of button : (int * int) =
 
 let draw_button = draw_button_primitive button_background;;
 
-let hover_on = draw_button_primitive button_hovercolor;;
-let hover_off = draw_button;;
-
+let rec check_buttons x y buttons =
+match buttons with
+| [] -> ()
+| h::t ->
+   if (coord_in_button x y h) then
+     (h.action (); check_buttons x y t)
+   else
+     (check_buttons x y t);;

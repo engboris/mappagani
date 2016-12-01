@@ -1,6 +1,11 @@
 open Graphics;;
 open Voronoi;;
 
+let blue : color = 0x94cbe3;;
+let red : color = 0xe88091;;
+let green : color = 0x9ded87;;
+let yellow : color = 0xf7fc8b;;
+
 (*some examples of voronoi*)
 let v1 = {
   dim = 200,200;
