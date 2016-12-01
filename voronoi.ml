@@ -68,7 +68,7 @@ let frontiere m i j =
   || ((j+1 < Array.length m.(0)) && (m.(i).(j+1) <> v));;
 
 let getCouleur (c:color option) = match c with
-  | None -> white
+  | None -> 0xf0f0f0
   | Some a -> a;;
 
 
