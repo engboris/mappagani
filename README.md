@@ -25,6 +25,8 @@ Il est aussi possible de mettre fin au jeu (considéré comme un abandon) en aff
 
 3. Entrer et exécuter la commande <code>make</code>.
 
+**Attention** : quelques problèmes d'affichages peuvent se produire sous Windows
+
 ## TODO
 - voronoi.ml -> draw_voronoi -> améliorer le try/catch lors du parcours des pixels [Kostia] 
 - ~~Réparer la fonction get_list_couleurs : supprimer les doublons, il doit y avoir exactement 4 couleurs [Kostia]~~
