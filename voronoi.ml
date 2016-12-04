@@ -1,13 +1,12 @@
 open Graphics;;
-(*  #load "graphics.cma";; 
- *)
+(*  #load "graphics.cma";; *)
 
 type seed = { c : color option; x : int; y : int };;
 type voronoi = { dim : int * int; seeds : seed array };;
 
 
 (***** Fonction d'affiche mode console pour des tests *****)
-
+(*TODO : supprimer*)
 let print_matrix m =
   let maxX = Array.length m in
   let maxY = Array.length m.(0) in
@@ -50,12 +49,11 @@ let regions_voronoi fonction voronoi =
   let dimX = fst voronoi.dim in
   let dimY = snd voronoi.dim in
   let m = Array.make_matrix dimX dimY 0 in
-  for i = 0 to dimX-1 do
-    for j = 0  to dimY-1 do
-      m.(i).(j) <- seed_of_pixel (i,j) fonction voronoi
-    done
-  done;m;;
-
+  Array.iteri (fun i line -> 
+     Array.iteri (fun j _ ->
+      (line.(j) <- seed_of_pixel (i,j) fonction voronoi)) line) m; m;;
+                                                                   
+ 
 
 (***** Affichage de la carte depuis un Voronoi *****)
 
