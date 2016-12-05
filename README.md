@@ -37,6 +37,7 @@ Il est aussi possible de mettre fin au jeu (considéré comme un abandon) en aff
 - Mieux découper logiquement le fichier voronoi.ml [Kostia]
 - Optmisations possibles [Kostia] :
   * Calculer les frontières dans region_voronoi et si on a un couple de pixel de couleurs différentes, ajouter ce voisinage dans une liste (sans doublons) puis à partir de la liste obtenue on a une fonction qui va calculer la matrice d'adjacence en temps linéaire en parcourant la liste. On peut utiliser des fonctions auxiliaire genre une grosse fonction qui renvoie (regions, table de voisinage) et regions_voronoi va juste récupérer le premier élément du couple de cette fonction auxiliaire et adjacence_voronoi va récupérer la table pour calculer l'adjacence.
+- Retirer la déclaration de type voronoi dans voronoi.ml et la garder dans voronoi.mli et résoudre les problèmes 
 
 ## Programme Extrémiste de Peaufinage (PEP)
 
