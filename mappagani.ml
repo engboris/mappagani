@@ -17,7 +17,7 @@ let generate_voronoi () : voronoi = Examples.select_voronoi ();;
                MAIN FUNCTION
    _________________________________________ *)
 
-type program_state = Play | Quit | End | NewMap;;
+type program_state = Play | Quit | End | NewMap | Reset;;
 
 let update_current_color c board_pos board_size =
   let rec_y = 20 in
@@ -34,6 +34,27 @@ let update_current_color c board_pos board_size =
 let adapt_and_get_screen_size voronoi =
   let (x, y) = voronoi.dim in (x + rightborder, y);;
 
+(* ----------- Logo ----------- *)
+
+let logo_size : (int * int) = (245, 115);;
+let green_to_exclude : int = 0x00FF00;;
+
+let make_logo () : image =
+  let (x, y) = logo_size in
+  let m = Array.make_matrix x y transp in
+  let channel = open_in "images/mappagani_logo.bmp" in
+  try (
+    seek_in channel 0x000A;
+    Array.iteri (fun i line -> 
+      Array.iteri (fun j _ ->
+        let v = input_byte channel in
+        (line.(j) <- (if v = green_to_exclude then transp else v))) line) m;
+  close_in channel;
+  make_image m
+  ) with End_of_file ->
+  close_in channel;
+  make_image m;;
+
 (* ----------- Menu ----------- *)
 
 let create_menu screen_size state voronoi_main colors_set regions =
@@ -43,7 +64,7 @@ let create_menu screen_size state voronoi_main colors_set regions =
   (* Quit *)
   let button_quit = create_menu_button topleft_position "Quitter" (fun () -> state := Quit) in
   (* Reset *)
-  let button_reset = create_menu_button (top_of button_quit) "Recommencer" (fun () -> state := Quit) in
+  let button_reset = create_menu_button (top_of button_quit) "Recommencer" (fun () -> state := Reset) in
   (* New game *)
   let button_newgame = create_menu_button (top_of button_reset) "Nouvelle carte" (fun () -> state := NewMap) in
   (* Solution *)
@@ -97,6 +118,11 @@ let main () =
   let (map_x, map_y) = voronoi_main.dim in
   let (screen_x, screen_y) = adapt_and_get_screen_size voronoi_main in
   let screen_size = (screen_x, screen_y) in
+  (* Logo *)
+  (*let logo = make_logo () in
+  let logo_position = (screen_x-250, 200) in
+  let (logo_x, logo_y) = logo_position in
+  draw_image logo logo_x logo_y;*)
   (* Settings *)
   set_window_title window_title;
   open_graph (" "^(string_of_int screen_x)^"x"^(string_of_int screen_y));
