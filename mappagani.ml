@@ -84,8 +84,6 @@ let rec game voronoi_main regions map_size menu screen_size state =
        resize_window (fst new_screen_size) (snd new_screen_size);
        List.iter draw_button menu;
        game new_voronoi new_regions new_voronoi.dim menu new_screen_size state)
-    else
-      ()
   done;;
 
 (* ----------- Main ----------- *)
@@ -104,6 +102,7 @@ let main () =
   open_graph (" "^(string_of_int screen_x)^"x"^(string_of_int screen_y));
   set_color background_color;
   fill_rect 0 0 screen_x screen_y;
+  synchronize ();
   (* Buttons *)
   let menu = create_menu screen_size state voronoi_main colors_set regions in
   List.iter draw_button menu;
