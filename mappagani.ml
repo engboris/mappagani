@@ -29,7 +29,7 @@ let update_current_color c board_pos board_size =
   moveto (x+l+3) (y-rec_y+2);
   draw_string selected_color_label;;
 
-(* A utiliser si necessaire 
+(* A utiliser si necessaire
    Ne fait rien pour l'instant *)
 let adapt_and_get_screen_size voronoi =
   let (x, y) = voronoi.dim in (x + rightborder, y);;
@@ -45,10 +45,13 @@ let make_logo () : image =
   let channel = open_in "images/mappagani_logo.bmp" in
   try (
     seek_in channel 0x000A;
-    Array.iteri (fun i line -> 
+    Array.iteri (fun i line ->
       Array.iteri (fun j _ ->
-        let v = input_byte channel in
-        (line.(j) <- (if v = green_to_exclude then transp else v))) line) m;
+	let b = input_byte channel in
+	let v = input_byte channel in
+	let r = input_byte channel in
+	let pixel = rgb r v b in
+        (line.(j) <- (if pixel = green_to_exclude then transp else pixel))) line) m;
   close_in channel;
   make_image m
   ) with End_of_file ->
@@ -103,6 +106,8 @@ let rec game voronoi_main regions map_size menu screen_size state =
        let new_colors_set = generator_color_set new_voronoi in
        let menu = create_menu new_screen_size state new_voronoi new_colors_set new_regions in
        resize_window (fst new_screen_size) (snd new_screen_size);
+       set_color background_color;
+       fill_rect 0 0 (fst new_screen_size) (snd new_screen_size);
        List.iter draw_button menu;
        game new_voronoi new_regions new_voronoi.dim menu new_screen_size state)
   done;;
@@ -118,16 +123,16 @@ let main () =
   let (map_x, map_y) = voronoi_main.dim in
   let (screen_x, screen_y) = adapt_and_get_screen_size voronoi_main in
   let screen_size = (screen_x, screen_y) in
-  (* Logo *)
-  (*let logo = make_logo () in
-  let logo_position = (screen_x-250, 200) in
-  let (logo_x, logo_y) = logo_position in
-  draw_image logo logo_x logo_y;*)
   (* Settings *)
   set_window_title window_title;
   open_graph (" "^(string_of_int screen_x)^"x"^(string_of_int screen_y));
   set_color background_color;
   fill_rect 0 0 screen_x screen_y;
+  (* Logo *)
+  let logo = make_logo () in
+  let logo_position = (screen_x-250, 200) in
+  let (logo_x, logo_y) = logo_position in
+  draw_image logo logo_x logo_y;
   synchronize ();
   (* Buttons *)
   let menu = create_menu screen_size state voronoi_main colors_set regions in
