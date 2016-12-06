@@ -33,7 +33,7 @@ Il est aussi possible de mettre fin au jeu (considéré comme un abandon) en aff
 - ~~Réparer la fonction get_list_couleurs : combler avec des couleurs pour en avoir 4 [Kostia]~~
 - ~~Réparer la fonction adjacences_voronoi : s'assurer qu'elle produit les bons résultats [Kostia]~~
 - Séparation des pixels des régions dans plusieurs listes : pour pouvoir colorier qu'une seule région [Kostia]
-- Fonction check_coloring qui parcours les seeds et leurs voisins et s'arrête puis renvoie true s'il existe un seed qui a un voisin de la même couleur. S'il n'en existe pas on retourne true [Kostia]
+- Fonction check_coloring qui parcours les seeds et leurs voisins et s'arrête puis renvoie true s'il existe un seed qui a un voisin de la même couleur. S'il n'en existe pas on retourne true [Boris]
 - Mieux découper logiquement le fichier voronoi.ml [Kostia] (draw_voronoi dans mappagani.ml)
 - Optmisations possibles [Kostia] :
   * Calculer les frontières dans region_voronoi et si on a un couple de pixel de couleurs différentes, ajouter ce voisinage dans une liste (sans doublons) puis à partir de la liste obtenue on a une fonction qui va calculer la matrice d'adjacence en temps linéaire en parcourant la liste. On peut utiliser des fonctions auxiliaire genre une grosse fonction qui renvoie (regions, table de voisinage) et regions_voronoi va juste récupérer le premier élément du couple de cette fonction auxiliaire et adjacence_voronoi va récupérer la table pour calculer l'adjacence.
