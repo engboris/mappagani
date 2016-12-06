@@ -74,13 +74,14 @@ let draw_voronoi matrix voronoi =
   set_color black;
   let maxY = Array.length matrix.(0) in
   Array.iteri (fun i line ->
-    Array.iteri (fun j _ ->
-	 if((frontiere matrix i (maxY-1-j))) then
+   Array.iteri (fun j _ ->
+	 let j' = maxY-1-j in
+	 if((frontiere matrix i j')) then
 	   (set_color black;
-	   plot i (maxY - 1 - j))
+	   plot i j')
          else
-	   set_color (getCouleur (voronoi.seeds.(matrix.(i).(maxY - 1 - j)).c));
-	   plot i (maxY -1 -j)) line) matrix; synchronize();;
+	   set_color (getCouleur (voronoi.seeds.(matrix.(i).(j')).c));
+	   plot i j') line) matrix; synchronize();;
 
 
 
