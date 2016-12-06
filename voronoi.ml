@@ -68,56 +68,20 @@ let getCouleur (c:color option) = match c with
   | Some a -> a;;
 
 
-(*TODO : fixme*)
-(*let draw_voronoi matrix voronoi =
-  auto_synchronize false;
-  set_color black;
-  let maxX = Array.length matrix in
-  let maxY = Array.length matrix.(0) in
-  for i = 0 to maxX - 1 do
-    for j = maxY-1 downto 0 do
-      if((frontiere matrix i j)) then
-	(set_color black;
-	plot i j)
-      else
-	set_color (getCouleur (voronoi.seeds.(matrix.(i).(j)).c));
-        plot i j
-    done;
-  done; synchronize ();;*)
-
-(*let draw_voronoi matrix voronoi =
-  auto_synchronize false;
-  set_color black;
-  let maxX = Array.length matrix in
-  let maxY = Array.length matrix.(0) in
-  for i = 0 to maxX - 1 do
-    for j = 0 to maxY - 1 do
-      if((frontiere matrix i (maxY-1-j))) then
-	(set_color black;
-	plot i (maxY - 1 - j))
-      else
-	set_color (getCouleur (voronoi.seeds.(matrix.(i).(maxY - 1 - j)).c));
-        plot i (maxY -1 -j)
-    done;
-  done; synchronize ();;
-  *)
 
 let draw_voronoi matrix voronoi =
   auto_synchronize false;
   set_color black;
   let maxY = Array.length matrix.(0) in
   Array.iteri (fun i line ->
-	       Array.iteri (fun j _ -> if((frontiere matrix i (maxY-1-j))) then
-	(set_color black;
-	plot i (maxY - 1 - j))
-      else
-	set_color (getCouleur (voronoi.seeds.(matrix.(i).(maxY - 1 - j)).c));
-        plot i (maxY -1 -j)) line) matrix; synchronize();;
+    Array.iteri (fun j _ ->
+	 if((frontiere matrix i (maxY-1-j))) then
+	   (set_color black;
+	   plot i (maxY - 1 - j))
+         else
+	   set_color (getCouleur (voronoi.seeds.(matrix.(i).(maxY - 1 - j)).c));
+	   plot i (maxY -1 -j)) line) matrix; synchronize();;
 
-  (*Array.iteri (fun i line ->
-     Array.iteri (fun j _ ->
-      (line.(j) <- seed_of_pixel (i,j) fonction voronoi)) line) m; m;;
-   *)
 
 
 (***** Calcul de la matrice d'adjacences *****)
