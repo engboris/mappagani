@@ -49,11 +49,9 @@ let regions_voronoi fonction voronoi =
   let dimX = fst voronoi.dim in
   let dimY = snd voronoi.dim in
   let m = Array.make_matrix dimX dimY 0 in
-  Array.iteri (fun i line -> 
+  Array.iteri (fun i line ->
      Array.iteri (fun j _ ->
       (line.(j) <- seed_of_pixel (i,j) fonction voronoi)) line) m; m;;
-                                                                   
- 
 
 (***** Affichage de la carte depuis un Voronoi *****)
 
@@ -97,19 +95,18 @@ let frontiere2 k m i j =
   ((i-1 > 0) && (m.(i-1).(j) = k))
   || ((i+1 < Array.length m ) && (m.(i+1).(j) = k))
   || ((j-1 > 0) && (m.(i).(j-1) = k))
-  || ((j+1 < Array.length m.(0)) && (m.(i).(j+1) = k));; 
-  
+  || ((j+1 < Array.length m.(0)) && (m.(i).(j+1) = k));;
 
 let adjacences_voronoi voronoi regions =
-  let n = Array.length voronoi.seeds in 
-  let b = Array.make_matrix n n false in 
-  let maxI = Array.length regions in 
-  let maxJ = Array.length regions.(0) in 
-  for h = 0 to n-1 do 
-    for k = 0 to n-1 do 
-      for i = 0 to maxI-1 do 
+  let n = Array.length voronoi.seeds in
+  let b = Array.make_matrix n n false in
+  let maxI = Array.length regions in
+  let maxJ = Array.length regions.(0) in
+  for h = 0 to n-1 do
+    for k = 0 to n-1 do
+      for i = 0 to maxI-1 do
         for j = 0 to maxJ-1 do
-          if((regions.(i).(j) = h) && (frontiere2 k regions i j) && h <> k) then 
+          if((regions.(i).(j) = h) && (frontiere2 k regions i j) && h <> k) then
             b.(h).(k) <- true
           else ()
         done;
@@ -125,9 +122,9 @@ let rec insert value list = match list with
   | h::t -> if(h = value) then h::t
             else if (value < h) then value::h::t
             else h::(insert value t);;
-  
 
-let adjacents_to i adj = 
+
+let adjacents_to i adj =
   let l = Array.length adj in
   let rec aux j tab  =
     if(j >= l) then tab
@@ -143,21 +140,19 @@ let rec fill_seeds voronoi list_color = match list_color with
   fill_seeds voronoi t;;
 
 
-let get_list_couleurs seeds = 
+let get_list_couleurs seeds =
   let l = Array.length seeds in
-  let rec aux i = 
+  let rec aux i =
     if (i >= l) then []
     else if (seeds.(i).c <> None) then (getCouleur seeds.(i).c)::(aux (i+1))
   else aux (i+1)
-  in aux 0;;   
+  in aux 0;;
 
-
-  
 
 let generator_color_set voronoi =
   let list_color = get_list_couleurs voronoi.seeds in
   let color_set = [yellow; magenta; cyan; red; blue; green;black; white;] in
-  let rec supprime_double list = 
+  let rec supprime_double list =
   match list with
   | [] -> []
   | h::t -> insert h (supprime_double t) in
@@ -165,6 +160,6 @@ let generator_color_set voronoi =
     | [] -> failwith "plus de 4 couleurs"
     | h::t -> if(List.length list = 4) then list
               else
-              rajoute_couleurs (insert h list) t in 
+              rajoute_couleurs (insert h list) t in
   rajoute_couleurs (supprime_double list_color) color_set;;
 
