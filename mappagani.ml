@@ -39,22 +39,43 @@ let adapt_and_get_screen_size voronoi =
 let logo_size : (int * int) = (245, 115);;
 let green_to_exclude : int = 0x00FF00;;
 
-let make_logo () : image =
-  let (x, y) = logo_size in
-  let m = Array.make_matrix x y transp in
-  let channel = open_in "images/mappagani_logo.bmp" in
+(* let make_logo () : image =
+  let (w, h) = logo_size in
+  let m = Array.make_matrix h w transp in
+  let channel = open_in_bin "images/mappagani_logo.bmp" in
   try (
-    seek_in channel 0x000A;
+    seek_in channel 54;
     Array.iteri (fun i line ->
       Array.iteri (fun j _ ->
 	let b = input_byte channel in
-	let v = input_byte channel in
+	let g = input_byte channel in
 	let r = input_byte channel in
-	let pixel = rgb r v b in
-        (line.(j) <- (if pixel = green_to_exclude then transp else pixel))) line) m;
+	let pixel = rgb r g b in
+        (line.(j) <- (if pixel = green_to_exclude then pixel else pixel))) line) m;
   close_in channel;
   make_image m
   ) with End_of_file ->
+  close_in channel;
+  make_image m;; *)
+
+let make_logo () : image =
+  let (w, h) = logo_size in
+  let m = Array.make_matrix h w transp in
+  let channel = open_in_bin "images/mappagani_logo.bmp" in
+  try 
+  ( seek_in channel 54;
+    for i = 0 to h-1 do
+      for j = 0 to w-1 do
+        let r = input_byte channel in
+        let g = input_byte channel in
+        let b = input_byte channel in
+        let pixel = rgb r g b in
+              (m.(h-1-i).(j) <- (if pixel = green_to_exclude then transp else pixel))
+        done;
+    done;
+    close_in channel;
+    make_image m)
+  with End_of_file ->
   close_in channel;
   make_image m;;
 
@@ -73,8 +94,8 @@ let create_menu screen_size state voronoi_main colors_set regions =
   (* Solution *)
   let button_solution =
     let (tpbnx, tpbny) = top_of button_reset in
-    let coloring = generate_coloring distance_taxicab voronoi_main colors_set in
-    let ac_solution = (fun () -> (draw_voronoi regions (fill_seeds voronoi_main coloring)); state := End) in
+    let coloring () = generate_coloring distance_taxicab voronoi_main colors_set in
+    let ac_solution = (fun () -> (draw_voronoi regions (fill_seeds voronoi_main (coloring ()))); state := End) in
     create_menu_button (tpbnx, tpbny+40) "Solution" ac_solution in
   (* Check *)
   let button_check = create_menu_button (top_of button_solution) "Valider coloriage" (fun () -> state := Quit) in
@@ -130,7 +151,7 @@ let main () =
   fill_rect 0 0 screen_x screen_y;
   (* Logo *)
   let logo = make_logo () in
-  let logo_position = (screen_x-250, 200) in
+  let logo_position = (screen_x-280, screen_y-175) in
   let (logo_x, logo_y) = logo_position in
   draw_image logo logo_x logo_y;
   synchronize ();
