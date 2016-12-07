@@ -114,6 +114,7 @@ let create_menu screen_size state voronoi_main colors_set regions liste_pixel =
   let (screen_x, screen_y) = screen_size in
   let default_h = default_height_menu_buttons in
   let topleft_position = (screen_x-250, screen_y-(screen_y/2)-(default_h*5/2)) in
+  let adj = adjacences_voronoi voronoi_main regions in
   (* Quit *)
   let button_quit = create_menu_button topleft_position "Quitter" (fun () -> state := Quit) in
   (* Reset *)
@@ -123,7 +124,7 @@ let create_menu screen_size state voronoi_main colors_set regions liste_pixel =
   (* Solution *)
   let button_solution =
     let (tpbnx, tpbny) = top_of button_reset in
-    let coloring () = generate_coloring distance_taxicab voronoi_main colors_set regions in
+    let coloring () = generate_coloring distance_taxicab voronoi_main colors_set regions adj in
     let ac_solution () = 
       let coloring_list = coloring () in
       List.iter (fun (i, k) -> if (voronoi_main.seeds.(i).c = None) then
@@ -132,8 +133,15 @@ let create_menu screen_size state voronoi_main colors_set regions liste_pixel =
       (state := End) in
     create_menu_button (tpbnx, tpbny+40) "Solution" ac_solution in
   (* Check *)
-  let ac_check () = () in
-  let button_check = create_menu_button (top_of button_solution) "Valider coloriage" ac_check in
+  let ac_check () =
+    let checking = check_coloring voronoi_main adj in
+    if (checking) then
+      (List.iter (fun i ->
+        let seedtmp = {c=Some black; x=voronoi_main.seeds.(i).x; y=voronoi_main.seeds.(i).y} in
+        (voronoi_main.seeds.(i) <- seedtmp);
+        draw_regions regions voronoi_main liste_pixel i) (seeds_to_indices voronoi_main.seeds);
+      (state := End))
+    in let button_check = create_menu_button (top_of button_solution) "Valider coloriage" ac_check in
   (* Buttons list *)
   [button_quit; button_reset; button_newgame; button_solution; button_check];;
 

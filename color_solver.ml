@@ -87,8 +87,7 @@ let produce_constraints seeds adj colors_set : Sat.literal list list =
 let rec extract_coloring results : Variables.t list =
   List.fold_left (fun acc (b, v) -> if b then v::acc else acc) [] results;;
 
-let generate_coloring distanceF voronoi colors_set regions : (int * Graphics.color) list =
-  let adj = adjacences_voronoi voronoi regions in
+let generate_coloring distanceF voronoi colors_set regions adj : (int * Graphics.color) list =
   let solving = Sat.solve (produce_constraints voronoi.seeds adj colors_set) in
   match solving with
   | None -> raise NoSolution
@@ -106,4 +105,4 @@ let check_coloring voronoi adj : bool =
   let has_same_neighbour i =
     let adj_to_i = adjacents_to i adj in
       List.exists (fun j -> voronoi.seeds.(j).c = voronoi.seeds.(i).c) adj_to_i
-  in List.exists (fun i -> has_same_neighbour i) (seeds_to_indices voronoi.seeds);;
+  in not (List.exists (fun i -> has_same_neighbour i) (seeds_to_indices voronoi.seeds));;

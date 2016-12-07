@@ -8,9 +8,9 @@ let v1 = {
   seeds = [|
     {c=Some red; x=50; y=100};
     {c=Some green; x=100; y=50};
-    {c=Some blue; x=100; y=150};
+    {c=None; x=100; y=150};
     {c=None; x=150; y=100};
-    {c=None; x=100; y=100}   (*square's seed*)
+    {c=Some blue; x=100; y=100}   (*square's seed*)
   |]
 }
 
