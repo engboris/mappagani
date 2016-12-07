@@ -87,8 +87,8 @@ let produce_constraints seeds adj colors_set : Sat.literal list list =
 let rec extract_coloring results : Variables.t list =
   List.fold_left (fun acc (b, v) -> if b then v::acc else acc) [] results;;
 
-let generate_coloring distanceF voronoi colors_set : (int * Graphics.color) list =
-  let adj = adjacences_voronoi voronoi (regions_voronoi distanceF voronoi) in
+let generate_coloring distanceF voronoi colors_set regions : (int * Graphics.color) list =
+  let adj = adjacences_voronoi voronoi regions in
   let solving = Sat.solve (produce_constraints voronoi.seeds adj colors_set) in
   match solving with
   | None -> raise NoSolution
@@ -97,4 +97,3 @@ let generate_coloring distanceF voronoi colors_set : (int * Graphics.color) list
     match extraction with
     | [] -> raise NoSolution
     | _ -> extraction;;
-    
