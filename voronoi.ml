@@ -5,18 +5,6 @@ type seed = { c : color option; x : int; y : int };;
 type voronoi = { dim : int * int; seeds : seed array };;
 
 
-(***** Fonction d'affiche mode console pour des tests *****)
-(*TODO : supprimer*)
-let print_matrix m =
-  let maxX = Array.length m in
-  let maxY = Array.length m.(0) in
-  for i = 0 to maxX -1 do
-    for j = 0 to maxY -1 do
-      print_int m.(i).(j); print_string " ";
-    done;
-  print_string "\n";
-  done;;
-
 (***** Fonctions de distance *****)
 let distance_euclide (x1, y1) (x2,y2) =
   let x = (x1 - x2) * (x1 - x2) in
