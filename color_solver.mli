@@ -6,3 +6,4 @@ module Variables : sig
 end
 
 val generate_coloring : (int * int -> int * int -> int) -> voronoi -> Graphics.color list -> int array array -> (int * Graphics.color) list
+val check_coloring : voronoi -> bool array array -> bool
