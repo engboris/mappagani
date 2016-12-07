@@ -19,7 +19,6 @@ let distance_taxicab (x1, y1) (x2,y2) =
 
 (***** Calcul de la matrice des regions *****)
 
-
 let indice_of_min array =
   let l = Array.length array in
   let rec aux i min indiceMin =
@@ -28,19 +27,34 @@ let indice_of_min array =
     else aux (i+1) min indiceMin in
   aux 1 array.(0) 0;;
 
-
 let seed_of_pixel (i,j) fonction voronoi =
   indice_of_min (Array.map (fun s -> fonction (i,j) (s.x, s.y)) voronoi.seeds);;
 
-
+(*
 let regions_voronoi fonction voronoi =
   let dimX = fst voronoi.dim in
   let dimY = snd voronoi.dim in
   let m = Array.make_matrix dimX dimY 0 in
   Array.iteri (fun i line ->
      Array.iteri (fun j _ ->
-      (line.(j) <- seed_of_pixel (i,j) fonction voronoi)) line) m; m;;
+		  (line.(j) <- seed_of_pixel (i,j) fonction voronoi)) line) m; m;;*)
 
+let regions_and_pixelList fonction voronoi =
+  let dimX = fst voronoi.dim in
+  let dimY = snd voronoi.dim in
+  let m = Array.make_matrix dimX dimY 0 in
+  let array_of_list_pixel = Array.make (Array.length voronoi.seeds) [] in
+  Array.iteri (fun i line ->
+       Array.iteri (fun j _ ->
+	  let seed = seed_of_pixel (i,j) fonction voronoi in
+	  (line.(j) <- seed;
+	  (array_of_list_pixel.(seed) <- (i,j)::array_of_list_pixel.(seed)))) line) m;
+  (m, array_of_list_pixel);;
+
+let liste_pixels fonction voronoi =
+  snd (regions_and_pixelList fonction voronoi);;
+let regions_voronoi fonction voronoi =
+  fst (regions_and_pixelList fonction voronoi);;
 
 (***** Recuperation des pixels de chaque regions *****)
 (*Liste de la forme [idRegions, [listePixel], ...]*)

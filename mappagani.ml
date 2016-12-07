@@ -60,6 +60,18 @@ let draw_voronoi matrix voronoi =
      set_color (getCouleur (voronoi.seeds.(matrix.(i).(j')).c));
      plot i j') line) matrix; synchronize();;
 
+let draw_regions matrix voronoi array_of_list indice =
+  auto_synchronize false;
+  let color_region = getCouleur(voronoi.seeds.(indice).c) in
+  List.iter (fun e ->
+	     let i = fst e in
+	     let j = snd e in
+	     if((frontiere matrix i j)) then
+     (set_color black;
+     plot i j)
+         else
+     set_color color_region;
+     plot i j) array_of_list.(indice); synchronize();;
 
 (* ----------- Logo ----------- *)
 
@@ -121,7 +133,7 @@ let create_menu screen_size state voronoi_main colors_set regions =
   (* Solution *)
   let button_solution =
     let (tpbnx, tpbny) = top_of button_reset in
-    let coloring () = generate_coloring distance_taxicab voronoi_main colors_set in
+    let coloring () = generate_coloring distance_taxicab voronoi_main colors_set regions in
     let ac_solution = (fun () -> (draw_voronoi regions (fill_seeds voronoi_main (coloring ()))); state := End) in
     create_menu_button (tpbnx, tpbny+40) "Solution" ac_solution in
   (* Check *)
@@ -131,7 +143,7 @@ let create_menu screen_size state voronoi_main colors_set regions =
 
 (* ----------- Game ----------- *)
 
-let rec game voronoi_main regions map_size menu screen_size state =
+let rec game voronoi_main regions map_size menu screen_size state liste_pixel =
   let (screen_x, screen_y) = screen_size in
   let newcolor = ref None in
   draw_voronoi regions voronoi_main;
@@ -148,7 +160,7 @@ let rec game voronoi_main regions map_size menu screen_size state =
       if (colortmp = None) then
 	let seedtmp = {c= !newcolor; x=voronoi_main.seeds.(owner).x; y=voronoi_main.seeds.(owner).y} in
 	(voronoi_main.seeds.(owner) <- seedtmp;
-        draw_voronoi regions voronoi_main;
+        draw_regions regions voronoi_main liste_pixel owner;
         synchronize ())
       else
 	(newcolor := voronoi_main.seeds.(owner).c;
@@ -156,7 +168,9 @@ let rec game voronoi_main regions map_size menu screen_size state =
     else if (!state = NewMap) then
       (state := Play;
        let new_voronoi = Examples.select_voronoi () in
-       let new_regions = regions_voronoi distance_taxicab new_voronoi in
+       let regions_list = regions_and_pixelList distance_taxicab new_voronoi in
+       let new_regions = fst regions_list in
+       let new_liste_pixel = snd regions_list in
        let new_screen_size = adapt_and_get_screen_size new_voronoi in
        let new_colors_set = generator_color_set new_voronoi in
        let menu = create_menu new_screen_size state new_voronoi new_colors_set new_regions in
@@ -164,7 +178,7 @@ let rec game voronoi_main regions map_size menu screen_size state =
        set_color background_color;
        fill_rect 0 0 (fst new_screen_size) (snd new_screen_size);
        List.iter draw_button menu;
-       game new_voronoi new_regions new_voronoi.dim menu new_screen_size state)
+       game new_voronoi new_regions new_voronoi.dim menu new_screen_size state new_liste_pixel)
   done;;
 
 (* ----------- Main ----------- *)
@@ -173,7 +187,9 @@ let main () =
   (* Working context *)
   let state = ref Play in
   let voronoi_main = generate_voronoi () in
-  let regions = regions_voronoi distance_taxicab voronoi_main in
+     let regions_list = regions_and_pixelList distance_taxicab voronoi_main in
+  let list_pixel = snd regions_list in
+  let regions = fst regions_list in
   let colors_set = generator_color_set voronoi_main in
   let (map_x, map_y) = voronoi_main.dim in
   let (screen_x, screen_y) = adapt_and_get_screen_size voronoi_main in
@@ -193,7 +209,7 @@ let main () =
   let menu = create_menu screen_size state voronoi_main colors_set regions in
   List.iter draw_button menu;
   (* Main loop *)
-  game voronoi_main regions (map_x, map_y) menu (screen_x, screen_y) state;
+  game voronoi_main regions (map_x, map_y) menu (screen_x, screen_y) state list_pixel;
   close_graph ();;
 
 main ();;
