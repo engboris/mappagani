@@ -72,12 +72,12 @@ let get_frontieres regions i j =
   let result = ref [] in
   let v = regions.(i).(j) in
   (if ((i-1 > 0) && (regions.(i-1).(j) <> v)) then
-    result := (regions.(i).(j), regions.(i-1).(j)) :: (!result);
-  if ((i+1 < Array.length regions) && (regions.(i+1).(j) <> v)) then
-    result := (regions.(i).(j), regions.(i+1).(j)) :: (!result);
-  if ((j-1 > 0) && (regions.(i).(j-1) <> v)) then
-    result := (regions.(i).(j), regions.(i).(j-1)) :: (!result);
-  if ((j+1 < Array.length regions.(0)) && (regions.(i).(j+1) <> v)) then
+    result := (regions.(i).(j), regions.(i-1).(j)) :: (!result)
+  else if ((i+1 < Array.length regions) && (regions.(i+1).(j) <> v)) then
+    result := (regions.(i).(j), regions.(i+1).(j)) :: (!result)
+  else if ((j-1 > 0) && (regions.(i).(j-1) <> v)) then
+    result := (regions.(i).(j), regions.(i).(j-1)) :: (!result)
+  else if ((j+1 < Array.length regions.(0)) && (regions.(i).(j+1) <> v)) then
     result := (regions.(i).(j), regions.(i).(j+1)) :: (!result));
   !result;;
 

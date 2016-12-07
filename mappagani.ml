@@ -80,25 +80,6 @@ let adapt_and_get_screen_size voronoi =
 let logo_size : (int * int) = (245, 115);;
 let green_to_exclude : int = 0x00FF00;;
 
-(* let make_logo () : image =
-  let (w, h) = logo_size in
-  let m = Array.make_matrix h w transp in
-  let channel = open_in_bin "images/mappagani_logo.bmp" in
-  try (
-    seek_in channel 54;
-    Array.iteri (fun i line ->
-      Array.iteri (fun j _ ->
-	let b = input_byte channel in
-	let g = input_byte channel in
-	let r = input_byte channel in
-	let pixel = rgb r g b in
-        (line.(j) <- (if pixel = green_to_exclude then pixel else pixel))) line) m;
-  close_in channel;
-  make_image m
-  ) with End_of_file ->
-  close_in channel;
-  make_image m;; *)
-
 let make_logo () : image =
   let (w, h) = logo_size in
   let m = Array.make_matrix h w transp in
@@ -119,6 +100,13 @@ let make_logo () : image =
   with End_of_file ->
   close_in channel;
   make_image m;;
+
+let draw_logo (screen_x, screen_y) = 
+  let logo = make_logo () in
+  let logo_position = (screen_x-280, screen_y-175) in
+  let (logo_x, logo_y) = logo_position in
+  draw_image logo logo_x logo_y;
+  synchronize ();;
 
 (* ----------- Menu ----------- *)
 
@@ -179,6 +167,7 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel =
        resize_window (fst new_screen_size) (snd new_screen_size);
        set_color background_color;
        fill_rect 0 0 (fst new_screen_size) (snd new_screen_size);
+       draw_logo new_screen_size;
        List.iter draw_button menu;
        game new_voronoi new_regions new_voronoi.dim menu new_screen_size state new_liste_pixel)
   done;;
@@ -202,11 +191,8 @@ let main () =
   set_color background_color;
   fill_rect 0 0 screen_x screen_y;
   (* Logo *)
-  let logo = make_logo () in
-  let logo_position = (screen_x-280, screen_y-175) in
-  let (logo_x, logo_y) = logo_position in
-  draw_image logo logo_x logo_y;
-  synchronize ();
+  if (screen_x > 300 && screen_y > 300) then
+    draw_logo (screen_x, screen_y);
   (* Buttons *)
   let menu = create_menu screen_size state voronoi_main colors_set regions in
   List.iter draw_button menu;

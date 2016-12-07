@@ -102,3 +102,8 @@ let generate_coloring distanceF voronoi colors_set regions : (int * Graphics.col
                VERIFICATION
    _________________________________________ *)
 
+let check_coloring voronoi adj : bool =
+  let has_same_neighbour i =
+    let adj_to_i = adjacents_to i adj in
+      List.exists (fun j -> voronoi.seeds.(j).c = voronoi.seeds.(i).c) adj_to_i
+  in List.exists (fun i -> has_same_neighbour i) (seeds_to_indices voronoi.seeds);;
