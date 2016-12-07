@@ -68,12 +68,6 @@ let regions_voronoi fonction voronoi =
 
 (***** Calcul de la matrice d'adjacences *****)
 
-let frontiere2 k m i j =
-  ((i-1 > 0) && (m.(i-1).(j) = k))
-  || ((i+1 < Array.length m ) && (m.(i+1).(j) = k))
-  || ((j-1 > 0) && (m.(i).(j-1) = k))
-  || ((j+1 < Array.length m.(0)) && (m.(i).(j+1) = k));;
-
 let get_frontieres regions i j =
   let result = ref [] in
   let v = regions.(i).(j) in
