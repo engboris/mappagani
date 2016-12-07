@@ -169,7 +169,7 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel =
        let new_liste_pixel = snd regions_list in
        let new_screen_size = adapt_and_get_screen_size new_voronoi in
        let new_colors_set = generator_color_set new_voronoi in
-       let menu = create_menu new_screen_size state new_voronoi new_colors_set new_regions liste_pixel in
+       let menu = create_menu new_screen_size state new_voronoi new_colors_set new_regions new_liste_pixel in
        resize_window (fst new_screen_size) (snd new_screen_size);
        set_color background_color;
        fill_rect 0 0 (fst new_screen_size) (snd new_screen_size);
