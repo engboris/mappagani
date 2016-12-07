@@ -92,6 +92,10 @@ let adjacences_voronoi voronoi regions =
 
 (***** Autre fonction utile pour la partie logique *****)
 
+let getCouleur (c:color option) = match c with
+  | None -> 0xf0f0f0
+  | Some a -> a;;
+
 let rec insert value list = match list with
   | [] -> value::[]
   | h::t -> if(h = value) then h::t

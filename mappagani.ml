@@ -43,10 +43,6 @@ let frontiere m i j =
   || ((j-1 > 0) && (m.(i).(j-1) <> v))
   || ((j+1 < Array.length m.(0)) && (m.(i).(j+1) <> v));;
 
-let getCouleur (c:color option) = match c with
-  | None -> 0xf0f0f0
-  | Some a -> a;;
-
 let draw_voronoi matrix voronoi =
   auto_synchronize false;
   set_color black;
@@ -90,7 +86,7 @@ let make_logo () : image =
   let (w, h) = logo_size in
   let m = Array.make_matrix h w transp in
   let channel = open_in_bin "images/mappagani_logo.bmp" in
-  try 
+  try
   ( seek_in channel 54;
     for i = 0 to h-1 do
       for j = 0 to w-1 do
