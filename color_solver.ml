@@ -57,7 +57,7 @@ let clause_adjacence seeds_indices (adj : bool array array) colors_set acc : Sat
   (* La restriction s'applique a toute couleur et tout seed *)
   List.fold_left (fun a index ->
     let adj_to_i = adjacents_to index adj in
-    List.fold_left (fun a' neighbour -> 
+    List.fold_left (fun a' neighbour ->
       List.fold_left (fun a'' color ->
         seed_adj_exclusion index neighbour color :: a'') a' colors_set) a adj_to_i) acc seeds_indices
 
@@ -66,7 +66,7 @@ let clause_presence seeds acc : Sat.literal list list =
   let l = Array.length seeds in
   let rec aux i acc =
     if (i >= l) then acc
-    else 
+    else
       match seeds.(i).c with
       | None -> aux (i+1) acc
       | Some c -> aux (i+1) ([(true, (i, getCouleur seeds.(i).c))]::acc)
