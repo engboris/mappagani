@@ -97,3 +97,8 @@ let generate_coloring distanceF voronoi colors_set regions : (int * Graphics.col
     match extraction with
     | [] -> raise NoSolution
     | _ -> extraction;;
+
+(* _________________________________________
+               VERIFICATION
+   _________________________________________ *)
+

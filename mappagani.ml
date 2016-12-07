@@ -7,7 +7,7 @@ open GraphicsPlus;;
 open Style;;
 
 (* _________________________________________
-               PARAMETERS
+                PARAMETRES
    _________________________________________ *)
 
 let window_title = "Mappagani";;
@@ -17,27 +17,8 @@ let rightborder : int = 300;;
 let generate_voronoi () : voronoi = Examples.select_voronoi ();;
 
 (* _________________________________________
-               MAIN FUNCTION
+            AFFICHAGE DE LA CARTE
    _________________________________________ *)
-
-type program_state = Play | Quit | End | NewMap | Reset;;
-
-let update_current_color c board_pos board_size =
-  let rec_y = 20 in
-  let (x, y) = board_pos in
-  let (l, h) = board_size in
-  set_color c;
-  fill_rect (x+l) (y-rec_y) (rightborder) rec_y;
-  set_color white;
-  moveto (x+l+3) (y-rec_y+2);
-  draw_string selected_color_label;;
-
-(* A utiliser si necessaire
-   Ne fait rien pour l'instant *)
-let adapt_and_get_screen_size voronoi =
-  let (x, y) = voronoi.dim in (x + rightborder, y);;
-
-(* ----------- Affichage Carte ----------- *)
 
 let frontiere m i j =
   let v = m.(i).(j) in
@@ -64,14 +45,35 @@ let draw_regions matrix voronoi array_of_list indice =
   auto_synchronize false;
   let color_region = getCouleur(voronoi.seeds.(indice).c) in
   List.iter (fun e ->
-	     let i = fst e in
-	     let j = snd e in
-	     if((frontiere matrix i j)) then
+       let i = fst e in
+       let j = snd e in
+       if((frontiere matrix i j)) then
      (set_color black;
      plot i j)
          else
      set_color color_region;
      plot i j) array_of_list.(indice); synchronize();;
+
+(* _________________________________________
+               MAIN FUNCTION
+   _________________________________________ *)
+
+type program_state = Play | Quit | End | NewMap | Reset;;
+
+let update_current_color c board_pos board_size =
+  let rec_y = 20 in
+  let (x, y) = board_pos in
+  let (l, h) = board_size in
+  set_color c;
+  fill_rect (x+l) (y-rec_y) (rightborder) rec_y;
+  set_color white;
+  moveto (x+l+3) (y-rec_y+2);
+  draw_string selected_color_label;;
+
+(* A utiliser si necessaire
+   Ne fait rien pour l'instant *)
+let adapt_and_get_screen_size voronoi =
+  let (x, y) = voronoi.dim in (x + rightborder, y);;
 
 (* ----------- Logo ----------- *)
 

@@ -74,23 +74,27 @@ let frontiere2 k m i j =
   || ((j-1 > 0) && (m.(i).(j-1) = k))
   || ((j+1 < Array.length m.(0)) && (m.(i).(j+1) = k));;
 
+let get_frontieres regions i j =
+  let result = ref [] in
+  let v = regions.(i).(j) in
+  (if ((i-1 > 0) && (regions.(i-1).(j) <> v)) then
+    result := (regions.(i).(j), regions.(i-1).(j)) :: (!result);
+  if ((i+1 < Array.length regions) && (regions.(i+1).(j) <> v)) then
+    result := (regions.(i).(j), regions.(i+1).(j)) :: (!result);
+  if ((j-1 > 0) && (regions.(i).(j-1) <> v)) then
+    result := (regions.(i).(j), regions.(i).(j-1)) :: (!result);
+  if ((j+1 < Array.length regions.(0)) && (regions.(i).(j+1) <> v)) then
+    result := (regions.(i).(j), regions.(i).(j+1)) :: (!result));
+  !result;;
+
 let adjacences_voronoi voronoi regions =
   let n = Array.length voronoi.seeds in
   let b = Array.make_matrix n n false in
-  let maxI = Array.length regions in
-  let maxJ = Array.length regions.(0) in
-  for h = 0 to n-1 do
-    for k = 0 to n-1 do
-      for i = 0 to maxI-1 do
-        for j = 0 to maxJ-1 do
-          if((regions.(i).(j) = h) && (frontiere2 k regions i j) && h <> k) then
-            b.(h).(k) <- true
-          else ()
-        done;
-      done;
-    done;
-  done; b;;
-
+  Array.iteri (fun i line ->
+    Array.iteri (fun j _ ->
+      let adj = get_frontieres regions i j in
+      List.iter (fun (x, y) -> b.(x).(y) <- true) adj) line) regions; 
+  b;;
 
 (***** Autre fonction utile pour la partie logique *****)
 
