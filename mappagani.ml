@@ -1,7 +1,10 @@
 open Graphics;;
 open Voronoi;;
 open Color_solver;;
-open Graphics_plus;;
+
+module GraphicsPlus = Graphics_plus.MakeStyle(Style);;
+open GraphicsPlus;;
+open Style;;
 
 (* _________________________________________
                PARAMETERS

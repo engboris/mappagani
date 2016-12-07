@@ -1,10 +1,6 @@
 open Graphics;;
 open Voronoi;;
-
-let blue : color = 0x94cbe3;;
-let red : color = 0xe88091;;
-let green : color = 0x9ded87;;
-let yellow : color = 0xf7fc8b;;
+open Style;;
 
 (*some examples of voronoi*)
 let v1 = {
@@ -17,7 +13,6 @@ let v1 = {
     {c=None; x=100; y=100}   (*square's seed*)
   |]
 }
-
 
 let v2 = {
   dim = 600,600;
