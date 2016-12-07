@@ -53,6 +53,15 @@ let regions_voronoi fonction voronoi =
      Array.iteri (fun j _ ->
       (line.(j) <- seed_of_pixel (i,j) fonction voronoi)) line) m; m;;
 
+
+(***** Recuperation des pixels de chaque regions *****)
+(*Liste de la forme [idRegions, [listePixel], ...]*)
+(*let liste_of_pixel regions =
+  let maxX = Array.length regions in 
+  let maxY = Array.length regions.(0) in 
+  Array.iteri fun i line -> 
+  (Array.iteri fun j e -> (insert i j e) line) regions);;
+*)
 (***** Affichage de la carte depuis un Voronoi *****)
 
 
@@ -66,8 +75,6 @@ let frontiere m i j =
 let getCouleur (c:color option) = match c with
   | None -> 0xf0f0f0
   | Some a -> a;;
-
-
 
 let draw_voronoi matrix voronoi =
   auto_synchronize false;

@@ -34,6 +34,34 @@ let update_current_color c board_pos board_size =
 let adapt_and_get_screen_size voronoi =
   let (x, y) = voronoi.dim in (x + rightborder, y);;
 
+(* ----------- Affichage Carte ----------- *)
+
+let frontiere m i j =
+  let v = m.(i).(j) in
+    ((i-1 > 0) && (m.(i-1).(j) <> v))
+  || ((i+1 < Array.length m ) && (m.(i+1).(j) <> v))
+  || ((j-1 > 0) && (m.(i).(j-1) <> v))
+  || ((j+1 < Array.length m.(0)) && (m.(i).(j+1) <> v));;
+
+let getCouleur (c:color option) = match c with
+  | None -> 0xf0f0f0
+  | Some a -> a;;
+
+let draw_voronoi matrix voronoi =
+  auto_synchronize false;
+  set_color black;
+  let maxY = Array.length matrix.(0) in
+  Array.iteri (fun i line ->
+   Array.iteri (fun j _ ->
+   let j' = maxY-1-j in
+   if((frontiere matrix i j')) then
+     (set_color black;
+     plot i j')
+         else
+     set_color (getCouleur (voronoi.seeds.(matrix.(i).(j')).c));
+     plot i j') line) matrix; synchronize();;
+
+
 (* ----------- Logo ----------- *)
 
 let logo_size : (int * int) = (245, 115);;
