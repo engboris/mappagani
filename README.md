@@ -25,7 +25,10 @@ Il est aussi possible de mettre fin au jeu (considéré comme un abandon) en aff
 
 3. Entrer et exécuter la commande <code>make</code>.
 
-**Attention** : quelques problèmes d'affichages peuvent se produire sous Windows
+**Attention** : le programme fonctionne mal sous Windows. Voici la liste des problèmes qui peuvent apparaître :
+- Pas de redimentionnement lorsqu'on demande une nouvelle carte
+- La fermeture du programme provoque une erreur
+- Le haut de la fenêtre du programme n'est pas visible
 
 ## TODO
 - ~~voronoi.ml -> draw_voronoi -> améliorer le try/catch lors du parcours des pixels [Kostia]~~ 
@@ -35,9 +38,9 @@ Il est aussi possible de mettre fin au jeu (considéré comme un abandon) en aff
 - ~~Séparation des pixels des régions dans plusieurs listes : pour pouvoir colorier qu'une seule région [Kostia]~~
 - ~~Fonction check_coloring qui parcours les seeds et leurs voisins et s'arrête puis renvoie true s'il existe un seed qui a un voisin de la même couleur. S'il n'en existe pas on retourne true [Boris]~~
 - ~~Mieux découper logiquement le fichier voronoi.ml [Kostia] (draw_voronoi dans mappagani.ml)~~
-- Retirer la déclaration de type voronoi dans voronoi.ml et la garder dans voronoi.mli et résoudre les problèmes [Boris]
+- Retirer la déclaration de type voronoi dans voronoi.ml et la garder dans voronoi.mli et résoudre les problèmes [Kostia]
 - Génération automatique de voronoi [Kostia]
-- Recommencer nouvelle partie [Kostia/Boris]
+- Recommencer nouvelle partie [Boris]
 - Supprimer une couleur [Boris]
 - **METTRE LE LOGO**
 - Youpi on a presque fini
