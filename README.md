@@ -23,7 +23,9 @@ Il est aussi possible de mettre fin au jeu (considéré comme un abandon) en aff
 
 2. Ouvrir un terminal (Invite de commande 'cmd' sous Windows) et déplacez vous dans le repertoire contenant les fichiers du projet 'Mappagani'.
 
-3. Entrer et exécuter la commande <code>make</code>.
+3. Entrer et exécuter la commande <code>make</code>. Le programme est maintenant compilé.
+
+4. Exécutez le programme avec <code>./mappagani.exe</code> sous *Linux* et <code>mappagani.exe</code> sous Windows.
 
 **Attention** : le programme fonctionne mal sous Windows. Voici la liste des problèmes qui peuvent apparaître :
 - Pas de redimentionnement lorsqu'on demande une nouvelle carte
