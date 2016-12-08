@@ -49,6 +49,8 @@ Il est aussi possible de mettre fin au jeu (considéré comme un abandon) en aff
 
 ## Programme Extrémiste de Peaufinage (PEP)
 
+- Déclarer une interface explicite pour chaque code source .ml
+- Mettre la description des fonctions dans les interfaces
 - Jeux de test complets
 - Factoriser le code (pas de répétitions)
 - Utiliser la syntaxe let..in pour plus de clarté
