@@ -37,6 +37,8 @@ Il est aussi possible de mettre fin au jeu (considéré comme un abandon) en aff
 - ~~Mieux découper logiquement le fichier voronoi.ml [Kostia] (draw_voronoi dans mappagani.ml)~~
 - Retirer la déclaration de type voronoi dans voronoi.ml et la garder dans voronoi.mli et résoudre les problèmes [Boris]
 - Génération automatique de voronoi [Kostia]
+- Recommencer nouvelle partie [Kostia/Boris]
+- Supprimer une couleur [Boris]
 - Youpi on a presque fini
 
 ## Programme Extrémiste de Peaufinage (PEP)
