@@ -78,22 +78,25 @@ let adapt_and_get_screen_size voronoi =
 (* ----------- Logo ----------- *)
 
 let logo_size : (int * int) = (245, 115);;
-let green_to_exclude : int = 0x00FF00;;
+let bravo_size : (int * int) = (300, 300);;
+let green_to_exclude : int = 0x00FF21;;
 
-let make_logo () : image =
-  let (w, h) = logo_size in
+let make_logo filename (w, h) : image =
   let m = Array.make_matrix h w transp in
-  let channel = open_in_bin "images/mappagani_logo.bmp" in
+  let channel = open_in_bin filename in
   try
   ( seek_in channel 54;
     for i = 0 to h-1 do
       for j = 0 to w-1 do
-        let r = input_byte channel in
-        let g = input_byte channel in
         let b = input_byte channel in
+        let g = input_byte channel in
+        let r = input_byte channel in
         let pixel = rgb r g b in
-              (m.(h-1-i).(j) <- (if pixel = green_to_exclude then transp else pixel))
-        done;
+        (m.(h-1-i).(j) <- (if pixel = green_to_exclude then transp else pixel))
+      done;
+      if w <> h then
+	let _ = input_byte channel in ();
+      else ()
     done;
     close_in channel;
     make_image m)
@@ -101,11 +104,9 @@ let make_logo () : image =
   close_in channel;
   make_image m;;
 
-let draw_logo (screen_x, screen_y) = 
-  let logo = make_logo () in
-  let logo_position = (screen_x-280, screen_y-175) in
-  let (logo_x, logo_y) = logo_position in
-  draw_image logo logo_x logo_y;
+let draw_logo filename (imageH, imageW) (screen_x, screen_y) =
+  let logo = make_logo filename (imageH, imageW) in
+  draw_image logo screen_x screen_y;
   synchronize ();;
 
 (* ----------- Menu ----------- *)
@@ -125,7 +126,7 @@ let create_menu screen_size state voronoi_main colors_set regions liste_pixel =
   let button_solution =
     let (tpbnx, tpbny) = top_of button_reset in
     let coloring () = generate_coloring distance_taxicab voronoi_main colors_set regions adj in
-    let ac_solution () = 
+    let ac_solution () =
       let coloring_list = coloring () in
       List.iter (fun (i, k) -> if (voronoi_main.seeds.(i).c = None) then
         let seedtmp = {c= Some k; x=voronoi_main.seeds.(i).x; y=voronoi_main.seeds.(i).y} in
@@ -140,7 +141,9 @@ let create_menu screen_size state voronoi_main colors_set regions liste_pixel =
         let seedtmp = {c=Some black; x=voronoi_main.seeds.(i).x; y=voronoi_main.seeds.(i).y} in
         (voronoi_main.seeds.(i) <- seedtmp);
         draw_regions regions voronoi_main liste_pixel i) (seeds_to_indices voronoi_main.seeds);
-      (state := End))
+       let (voronoi_x, voronoi_y) = voronoi_main.dim in
+       draw_logo "images/bravo.bmp" bravo_size (voronoi_x/2-150, voronoi_y/2-150);
+       (state := End))
     in let button_check = create_menu_button (top_of button_solution) "Valider coloriage" ac_check in
   (* Buttons list *)
   [button_quit; button_reset; button_newgame; button_solution; button_check];;
@@ -181,7 +184,9 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel =
        resize_window (fst new_screen_size) (snd new_screen_size);
        set_color background_color;
        fill_rect 0 0 (fst new_screen_size) (snd new_screen_size);
-       draw_logo new_screen_size;
+       let (new_screen_x, new_screen_y) = new_screen_size in
+       if (new_screen_x > 300 && new_screen_y > 300) then
+	 draw_logo "images/mappagani_logo.bmp" logo_size (new_screen_x-280, new_screen_y-175);
        List.iter draw_button menu;
        game new_voronoi new_regions new_voronoi.dim menu new_screen_size state new_liste_pixel)
   done;;
@@ -206,7 +211,7 @@ let main () =
   fill_rect 0 0 screen_x screen_y;
   (* Logo *)
   if (screen_x > 300 && screen_y > 300) then
-    draw_logo (screen_x, screen_y);
+    draw_logo "images/mappagani_logo.bmp" logo_size (screen_x-280, screen_y-175);
   (* Buttons *)
   let menu = create_menu screen_size state voronoi_main colors_set regions list_pixel in
   List.iter draw_button menu;
