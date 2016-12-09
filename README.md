@@ -44,7 +44,7 @@ Il est aussi possible de mettre fin au jeu (considéré comme un abandon) en aff
 - Génération automatique de voronoi [Kostia]
 - Recommencer nouvelle partie [Boris]
 - Supprimer une couleur [Boris]
-- **METTRE LE LOGO**
+- ~~**METTRE LE LOGO**~ 
 - Youpi on a presque fini
 
 ## Programme Extrémiste de Peaufinage (PEP)
