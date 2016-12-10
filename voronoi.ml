@@ -148,13 +148,13 @@ let generator_color_set voronoi =
 let random_voronoi =
   Random.self_init ();
   let color_set = [|yellow; magenta; red; blue|] in
-  let voronoi_size = (float_of_int ((Random.int 200) * 5)) in
+  let voronoi_size = (float_of_int ((Random.int 201) * 5)) in
   let nb_seeds = (voronoi_size / 6) in
   let voronoi = {dim = (voronoi_size, voronoi_size);seeds =  Array.make nb_seeds {c = None; x=0; y=0 } in
   for i = 0 to nb_seeds do
     let pos_x = Random.int voronoi_size -1 in
     let pos_y = Random.int voronoi_size -1 in
-    voronoi.seeds.(i) <- {c=color_set.(Random.int 3); x=pos_x; y=pos_y};
+    voronoi.seeds.(i) <- {c=color_set.(Random.int 4); x=pos_x; y=pos_y};
     Random.self_init ();
   done;
   voronoi;;
