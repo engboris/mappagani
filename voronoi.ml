@@ -155,7 +155,7 @@ let random_voronoi =
     let pos_x = Random.int voronoi_size -1 in
     let pos_y = Random.int voronoi_size -1 in
     voronoi.seeds.(i) <- {c=color_set.(Random.int 4); x=pos_x; y=pos_y};
-    Random.self_init ();
+    (* Random.self_init ();*)
   done;
   voronoi;;
   
