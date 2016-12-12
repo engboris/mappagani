@@ -60,12 +60,38 @@ let top_of button : (int * int) =
 let draw_button = draw_button_primitive Style.button_background;;
 
 let rec check_buttons x y buttons =
-match buttons with
-| [] -> ()
-| h::t ->
-   if (coord_in_button x y h) then
-     (h.action (); check_buttons x y t)
-   else
-     (check_buttons x y t);;
+  List.iter (fun b -> if coord_in_button x y b then b.action ()) buttons;;
+
+(* _________________________________________
+                  IMAGES
+   _________________________________________ *)
+
+let green_to_exclude : int = 0x00FF21;;
+
+let make_picture filename (w, h) : image =
+  let m = Array.make_matrix h w transp in
+  let channel = open_in_bin filename in
+  try (
+    seek_in channel 54;
+    for i = 0 to h-1 do
+      for j = 0 to w-1 do
+        let b = input_byte channel in
+        let g = input_byte channel in
+        let r = input_byte channel in
+        let pixel = rgb r g b in
+        (m.(h-1-i).(j) <- (if pixel = green_to_exclude then transp else pixel))
+      done;
+      if w <> h then let _ = input_byte channel in ();
+    done;
+    close_in channel;
+    make_image m)
+  with End_of_file ->
+  close_in channel;
+  make_image m;;
+
+let draw_picture filename (imageH, imageW) (screen_x, screen_y) =
+  let logo = make_picture filename (imageH, imageW) in
+  draw_image logo screen_x screen_y;
+  synchronize ();;
 
 end
