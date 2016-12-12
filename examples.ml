@@ -60,7 +60,6 @@ let v3 = {
     {c = None; x=375; y=47};
   |]}
 
-
 let v4 =  {
     dim = 800,800;
     seeds = [|
