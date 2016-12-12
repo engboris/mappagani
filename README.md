@@ -1,3 +1,5 @@
+<img src='http://image.noelshack.com/fichiers/2016/50/1481574975-mappagani-logo.png' />
+
 # MapPagani
 
 MapPagani est un projet réalisé par *Kostia Chardonnet* et *Sambo Boris Eng* dans le cadre du projet de programmation fonctionnelle (module PF5) de L3 Informatique à l'Université Paris 7 (Diderot).
