@@ -30,15 +30,6 @@ let indice_of_min array =
 let seed_of_pixel (i,j) fonction voronoi =
   indice_of_min (Array.map (fun s -> fonction (i,j) (s.x, s.y)) voronoi.seeds);;
 
-(*
-let regions_voronoi fonction voronoi =
-  let dimX = fst voronoi.dim in
-  let dimY = snd voronoi.dim in
-  let m = Array.make_matrix dimX dimY 0 in
-  Array.iteri (fun i line ->
-     Array.iteri (fun j _ ->
-		  (line.(j) <- seed_of_pixel (i,j) fonction voronoi)) line) m; m;;*)
-
 let regions_and_pixelList fonction voronoi =
   let dimX = fst voronoi.dim in
   let dimY = snd voronoi.dim in
@@ -55,16 +46,6 @@ let liste_pixels fonction voronoi =
   snd (regions_and_pixelList fonction voronoi);;
 let regions_voronoi fonction voronoi =
   fst (regions_and_pixelList fonction voronoi);;
-
-(***** Recuperation des pixels de chaque regions *****)
-(*Liste de la forme [idRegions, [listePixel], ...]*)
-(*let liste_of_pixel regions =
-  let maxX = Array.length regions in 
-  let maxY = Array.length regions.(0) in 
-  Array.iteri fun i line -> 
-  (Array.iteri fun j e -> (insert i j e) line) regions);;
-*)
-
 
 (***** Calcul de la matrice d'adjacences *****)
 
@@ -87,7 +68,7 @@ let adjacences_voronoi voronoi regions =
   Array.iteri (fun i line ->
     Array.iteri (fun j _ ->
       let adj = get_frontieres regions i j in
-      List.iter (fun (x, y) -> b.(x).(y) <- true) adj) line) regions; 
+      List.iter (fun (x, y) -> b.(x).(y) <- true) adj) line) regions;
   b;;
 
 (***** Autre fonction utile pour la partie logique *****)
@@ -98,9 +79,9 @@ let getCouleur (c:color option) = match c with
 
 let rec insert value list = match list with
   | [] -> value::[]
-  | h::t -> if(h = value) then h::t
-            else if (value < h) then value::h::t
-            else h::(insert value t);;
+  | h::t when h = value -> h::t
+  | h::t when value < h -> value::h::t
+  | h::t -> h::(insert value t);;
 
 
 let adjacents_to i adj =
@@ -137,9 +118,8 @@ let generator_color_set voronoi =
   | h::t -> insert h (supprime_double t) in
   let rec rajoute_couleurs list color_set = match color_set with
     | [] -> failwith "plus de 4 couleurs"
-    | h::t -> if(List.length list = 4) then list
-              else
-              rajoute_couleurs (insert h list) t in
+    | h::t when List.length list = 4 -> list
+    | h::t -> rajoute_couleurs (insert h list) t in
   rajoute_couleurs (supprime_double list_color) color_set;;
 
 (***** Generation automatique et aléatoire de voronoi *****)
