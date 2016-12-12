@@ -41,10 +41,12 @@ Il est aussi possible de mettre fin au jeu (considéré comme un abandon) en aff
 - ~~Fonction check_coloring qui parcours les seeds et leurs voisins et s'arrête puis renvoie true s'il existe un seed qui a un voisin de la même couleur. S'il n'en existe pas on retourne true [Boris]~~
 - ~~Mieux découper logiquement le fichier voronoi.ml [Kostia] (draw_voronoi dans mappagani.ml)~~
 - Retirer la déclaration de type voronoi dans voronoi.ml et la garder dans voronoi.mli et résoudre les problèmes [Kostia]
-- Génération automatique de voronoi [Kostia]
-- Recommencer nouvelle partie [Boris]
-- Supprimer une couleur [Boris]
-- ~~**METTRE LE LOGO**~ 
+- Génération automatique de voronoi [Kostia] A TESTER
+- Empêcher la fermeture de la fenêtre lorsqu'il n'y a pas de solution (afficher un message)
+- Faire une image quand le joueur a perdu [Boris]
+- ~~Recommencer nouvelle partie [Boris]~~
+- ~~Supprimer une couleur [Kostia]~~
+- ~~**METTRE LE LOGO**~~
 - Youpi on a presque fini
 
 ## Programme Extrémiste de Peaufinage (PEP)
