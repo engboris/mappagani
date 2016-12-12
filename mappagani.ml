@@ -200,7 +200,7 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel di
       game new_voronoi new_regions new_voronoi.dim new_menu new_screen_size state new_liste_pixel distance_f)
     (* MAP RESET *)
     else if (!state = Reset) then
-      state := Play;
+     (state := Play;
       let new_voronoi = original in
       set_color background_color;
       fill_rect 0 0 (fst screen_size) (snd screen_size);
@@ -208,7 +208,7 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel di
       let new_colors_set = generator_color_set new_voronoi in
       let new_menu = create_menu screen_size state new_voronoi new_colors_set regions liste_pixel distance_f in
       draw_menu new_menu;
-      game new_voronoi regions new_voronoi.dim new_menu screen_size state liste_pixel distance_f;
+      game new_voronoi regions new_voronoi.dim new_menu screen_size state liste_pixel distance_f)
   done;;
 
 (* ----------- Main ----------- *)
