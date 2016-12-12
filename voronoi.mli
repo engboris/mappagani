@@ -12,3 +12,4 @@ val getCouleur : Graphics.color option -> Graphics.color
 val get_list_couleurs : seed array -> Graphics.color list
 val fill_seeds : voronoi -> (int * Graphics.color) list -> voronoi
 val generator_color_set : voronoi -> Graphics.color list
+val random_voronoi : unit -> voronoi

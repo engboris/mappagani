@@ -101,7 +101,10 @@ let v4 =  {
 
 let voronoi_list = [v1;v2;v3;v4];;
 
-let select_voronoi () = 
+let select_voronoi () =
   Random.self_init ();
   let l = List.length voronoi_list in
   List.nth voronoi_list (Random.int l);;
+
+let select_random_voronoi () =
+  random_voronoi;;
