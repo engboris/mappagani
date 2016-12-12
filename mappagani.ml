@@ -165,9 +165,10 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel di
   update_current_color black (0, screen_y) map_size;
   while (!state <> Quit) do
     synchronize ();
-    let e = wait_next_event[Button_down] in
-    let x_mouse = e.mouse_x and y_mouse = e.mouse_y in
+    let e = wait_next_event[Key_pressed; Button_down] in
     (* Buttons linking *)
+    if (button_down ()) then
+    (let x_mouse = e.mouse_x and y_mouse = e.mouse_y in
     check_buttons x_mouse y_mouse menu;
     if (coord_in_surface x_mouse y_mouse (0, 0) map_size) then
       let owner = regions.(x_mouse).(y_mouse) in
@@ -179,7 +180,18 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel di
         synchronize ())
       else
         (newcolor := voronoi_main.seeds.(owner).c;
-	 update_current_color (getCouleur !newcolor) (0, screen_y) map_size)
+	 update_current_color (getCouleur !newcolor) (0, screen_y) map_size))
+    else ();
+    if (e.keypressed && e.key = ' ') then
+     (let x_mouse = e.mouse_x and y_mouse = e.mouse_y in
+      if (coord_in_surface x_mouse y_mouse (0, 0) map_size) then
+	let owner = regions.(x_mouse).(y_mouse) in
+	let colortmp = voronoi_main.seeds.(owner).c in
+	if (colortmp <> None) then
+	let seedtmp = {c= None; x=voronoi_main.seeds.(owner).x; y=voronoi_main.seeds.(owner).y} in
+	(voronoi_main.seeds.(owner) <- seedtmp;
+        draw_regions regions voronoi_main liste_pixel owner;
+        synchronize ()))
     (* NEW MAP *)
     else if (!state = NewMap) then
       (state := Play;
