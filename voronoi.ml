@@ -145,7 +145,7 @@ let generator_color_set voronoi =
 (***** Generation automatique et aléatoire de voronoi *****)
 
 (*TODO : fix random number generation*)
-let random_voronoi =
+let random_voronoi () =
   Random.self_init ();
   let color_set = [|yellow; magenta; red; blue|] in
   let voronoi_size = ((Random.int 201) * 5) in
