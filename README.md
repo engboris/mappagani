@@ -43,7 +43,7 @@ Il est aussi possible de mettre fin au jeu (considéré comme un abandon) en aff
 - Retirer la déclaration de type voronoi dans voronoi.ml et la garder dans voronoi.mli et résoudre les problèmes [Kostia]
 - Génération automatique de voronoi [Kostia] A TESTER
 - Empêcher la fermeture de la fenêtre lorsqu'il n'y a pas de solution (afficher un message)
-- Faire une image quand le joueur a perdu [Boris]
+- ~~Faire une image quand le joueur a perdu [Boris]~~
 - ~~Recommencer nouvelle partie [Boris]~~
 - ~~Supprimer une couleur [Kostia]~~
 - ~~**METTRE LE LOGO**~~
@@ -51,6 +51,9 @@ Il est aussi possible de mettre fin au jeu (considéré comme un abandon) en aff
 
 ## Programme Extrémiste de Peaufinage (PEP)
 
+- Retirer toutes les boucles for
+- Rendre le code plus fonctionnel si possible
+- Utiliser "when" pour les conditions dans le pattern matching
 - Déclarer une interface explicite pour chaque code source .ml
 - Mettre la description des fonctions dans les interfaces
 - Jeux de test complets
