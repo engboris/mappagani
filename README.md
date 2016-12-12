@@ -1,8 +1,6 @@
 <img src='http://image.noelshack.com/fichiers/2016/50/1481574975-mappagani-logo.png' />
 
-# MapPagani
-
-MapPagani est un projet réalisé par *Kostia Chardonnet* et *Sambo Boris Eng* dans le cadre du projet de programmation fonctionnelle (module PF5) de L3 Informatique à l'Université Paris 7 (Diderot).
+Mappagani est un projet réalisé par *Kostia Chardonnet* et *Sambo Boris Eng* dans le cadre du projet de programmation fonctionnelle (module PF5) de L3 Informatique à l'Université Paris 7 (Diderot).
 
 Le programme correspond à un mini-jeu de puzzle où un joueur doit colorier une carte divisée en plusieurs régions avec seulement 4 uniques couleurs. La coloration complète de la carte telle que deux régions adjacentes sont de couleurs différentes mène à une victoire.
 
