@@ -93,13 +93,15 @@ let v4 =  {
               {c = None; x=600; y=550};
               {c = Some red; x=700; y=550};
             |]
-    }
+}
+
 
 (*ADD other voronoi of 30/40 seeds, for example taken from the web-site*)
 
 let voronoi_list = [v1;v2;v3;v4];;
 
 let select_voronoi () =
-  Random.self_init ();
+ Random.self_init ();
   let l = List.length voronoi_list in
   List.nth voronoi_list (Random.int l);;
+
