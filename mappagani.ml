@@ -207,7 +207,7 @@ let main () =
   auto_synchronize false;
   (* Working context *)
   let state = ref Play in
-  let distance_f = distance_taxicab in
+  let distance_f = distance_euclide in
   let voronoi_main = generate_voronoi () in
   let regions_list = regions_and_pixelList distance_f voronoi_main in
   let list_pixel = snd regions_list in
