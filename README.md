@@ -1,6 +1,6 @@
-# MapPagani
+# Mappagani
 
-MapPagani est un projet réalisé par *Kostia Chardonnet* et *Sambo Boris Eng* dans le cadre du projet de programmation fonctionnelle (module PF5) de L3 Informatique à l'Université Paris 7 (Diderot).
+Mappagani est un projet réalisé par *Kostia Chardonnet* et *Sambo Boris Eng* dans le cadre du projet de programmation fonctionnelle (module PF5) de L3 Informatique à l'Université Paris 7 (Diderot).
 
 Le programme correspond à un mini-jeu de puzzle où un joueur doit colorier une carte divisée en plusieurs régions avec seulement 4 uniques couleurs. La coloration complète de la carte telle que deux régions adjacentes sont de couleurs différentes mène à une victoire.
 
@@ -40,9 +40,8 @@ Il est aussi possible de mettre fin au jeu (considéré comme un abandon) en aff
 - ~~Séparation des pixels des régions dans plusieurs listes : pour pouvoir colorier qu'une seule région [Kostia]~~
 - ~~Fonction check_coloring qui parcours les seeds et leurs voisins et s'arrête puis renvoie true s'il existe un seed qui a un voisin de la même couleur. S'il n'en existe pas on retourne true [Boris]~~
 - ~~Mieux découper logiquement le fichier voronoi.ml [Kostia] (draw_voronoi dans mappagani.ml)~~
-- Retirer la déclaration de type voronoi dans voronoi.ml et la garder dans voronoi.mli et résoudre les problèmes [Kostia]
-- Génération automatique de voronoi [Kostia] A TESTER
-- Empêcher la fermeture de la fenêtre lorsqu'il n'y a pas de solution (afficher un message)
+- ~~Empêcher la fermeture de la fenêtre lorsqu'il n'y a pas de solution (afficher un message) [Kostia]~~
+- Switch entre distances taxicab et euclide
 - ~~Faire une image quand le joueur a perdu [Boris]~~
 - ~~Recommencer nouvelle partie [Boris]~~
 - ~~Supprimer une couleur [Kostia]~~

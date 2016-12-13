@@ -1,9 +1,7 @@
 open Graphics;;
-(*  #load "graphics.cma";; *)
 
 type seed = { c : color option; x : int; y : int };;
 type voronoi = { dim : int * int; seeds : seed array };;
-
 
 (***** Fonctions de distance *****)
 let distance_euclide (x1, y1) (x2,y2) =
@@ -11,14 +9,13 @@ let distance_euclide (x1, y1) (x2,y2) =
   let y = (y1 - y2) * (y1 - y2) in
   int_of_float (sqrt (float_of_int (x + y)));;
 
-
 let distance_taxicab (x1, y1) (x2,y2) =
   let x = abs (x1 - x2) in
   let y = abs (y1 - y2) in
   x + y;;
 
-(***** Calcul de la matrice des regions *****)
 
+(***** Calcul de la matrice des regions *****)
 let indice_of_min array =
   let l = Array.length array in
   let rec aux i min indiceMin =
@@ -47,8 +44,8 @@ let liste_pixels fonction voronoi =
 let regions_voronoi fonction voronoi =
   fst (regions_and_pixelList fonction voronoi);;
 
-(***** Calcul de la matrice d'adjacences *****)
 
+(***** Calcul de la matrice d'adjacences *****)
 let get_frontieres regions i j =
   let result = ref [] in
   let v = regions.(i).(j) in
@@ -71,8 +68,8 @@ let adjacences_voronoi voronoi regions =
       List.iter (fun (x, y) -> b.(x).(y) <- true) adj) line) regions;
   b;;
 
-(***** Autre fonction utile pour la partie logique *****)
 
+(***** Autre fonction utile pour la partie logique *****)
 let getCouleur (c:color option) = match c with
   | None -> 0xf0f0f0
   | Some a -> a;;
@@ -83,7 +80,6 @@ let rec insert value list = match list with
   | h::t when value < h -> value::h::t
   | h::t -> h::(insert value t);;
 
-
 let adjacents_to i adj =
   let l = Array.length adj in
   let rec aux j tab  =
@@ -92,13 +88,11 @@ let adjacents_to i adj =
     else aux (j+1) tab in
   aux 0 [];;
 
-
 let rec fill_seeds voronoi list_color = match list_color with
 | [] -> voronoi
 | (i, c')::t ->
   voronoi.seeds.(i) <- {c=Some c'; x=voronoi.seeds.(i).x; y=voronoi.seeds.(i).y};
   fill_seeds voronoi t;;
-
 
 let get_list_couleurs seeds =
   let l = Array.length seeds in
@@ -107,7 +101,6 @@ let get_list_couleurs seeds =
     else if (seeds.(i).c <> None) then (getCouleur seeds.(i).c)::(aux (i+1))
   else aux (i+1)
   in aux 0;;
-
 
 let generator_color_set voronoi =
   let list_color = get_list_couleurs voronoi.seeds in
@@ -121,20 +114,3 @@ let generator_color_set voronoi =
     | h::t when List.length list = 4 -> list
     | h::t -> rajoute_couleurs (insert h list) t in
   rajoute_couleurs (supprime_double list_color) color_set;;
-
-(***** Generation automatique et aléatoire de voronoi *****)
-
-(*TODO : fix random number generation*)
-let random_voronoi () =
-  Random.self_init ();
-  let color_set = [|yellow; magenta; red; blue|] in
-  let voronoi_size = ((Random.int 201) * 5) in
-  let nb_seeds = (voronoi_size / 6) in
-  let voronoi = {dim=(voronoi_size, voronoi_size); seeds=Array.make nb_seeds {c=None; x=0; y=0}} in
-  for i = 0 to nb_seeds do
-    let pos_x = Random.int voronoi_size -1 in
-    let pos_y = Random.int voronoi_size -1 in
-    voronoi.seeds.(i) <- {c=Some color_set.(Random.int 4); x=pos_x; y=pos_y};
-    (* Random.self_init ();*)
-  done;
-  voronoi;;

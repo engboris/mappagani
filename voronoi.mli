@@ -1,15 +1,23 @@
 type seed = { c : Graphics.color option; x : int; y : int; }
 type voronoi = { dim : int * int; seeds : seed array; }
 
+(* Distance euclidienne *)
 val distance_euclide : int * int -> int * int -> int
+
+(* Distance taxicab *)
 val distance_taxicab : int * int -> int * int -> int
-val indice_of_min : 'a array -> int
-val seed_of_pixel : 'a * 'b -> ('a * 'b -> int * int -> 'c) -> voronoi -> int
+
+(* Renvoi la matrices des régions ainsi qu'une liste  *)
 val regions_and_pixelList : (int * int -> int * int -> 'a) -> voronoi -> (int array array * (int*int) list array)
+
+(* Génère la matrice d'adjacence *)
 val adjacences_voronoi : voronoi -> int array array -> bool array array
+
+(* Renvoi la liste des voisins d'un seed *)
 val adjacents_to : int -> bool array array -> int list
+
+(* Transforme un color option en color *)
 val getCouleur : Graphics.color option -> Graphics.color
-val get_list_couleurs : seed array -> Graphics.color list
-val fill_seeds : voronoi -> (int * Graphics.color) list -> voronoi
+
+(* Si il y a moins de 4 couleurs sur le voronoi de base, rajoute des couleurs jusqu'à en avoir 4 *)
 val generator_color_set : voronoi -> Graphics.color list
-val random_voronoi : unit -> voronoi
