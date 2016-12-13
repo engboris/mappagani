@@ -13,7 +13,6 @@ module type STYLE = sig
     val default_height_menu_buttons : color;;
 end
 
-
 module MakeStyle (Style : STYLE) : sig
 
 type button = {
@@ -26,18 +25,19 @@ type button = {
 (* Génère les boutons du menu *)
 val create_menu_button : (int * int) -> string -> (unit -> unit) -> button
 
-
-(**)
+(* Vérifie si les coordonnées sont dans une surface *)
 val coord_in_surface : int -> int -> (int * int) -> (int * int) -> bool
 
-
+(* Renvoi la position juste au dessus d'un bouton *)
 val top_of : button -> (int * int)
 
+(* Dessine un bouton à l'écran *)
+val draw_button : button -> unit
 
-val check_buttons : int -> int -> button
+(* Vérifie si on appuie sur un bouton *)
+val check_buttons : int -> int -> button list -> unit
 
-
+(* Affiche une image à l'écran selon les coordonnées indiquées *)
 val draw_picture : string -> (int * int) -> (int * int) -> unit
-
 
 end
