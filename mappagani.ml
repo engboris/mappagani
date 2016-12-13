@@ -191,6 +191,7 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel di
       if (new_screen_x > 300 && new_screen_y > 300) then
         draw_picture "images/mappagani_logo.bmp" logo_size (new_screen_x-280, new_screen_y-175);
       draw_menu new_menu;
+      Array.iteri (fun i _ -> voronoi_main.seeds.(i) <- original.seeds.(i)) voronoi_main.seeds;
       game new_voronoi new_regions new_voronoi.dim new_menu new_screen_size state new_liste_pixel distance_f)
     (* MAP RESET *)
     else if (!state = Reset) then
@@ -207,7 +208,7 @@ let main () =
   auto_synchronize false;
   (* Working context *)
   let state = ref Play in
-  let distance_f = distance_euclide in
+  let distance_f = distance_taxicab in
   let voronoi_main = generate_voronoi () in
   let regions_list = regions_and_pixelList distance_f voronoi_main in
   let list_pixel = snd regions_list in
@@ -228,7 +229,8 @@ let main () =
   let menu = create_menu screen_size state voronoi_main colors_set regions list_pixel distance_f in
   List.iter draw_button menu;
   (* Main loop *)
-  game voronoi_main regions (map_x, map_y) menu screen_size state list_pixel distance_f;
+  try (game voronoi_main regions (map_x, map_y) menu screen_size state list_pixel distance_f)
+  with Graphic_failure("fatal I/O error") -> ();
   close_graph ();;
 
 main ();;
