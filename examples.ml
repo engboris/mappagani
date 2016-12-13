@@ -1,4 +1,3 @@
-open Graphics;;
 open Voronoi;;
 open Style;;
 
