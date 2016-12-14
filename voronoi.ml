@@ -3,19 +3,6 @@ open Graphics;;
 type seed = { c : color option; x : int; y : int };;
 type voronoi = { dim : int * int; seeds : seed array };;
 
-let print_matrix2 adj = 
-  let maxX = Array.length adj - 1 in
-  let maxY = Array.length adj.(0) - 1 in
-  for i = 0 to maxX do 
-     for j = 0 to maxY do 
-        if(adj.(i).(j)) then (print_int 1)
-        else (print_int 0);
-        print_string " ";
-      done;
-      print_newline;
-  done;;
-
-
 let print_matrix voronoi adj =
   set_color black;
   let maxX = Array.length adj - 1 in
