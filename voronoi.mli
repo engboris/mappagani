@@ -22,6 +22,5 @@ val getCouleur : Graphics.color option -> Graphics.color
 (* Si il y a moins de 4 couleurs sur le voronoi de base, rajoute des couleurs jusqu'à en avoir 4 *)
 val generator_color_set : voronoi -> Graphics.color list
 
-
-(* tmp a supprimer *)
-val print_matrix : voronoi -> bool array array -> unit
+(* Generation du graphe d'adjacence *)
+val generate_graph : voronoi -> bool array array -> unit

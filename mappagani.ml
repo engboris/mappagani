@@ -66,7 +66,8 @@ let draw_black voronoi_main liste_pixel regions =
 
 type program_state = Play | Quit | End | NewMap | Reset;;
 
-let update_current_color c board_pos board_size =
+let update_current_color 
+c board_pos board_size =
   let rec_y = 20 in
   let (x, y) = board_pos in
   let (l, h) = board_size in
@@ -146,7 +147,6 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel di
   let newcolor = ref None in
   draw_voronoi regions voronoi_main;
   update_current_color black (0, screen_y) map_size;
-    print_matrix voronoi_main adj;
 
   while (!state <> Quit) do
     synchronize ();

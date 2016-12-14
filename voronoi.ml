@@ -3,15 +3,16 @@ open Graphics;;
 type seed = { c : color option; x : int; y : int };;
 type voronoi = { dim : int * int; seeds : seed array };;
 
-let print_matrix voronoi adj =
+
+let generate_graph voronoi adj =
   set_color black;
   let maxX = Array.length adj - 1 in
   let maxY = Array.length adj.(0) - 1 in
   for i = 0 to maxX do 
      for j = 0 to maxY do 
-        if(adj.(i).(j)) then
+        if(adj.(i).(j)) then(
           moveto voronoi.seeds.(i).x voronoi.seeds.(i).y;
-          lineto voronoi.seeds.(j).x voronoi.seeds.(j).y; 
+          lineto voronoi.seeds.(j).x voronoi.seeds.(j).y)
       done;
   done;;
 
@@ -63,12 +64,12 @@ let get_frontieres regions i j =
   let result = ref [] in
   let v = regions.(i).(j) in
   (if ((i-1 > 0) && (regions.(i-1).(j) <> v)) then
-    result := (regions.(i).(j), regions.(i-1).(j)) :: (!result)
-  else if ((i+1 < Array.length regions) && (regions.(i+1).(j) <> v)) then
-    result := (regions.(i).(j), regions.(i+1).(j)) :: (!result)
-  else if ((j-1 > 0) && (regions.(i).(j-1) <> v)) then
-    result := (regions.(i).(j), regions.(i).(j-1)) :: (!result)
-  else if ((j+1 < Array.length regions.(0)) && (regions.(i).(j+1) <> v)) then
+    result := (regions.(i).(j), regions.(i-1).(j)) :: (!result));
+  (if ((i+1 < Array.length regions) && (regions.(i+1).(j) <> v)) then
+    result := (regions.(i).(j), regions.(i+1).(j)) :: (!result));
+  (if ((j-1 > 0) && (regions.(i).(j-1) <> v)) then
+    result := (regions.(i).(j), regions.(i).(j-1)) :: (!result));
+  (if ((j+1 < Array.length regions.(0)) && (regions.(i).(j+1) <> v)) then
     result := (regions.(i).(j), regions.(i).(j+1)) :: (!result));
   !result;;
 
@@ -79,6 +80,7 @@ let adjacences_voronoi voronoi regions =
     Array.iteri (fun j _ ->
       let adj = get_frontieres regions i j in
       List.iter (fun (x, y) -> b.(x).(y) <- true) adj) line) regions;
+  print_matrix2 b;
     b;;
 
 
@@ -117,7 +119,7 @@ let get_list_couleurs seeds =
 
 let generator_color_set voronoi =
   let list_color = get_list_couleurs voronoi.seeds in
-  let color_set = [yellow; magenta; cyan; red; blue; green;black; white;] in
+  let color_set = [yellow; magenta; cyan; red; blue; green; black; white;] in
   let rec supprime_double list =
   match list with
   | [] -> []
