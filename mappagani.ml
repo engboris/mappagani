@@ -61,7 +61,7 @@ let draw_black voronoi_main liste_pixel regions =
         draw_regions regions voronoi_main liste_pixel i) (seeds_to_indices voronoi_main.seeds);;
 
 (* _________________________________________
-               MAIN FUNCTION
+                FONCTION MAIN
    _________________________________________ *)
 
 type program_state = Play | Quit | End | NewMap | Reset;;
@@ -76,12 +76,11 @@ let update_current_color c board_pos board_size =
   moveto (x+l+3) (y-rec_y+2);
   draw_string selected_color_label;;
 
-(* A utiliser si necessaire
-   Ne fait rien pour l'instant *)
+(* Non exploité : permet d'adapter la taille des fenêtres *)
 let adapt_and_get_screen_size voronoi =
   let (x, y) = voronoi.dim in (x + rightborder, y);;
 
-(* ----------- Images dimensions ----------- *)
+(* ----------- Dimension des images ----------- *)
 
 let logo_size : (int * int) = (245, 115);;
 let bravo_size : (int * int) = (300, 300);;
@@ -96,18 +95,18 @@ let create_menu screen_size state voronoi_main colors_set regions liste_pixel di
   let default_h = default_height_menu_buttons in
   let topleft_position = (screen_x-250, screen_y-(screen_y/2)-(default_h*5/2)) in
   let adj = adjacences_voronoi voronoi_main regions in
-  (* Quit *)
+  (* Quitter le jeu *)
   let ac_quit = (fun () -> state := Quit) in
   let button_quit = create_menu_button topleft_position "Quitter" ac_quit in
-  (* Reset *)
+  (* Recommencer le jeu *)
   let ac_reset = (fun () -> if !state <> End then state := Reset) in
   let button_reset =
     create_menu_button (top_of button_quit) "Recommencer" ac_reset in
-  (* New game *)
+  (* Nouvelle partie *)
   let ac_newgame = (fun () -> state := NewMap) in
   let button_newgame =
     create_menu_button (top_of button_reset) "Nouvelle carte" ac_newgame in
-  (* Solution *)
+  (* Affichage de la solution *)
   let button_solution =
     let (tpbnx, tpbny) = top_of button_reset in
     let ac_solution () =
@@ -116,13 +115,14 @@ let create_menu screen_size state voronoi_main colors_set regions liste_pixel di
       List.iter (fun (i, k) -> if (voronoi_main.seeds.(i).c = None) then
         let seedtmp = {c= Some k; x=voronoi_main.seeds.(i).x; y=voronoi_main.seeds.(i).y} in
         (voronoi_main.seeds.(i) <- seedtmp); draw_regions regions voronoi_main liste_pixel i) coloring_list;
-      (state := End) with
-	NoSolution -> (draw_black voronoi_main liste_pixel regions;
+        (state := End)
+        with NoSolution ->
+          (draw_black voronoi_main liste_pixel regions;
 		      draw_picture "images/nosolution.bmp" nosolution_size (voronoi_x/2-150, voronoi_y/2-150);
 		      (state := End))
     in
     create_menu_button (tpbnx, tpbny+40) "Solution" ac_solution in
-  (* Check *)
+  (* Vérification du coloriage *)
   let ac_check () =
     let checking = check_coloring voronoi_main adj in
       draw_black voronoi_main liste_pixel regions;
@@ -132,12 +132,12 @@ let create_menu screen_size state voronoi_main colors_set regions liste_pixel di
 	 draw_picture "images/perdu.bmp" perdu_size (voronoi_x/2-150, voronoi_y/2-150);
       (state := End)
     in let button_check = create_menu_button (top_of button_solution) "Valider coloriage" ac_check in
-  (* Buttons list *)
+  (* Liste des boutons actifs *)
   [button_quit; button_reset; button_newgame; button_solution; button_check];;
 
 let draw_menu menu = List.iter draw_button menu;;
 
-(* ----------- Game ----------- *)
+(* ----------- Boucle de jeu ----------- *)
 
 let rec game voronoi_main regions map_size menu screen_size state liste_pixel distance_f =
   let original = {dim=voronoi_main.dim; seeds=Array.copy voronoi_main.seeds} in
@@ -148,7 +148,7 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel di
   while (!state <> Quit) do
     synchronize ();
     let e = wait_next_event[Key_pressed; Button_down] in
-    (* If mouse pressed *)
+    (* Appui souris / Coloriage de couleurs *)
     if (button_down ()) then
       (let x_mouse = e.mouse_x and y_mouse = e.mouse_y in
       check_buttons x_mouse y_mouse menu;
@@ -163,18 +163,18 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel di
         else
           (newcolor := voronoi_main.seeds.(owner).c;
 	      update_current_color (getCouleur !newcolor) (0, screen_y) map_size));
-    (* If keyboard pressed *)
+    (* Appui clavier / Suppression de couleur *)
     if (e.keypressed && e.key = ' ') then
       (let x_mouse = e.mouse_x and y_mouse = e.mouse_y in
       if (coord_in_surface x_mouse y_mouse (0, 0) map_size) then
 	    let owner = regions.(x_mouse).(y_mouse) in
 	    let colortmp = voronoi_main.seeds.(owner).c in
-	    if (colortmp <> None) then
-	    let seedtmp = {c= None; x=voronoi_main.seeds.(owner).x; y=voronoi_main.seeds.(owner).y} in
-	    (voronoi_main.seeds.(owner) <- seedtmp;
-      draw_regions regions voronoi_main liste_pixel owner;
+	    if (colortmp <> None && original.seeds.(owner).c = None && !state <> End) then
+	      let seedtmp = {c= None; x=voronoi_main.seeds.(owner).x; y=voronoi_main.seeds.(owner).y} in
+	      (voronoi_main.seeds.(owner) <- seedtmp;
+        draw_regions regions voronoi_main liste_pixel owner;
       synchronize ()));
-    (* NEW MAP *)
+    (* Nouvelle carte *)
     if (!state = NewMap) then
       (state := Play;
       let new_voronoi = Examples.select_voronoi () in
@@ -193,7 +193,7 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel di
       draw_menu new_menu;
       Array.iteri (fun i _ -> voronoi_main.seeds.(i) <- original.seeds.(i)) voronoi_main.seeds;
       game new_voronoi new_regions new_voronoi.dim new_menu new_screen_size state new_liste_pixel distance_f)
-    (* MAP RESET *)
+    (* Remise à zéro de la carte *)
     else if (!state = Reset) then
      (state := Play;
       let new_voronoi = original in
@@ -206,7 +206,7 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel di
 (* ----------- Main ----------- *)
 let main () =
   auto_synchronize false;
-  (* Working context *)
+  (* Contexte de travail *)
   let state = ref Play in
   let distance_f = distance_taxicab in
   let voronoi_main = generate_voronoi () in
@@ -217,7 +217,7 @@ let main () =
   let (map_x, map_y) = voronoi_main.dim in
   let (screen_x, screen_y) = adapt_and_get_screen_size voronoi_main in
   let screen_size = (screen_x, screen_y) in
-  (* Settings *)
+  (* Initialisation graphique *)
   set_window_title window_title;
   open_graph (" "^(string_of_int screen_x)^"x"^(string_of_int screen_y));
   set_color background_color;
@@ -225,10 +225,10 @@ let main () =
   (* Logo *)
   if (screen_x > 300 && screen_y > 300) then
     draw_picture "images/mappagani_logo.bmp" logo_size (screen_x-280, screen_y-175);
-  (* Buttons *)
+  (* Création du menu *)
   let menu = create_menu screen_size state voronoi_main colors_set regions list_pixel distance_f in
-  List.iter draw_button menu;
-  (* Main loop *)
+  draw_menu menu;
+  (* Lancement de la boucle principale *)
   try (game voronoi_main regions (map_x, map_y) menu screen_size state list_pixel distance_f)
   with Graphic_failure("fatal I/O error") -> ();
   close_graph ();;
