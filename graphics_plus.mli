@@ -26,6 +26,10 @@ type button = {
 
 type menu = button list;;
 
+(* _________________________________________
+                  BUTTONS
+   _________________________________________ *)
+
 (* Génère les boutons du menu *)
 val create_menu_button : (int * int) -> string -> (unit -> unit) -> button
 
@@ -41,8 +45,24 @@ val draw_button : button -> unit
 (* Vérifie si on appuie sur un bouton *)
 val check_buttons : int -> int -> button list -> unit
 
+(* Desactive / Active un bouton *)
+val disable_button : button -> unit
+val enable_button : button -> unit
+
+(* _________________________________________
+                  MENU
+   _________________________________________ *)
+
 (* Dessine les boutons d'un menu *)
 val draw_menu : menu -> unit
+
+(* Desactive / Active les boutons d'un menu *)
+val disable_menu : menu -> unit
+val enable_menu : menu -> unit
+
+(* _________________________________________
+                  IMAGES
+   _________________________________________ *)
 
 (* Affiche une image à l'écran selon les coordonnées indiquées *)
 val draw_picture : string -> (int * int) -> (int * int) -> unit

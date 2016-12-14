@@ -17,7 +17,7 @@ end
 module MakeStyle (Style : STYLE) = struct
 
 (* _________________________________________
-                  BUTTONS
+                  BOUTONS
    _________________________________________ *)
 
 type button = {
@@ -71,12 +71,20 @@ let draw_inactive_button =
 let rec check_buttons x y buttons =
   List.iter (fun b -> if coord_in_button x y b then b.action ()) buttons;;
 
+let disable_button button = button.active <- false;;
+
+let enable_button button = button.active <- true;;
+
 (* _________________________________________
                   MENU
    _________________________________________ *)
 
 let draw_menu menu =
   List.iter (fun b -> if b.active then draw_button b else draw_inactive_button b) menu;;
+
+let disable_menu menu = List.iter disable_button menu;;
+
+let enable_menu menu = List.iter enable_button menu;;
 
 (* _________________________________________
                   IMAGES
