@@ -7,6 +7,7 @@ module type STYLE = sig
     val yellow : color;;
     val button_background : color;;
     val button_textcolor : color;;
+    val button_inactive_textcolor : color;;
     val button_bordercolor : color;;
     val button_hovercolor : color;;
     val default_width_menu_buttons : color;;
@@ -23,15 +24,19 @@ type button = {
   coord : (int * int);
   size : (int * int);
   text : string;
-  action : unit -> unit
+  action : unit -> unit;
+  mutable active : bool
 };;
+
+type menu = button list;;
 
 (* ----------- Functions ----------- *)
 let create_menu_button c s a =
   {coord = c;
    size = (Style.default_width_menu_buttons, Style.default_height_menu_buttons);
    text = s;
-   action = a};;
+   action = a;
+   active = true};;
 
 let coord_in_surface x y pos size : bool =
   let (blx, bly) = pos and (l, h) = size in
@@ -40,13 +45,13 @@ let coord_in_surface x y pos size : bool =
 let coord_in_button x y button : bool =
   coord_in_surface x y button.coord button.size;;
 
-let draw_button_primitive background button =
+let draw_button_primitive background foreground button =
   let (blx, bly) = button.coord and (l, h) = button.size in
   set_color background;
   fill_rect blx bly l h;
   set_color Style.button_bordercolor;
   draw_rect blx bly l h;
-  set_color Style.button_textcolor;
+  set_color foreground;
   let (string_x, string_y) = text_size button.text in
   moveto (blx+(l/2)-(string_x/2)) (bly+(h/2)-(string_y/2));
   draw_string button.text;
@@ -57,10 +62,21 @@ let top_of button : (int * int) =
   let (l, h) = button.size in
   (px, py+h);;
 
-let draw_button = draw_button_primitive Style.button_background;;
+let draw_button =
+  draw_button_primitive Style.button_background Style.button_textcolor;;
+
+let draw_inactive_button =
+  draw_button_primitive Style.button_background Style.button_inactive_textcolor;;
 
 let rec check_buttons x y buttons =
   List.iter (fun b -> if coord_in_button x y b then b.action ()) buttons;;
+
+(* _________________________________________
+                  MENU
+   _________________________________________ *)
+
+let draw_menu menu =
+  List.iter (fun b -> if b.active then draw_button b else draw_inactive_button b) menu;;
 
 (* _________________________________________
                   IMAGES

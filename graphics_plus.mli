@@ -7,6 +7,7 @@ module type STYLE = sig
     val yellow : color;;
     val button_background : color;;
     val button_textcolor : color;;
+    val button_inactive_textcolor : color;;
     val button_bordercolor : color;;
     val button_hovercolor : color;;
     val default_width_menu_buttons : color;;
@@ -19,8 +20,11 @@ type button = {
   coord : (int * int);
   size : (int * int);
   text : string;
-  action : unit -> unit
+  action : unit -> unit;
+  mutable active : bool
 }
+
+type menu = button list;;
 
 (* Génère les boutons du menu *)
 val create_menu_button : (int * int) -> string -> (unit -> unit) -> button
@@ -36,6 +40,9 @@ val draw_button : button -> unit
 
 (* Vérifie si on appuie sur un bouton *)
 val check_buttons : int -> int -> button list -> unit
+
+(* Dessine les boutons d'un menu *)
+val draw_menu : menu -> unit
 
 (* Affiche une image à l'écran selon les coordonnées indiquées *)
 val draw_picture : string -> (int * int) -> (int * int) -> unit

@@ -17,6 +17,7 @@ let background_color = 0x333536;;
 
 let button_background = 0x333536;;
 let button_textcolor = white;;
+let button_inactive_textcolor = 0x5a5a5a;;
 let button_bordercolor = 0x57cdff;;
 let button_hovercolor = cyan;;
 
