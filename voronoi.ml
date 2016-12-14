@@ -3,11 +3,23 @@ open Graphics;;
 type seed = { c : color option; x : int; y : int };;
 type voronoi = { dim : int * int; seeds : seed array };;
 
+
+let print_matrix m =
+  let maxX = Array.length m - 1 in
+  let maxY = Array.length m.(0) - 1 in
+  for i = 0 to maxX do 
+     for j = 0 to maxY do 
+         print_int m.(i).(j); print_string " ";
+      done;
+    print_string "\n";
+  done;;
+
+
 (***** Fonctions de distance *****)
 let distance_euclide (x1, y1) (x2,y2) =
   let x = (x1 - x2) * (x1 - x2) in
   let y = (y1 - y2) * (y1 - y2) in
-  int_of_float (sqrt (float_of_int (x + y)));;
+  (x + y);;
 
 let distance_taxicab (x1, y1) (x2,y2) =
   let x = abs (x1 - x2) in
