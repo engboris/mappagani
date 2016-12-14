@@ -24,4 +24,5 @@ val generator_color_set : voronoi -> Graphics.color list
 
 
 (* tmp a supprimer *)
-val print_matrix : int array array -> unit
+val print_matrix : voronoi -> bool array array -> unit
+val print_matrix2 : bool array array -> unit

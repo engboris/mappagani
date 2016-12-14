@@ -3,15 +3,29 @@ open Graphics;;
 type seed = { c : color option; x : int; y : int };;
 type voronoi = { dim : int * int; seeds : seed array };;
 
-
-let print_matrix m =
-  let maxX = Array.length m - 1 in
-  let maxY = Array.length m.(0) - 1 in
+let print_matrix2 adj = 
+  let maxX = Array.length adj - 1 in
+  let maxY = Array.length adj.(0) - 1 in
   for i = 0 to maxX do 
      for j = 0 to maxY do 
-         print_int m.(i).(j); print_string " ";
+        if(adj.(i).(j)) then (print_int 1)
+        else (print_int 0);
+        print_string " ";
       done;
-    print_string "\n";
+      print_newline;
+  done;;
+
+
+let print_matrix voronoi adj =
+  set_color black;
+  let maxX = Array.length adj - 1 in
+  let maxY = Array.length adj.(0) - 1 in
+  for i = 0 to maxX do 
+     for j = 0 to maxY do 
+        if(adj.(i).(j)) then
+          moveto voronoi.seeds.(i).x voronoi.seeds.(i).y;
+          lineto voronoi.seeds.(j).x voronoi.seeds.(j).y; 
+      done;
   done;;
 
 
@@ -78,7 +92,8 @@ let adjacences_voronoi voronoi regions =
     Array.iteri (fun j _ ->
       let adj = get_frontieres regions i j in
       List.iter (fun (x, y) -> b.(x).(y) <- true) adj) line) regions;
-  b;;
+  print_matrix2 b;
+    b;;
 
 
 (***** Autre fonction utile pour la partie logique *****)

@@ -140,11 +140,14 @@ let draw_menu menu = List.iter draw_button menu;;
 (* ----------- Boucle de jeu ----------- *)
 
 let rec game voronoi_main regions map_size menu screen_size state liste_pixel distance_f =
+  let adj = adjacences_voronoi voronoi_main regions in
   let original = {dim=voronoi_main.dim; seeds=Array.copy voronoi_main.seeds} in
   let (screen_x, screen_y) = screen_size in
   let newcolor = ref None in
   draw_voronoi regions voronoi_main;
   update_current_color black (0, screen_y) map_size;
+    print_matrix voronoi_main adj;
+
   while (!state <> Quit) do
     synchronize ();
     let e = wait_next_event[Key_pressed; Button_down] in
