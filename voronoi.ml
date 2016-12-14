@@ -7,7 +7,7 @@ type voronoi = { dim : int * int; seeds : seed array };;
 let distance_euclide (x1, y1) (x2,y2) =
   let x = (x1 - x2) * (x1 - x2) in
   let y = (y1 - y2) * (y1 - y2) in
-  int_of_float (sqrt (float_of_int (x + y)));;
+  (x + y);;
 
 let distance_taxicab (x1, y1) (x2,y2) =
   let x = abs (x1 - x2) in
