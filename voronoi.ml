@@ -79,7 +79,6 @@ let adjacences_voronoi voronoi regions =
     Array.iteri (fun j _ ->
       let adj = get_frontieres regions i j in
       List.iter (fun (x, y) -> b.(x).(y) <- true) adj) line) regions;
-  print_matrix2 b;
     b;;
 
 
