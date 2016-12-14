@@ -19,6 +19,7 @@ clean:
 		rm -rf *.cmi
 		rm -rf *.cmo
 		rm -rf *.cmx
+		rm -rf *.o
 
 mrproper: clean
 		rm -rf $(EXEC)
