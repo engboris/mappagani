@@ -44,7 +44,7 @@ Il est aussi possible de mettre fin au jeu (considéré comme un abandon) en aff
 - Switch entre distances taxicab et euclide
 - Ecraser le coloriage du joueur [Kostia]
 - Consommation des voronoi [Kostia]
-- Retirer le bouton de validation de coloriage et remplacer par une détection automatique [Boris]
+- ~~Retirer le bouton de validation de coloriage et remplacer par une détection automatique [Boris]~~
 - ~~Faire une image quand le joueur a perdu [Boris]~~
 - ~~Recommencer nouvelle partie [Boris]~~
 - ~~Supprimer une couleur [Kostia]~~
