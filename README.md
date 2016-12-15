@@ -42,6 +42,9 @@ Il est aussi possible de mettre fin au jeu (considéré comme un abandon) en aff
 - ~~Mieux découper logiquement le fichier voronoi.ml [Kostia] (draw_voronoi dans mappagani.ml)~~
 - ~~Empêcher la fermeture de la fenêtre lorsqu'il n'y a pas de solution (afficher un message) [Kostia]~~
 - Switch entre distances taxicab et euclide
+- Ecraser le coloriage du joueur [Kostia]
+- Consommation des voronoi [Kostia]
+- Retirer le bouton de validation de coloriage et remplacer par une détection automatique [Boris]
 - ~~Faire une image quand le joueur a perdu [Boris]~~
 - ~~Recommencer nouvelle partie [Boris]~~
 - ~~Supprimer une couleur [Kostia]~~
