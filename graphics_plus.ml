@@ -62,11 +62,22 @@ let top_of button : (int * int) =
   let (l, h) = button.size in
   (px, py+h);;
 
-let draw_button =
-  draw_button_primitive Style.button_background Style.button_textcolor;;
+let draw_button button =
+  if (button.active) then
+    draw_button_primitive Style.button_background Style.button_textcolor button
+  else
+    draw_button_primitive Style.button_background Style.button_inactive_textcolor button;;
 
-let draw_inactive_button =
-  draw_button_primitive Style.button_background Style.button_inactive_textcolor;;
+let hover button =
+  if (button.active) then
+    draw_button_primitive Style.button_hovercolor Style.button_textcolor button
+  else
+    draw_button_primitive Style.button_hovercolor Style.button_inactive_textcolor button;;
+
+let unhover = draw_button;;
+
+let check_hover x y buttons =
+  List.iter (fun b -> if coord_in_button x y b then hover b else unhover b) buttons;;
 
 let rec check_buttons x y buttons =
   List.iter (fun b -> if coord_in_button x y b then b.action ()) buttons;;
@@ -80,7 +91,7 @@ let enable_button button = button.active <- true;;
    _________________________________________ *)
 
 let draw_menu menu =
-  List.iter (fun b -> if b.active then draw_button b else draw_inactive_button b) menu;;
+  List.iter (fun b -> if b.active then draw_button b else draw_button b) menu;;
 
 let disable_menu menu = List.iter disable_button menu;;
 

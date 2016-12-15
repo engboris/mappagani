@@ -94,7 +94,7 @@ let rec create_menu screen_size state voronoi_main colors_set regions liste_pixe
   let (screen_x, screen_y) = screen_size in
   let (voronoi_x, voronoi_y) = voronoi_main.dim in
   let default_h = default_height_menu_buttons in
-  let topleft_position = (screen_x-250, screen_y-(screen_y/2)-(default_h*5/2)) in
+  let topleft_position = (screen_x-250, screen_y-(screen_y/2)-(default_h*5/2)-15) in
   let adj = adjacences_voronoi voronoi_main regions in
   (* ----- Quitter le jeu ----- *)
   let ac_quit = (fun () -> state := Quit) in
@@ -141,11 +141,11 @@ let rec create_menu screen_size state voronoi_main colors_set regions liste_pixe
   (* Gestion de l'activite des boutons *)
   if (!state = End) then
     (disable_menu menu; List.iter enable_button [button_quit; button_newgame]);
-  (* Affichage et renvoi du menu *)
+  (* Envoi du menu *)
   menu
 (* Actualisation du menu *)
 and refresh_menu screen_size state voronoi_main colors_set regions liste_pixel distance_f =
-  let menu = create_menu screen_size state voronoi_main colors_set regions liste_pixel distance_f in 
+  let menu = create_menu screen_size state voronoi_main colors_set regions liste_pixel distance_f in
   draw_menu menu;;
 
 (* ----------- Boucle de jeu ----------- *)
@@ -158,7 +158,7 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel di
   update_current_color black (0, screen_y) map_size;
   while (!state <> Quit) do
     synchronize ();
-    let e = wait_next_event[Key_pressed; Button_down] in
+    let e = wait_next_event[Key_pressed; Button_down; Mouse_motion] in
     (* Appui souris / Coloriage de couleurs *)
     if (button_down ()) then
       (let x_mouse = e.mouse_x and y_mouse = e.mouse_y in
@@ -177,6 +177,7 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel di
     (* Appui clavier / Suppression de couleur *)
     if (e.keypressed && e.key = ' ') then
       (let x_mouse = e.mouse_x and y_mouse = e.mouse_y in
+      check_hover x_mouse y_mouse menu;
       if (coord_in_surface x_mouse y_mouse (0, 0) map_size) then
 	    let owner = regions.(x_mouse).(y_mouse) in
 	    let colortmp = voronoi_main.seeds.(owner).c in

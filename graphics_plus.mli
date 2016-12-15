@@ -49,6 +49,9 @@ val check_buttons : int -> int -> button list -> unit
 val disable_button : button -> unit
 val enable_button : button -> unit
 
+(* Change l'apparence des boutons si le curseur est dessus *)
+val check_hover : int -> int -> button list -> unit
+
 (* _________________________________________
                   MENU
    _________________________________________ *)
