@@ -160,8 +160,7 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel di
       check_buttons x_mouse y_mouse menu;
       if (coord_in_surface x_mouse y_mouse (0, 0) map_size) then
         let owner = regions.(x_mouse).(y_mouse) in
-        let colortmp = voronoi_main.seeds.(owner).c in
-        if (colortmp = None && !newcolor <> None) then
+        if (!newcolor <> None && original.seeds.(owner).c = None) then
 	        let seedtmp = {c= !newcolor; x=voronoi_main.seeds.(owner).x; y=voronoi_main.seeds.(owner).y} in
 	        (voronoi_main.seeds.(owner) <- seedtmp;
           draw_regions regions voronoi_main liste_pixel owner;
@@ -252,5 +251,3 @@ let main () =
   close_graph ();;
 
 main ();;
-
-
