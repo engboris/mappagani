@@ -2,20 +2,11 @@
 
 Mappagani est un projet réalisé par *Kostia Chardonnet* et *Sambo Boris Eng* dans le cadre du projet de programmation fonctionnelle (module PF5) de L3 Informatique à l'Université Paris 7 (Diderot).
 
-Le programme correspond à un mini-jeu de puzzle où un joueur doit colorier une carte divisée en plusieurs régions avec seulement 4 uniques couleurs. La coloration complète de la carte telle que deux régions adjacentes sont de couleurs différentes mène à une victoire.
+Le programme est un mini-jeu de puzzle où un joueur doit colorier une carte divisée en plusieurs régions avec seulement 4 couleurs seulement. La coloration complète de la carte telle que deux régions adjacentes sont de couleurs différentes mène à une victoire.
 
-Il est aussi possible de mettre fin au jeu (considéré comme un abandon) en affichant un coloriage correct jouant le rôle de réponse au puzzle.
+Il est aussi possible de mettre fin au jeu (considéré comme un abandon) en affichant un coloriage correct jouant le rôle de solution du puzzle.
 
-## Messages administratif (Staff)
-
-**La date limite de soumission est le vendredi 6 janvier à 23h59**
-
-- Code source en OCaml, compilable et utilisable tel quel sous Linux et/ou sur les ordinateurs de l'UFR
-- README contenant les noms et indiquant brièvement comment compiler le code source et, si nécessaire, comment utiliser l'exécutable produit
-- Un rapport de quelques pages (au plus 5) au format PDF décrivant le projet ainsi que les extensions réalisées, expliquant et justifiant les choix de conception ou d’implémentation
-- Tout autre fichier nécessaire à la compilation et à l'exécution : fichiers d’exemples, Makefile
-
-## Installation et utilisation
+## Installation
 
 1. Télécharger la version la plus récente de *GNU Make*
  - Linux : https://www.gnu.org/software/make/
@@ -32,24 +23,13 @@ Il est aussi possible de mettre fin au jeu (considéré comme un abandon) en aff
 - La fermeture du programme provoque une erreur
 - Le haut de la fenêtre du programme n'est pas visible
 
-## TODO
-- ~~voronoi.ml -> draw_voronoi -> améliorer le try/catch lors du parcours des pixels [Kostia]~~ 
-- ~~Réparer la fonction get_list_couleurs : supprimer les doublons, il doit y avoir exactement 4 couleurs [Kostia]~~
-- ~~Réparer la fonction get_list_couleurs : combler avec des couleurs pour en avoir 4 [Kostia]~~
-- ~~Réparer la fonction adjacences_voronoi : s'assurer qu'elle produit les bons résultats [Kostia]~~
-- ~~Séparation des pixels des régions dans plusieurs listes : pour pouvoir colorier qu'une seule région [Kostia]~~
-- ~~Fonction check_coloring qui parcours les seeds et leurs voisins et s'arrête puis renvoie true s'il existe un seed qui a un voisin de la même couleur. S'il n'en existe pas on retourne true [Boris]~~
-- ~~Mieux découper logiquement le fichier voronoi.ml [Kostia] (draw_voronoi dans mappagani.ml)~~
-- ~~Empêcher la fermeture de la fenêtre lorsqu'il n'y a pas de solution (afficher un message) [Kostia]~~
-- Switch entre distances taxicab et euclide
-- Ecraser le coloriage du joueur [Kostia]
-- Consommation des voronoi [Kostia]
-- ~~Retirer le bouton de validation de coloriage et remplacer par une détection automatique [Boris]~~
-- ~~Faire une image quand le joueur a perdu [Boris]~~
-- ~~Recommencer nouvelle partie [Boris]~~
-- ~~Supprimer une couleur [Kostia]~~
-- ~~**METTRE LE LOGO**~~
-- Youpi on a presque fini
+## Comment jouer
+
+- Cliquez sur une région déjà coloriée pour absorber sa couleur puis appuyez sur une région différente de celles d'origine pour la colorier avec la couleur enregistrée. Une fois la carte complétée sans avoir deux régions côte à côte de même couleur un message de victoire s'affiche.
+ 
+- Vous pouvez supprimer le coloriage d'une région en vous positionnant dessus et en appuyant sur la touche "Espace".
+
+- À tout moment vous pouvez choisir de recommencer votre coloriage ou d'abandonner en affichant la solution. Ces options sont disponibles sur le menu. 
 
 ## Programme Extrémiste de Peaufinage (PEP)
 
