@@ -98,10 +98,17 @@ let v4 =  {
 
 (*ADD other voronoi of 30/40 seeds, for example taken from the web-site*)
 
-let voronoi_list = [v1;v2;v3;v4];;
-
+let voronoi_list = ref [v1;v2;v3;v4];;
+  
+exception No_voronoi;;
+ 
 let select_voronoi () =
-  Random.self_init ();
-  let l = List.length voronoi_list in
-  List.nth voronoi_list (Random.int l);;
+  let l = List.length !voronoi_list in
+  if(l = 0) then
+    (raise No_voronoi)
+  else
+   (Random.self_init ();
+    let e = List.nth !voronoi_list (Random.int l) in
+    voronoi_list := List.filter (fun x -> x <> e) !voronoi_list;
+    e);; 
 
