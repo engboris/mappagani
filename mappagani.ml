@@ -58,9 +58,6 @@ let draw_blackscreen voronoi_main liste_pixel regions =
     (voronoi_main.seeds.(i) <- seedtmp);
     draw_regions regions voronoi_main liste_pixel i) (seeds_to_indices voronoi_main.seeds);;
 
-let is_complete_voronoi voronoi =
-  Array.fold_right (fun s base -> if s.c = None then false else true && base) voronoi.seeds true;;
-
 (* _________________________________________
                 FONCTION MAIN
    _________________________________________ *)

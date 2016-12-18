@@ -24,3 +24,7 @@ val generator_color_set : voronoi -> Graphics.color list
 
 (* Generation du graphe d'adjacence *)
 val generate_graph : voronoi -> bool array array -> unit
+
+(* Vérification du voronoi *)
+val is_complete_voronoi : voronoi -> bool
+  
