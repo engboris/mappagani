@@ -1,11 +1,10 @@
 open Graphics;;
 open Voronoi;;
 open Color_solver;;
-
+open Examples;;
 module GraphicsPlus = Graphics_plus.MakeStyle(Style);;
 open GraphicsPlus;;
 open Style;;
-open Examples;;
 (* _________________________________________
                 PARAMETRES
    _________________________________________ *)
@@ -32,14 +31,23 @@ type program_state =
 
 (* ----------- Gestion sélection voronoi ----------- *)
 
-let voronoi_list = ref [v1;v2;v3;v4];;                       
+let voronoi_list = ref [v1;v2;v3;v4];;
+
+exception No_value;;
+let get v = match v with
+  | Some a -> a
+  | None -> raise No_value;;
 
 let select state  =
-  try select_voronoi voronoi_list with
-    No_voronoi -> (remove_screen ();
-                   let size_X = size_x () and size_Y = size_y () in
-                 draw_picture "images/jeutermine.bmp" nosolution_size (size_X/2-150, size_Y/2-150);
-                 (state := GameOver));;
+  let Some x = try select_voronoi voronoi_list with
+    No_voronoi -> None in
+    match x with
+    | None -> remove_screen ();
+              let size_X = size_x () and size_Y = size_y () in
+              draw_picture "images/jeutermine.bmp" nosolution_size (size_X/2-150, size_Y/2-150);
+              (state := GameOver);
+    | Some a -> ();;
+  
   
 let generate_voronoi state = select state;;
                           
@@ -197,7 +205,7 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel di
     if (!state = NewMap) then
       (state := Play;
       Array.iteri (fun i _ -> voronoi_main.seeds.(i) <- original.seeds.(i)) voronoi_main.seeds;
-      let new_voronoi = select () in
+      let new_voronoi = get (select ()) in
       let regions_list = regions_and_pixelList distance_f new_voronoi in
       let new_regions = fst regions_list in
       let new_adj = adjacences_voronoi new_voronoi new_regions in
