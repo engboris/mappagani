@@ -129,6 +129,18 @@ let generator_color_set voronoi =
     | h::t -> rajoute_couleurs (insert h list) t in
   rajoute_couleurs (supprime_double list_color) color_set;;
 
+  
+exception No_voronoi;;
+ 
+let select_voronoi voronoi_list =
+  let l = List.length !voronoi_list in
+  if(l = 0) then
+    (raise No_voronoi)
+  else
+   (Random.self_init ();
+    let e = List.nth !voronoi_list (Random.int l) in
+    voronoi_list := List.filter (fun x -> x <> e) !voronoi_list;
+    e);;
 
 let is_complete_voronoi voronoi =
   Array.fold_right (fun s base -> if s.c = None then false else true && base) voronoi.seeds true;;

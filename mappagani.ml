@@ -15,6 +15,7 @@ let selected_color_label = "Couleur choisie";;
 
 let rightborder : int = 300;;
 let generate_voronoi () : voronoi = Examples.select_voronoi ();;
+let voronoi_list = ref [v1;v2;v3;v4];;
 
 (* _________________________________________
             AFFICHAGE DE LA CARTE

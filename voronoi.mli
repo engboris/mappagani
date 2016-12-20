@@ -1,6 +1,8 @@
 type seed = { c : Graphics.color option; x : int; y : int; }
 type voronoi = { dim : int * int; seeds : seed array; }
 
+exception No_voronoi
+                 
 (* Distance euclidienne *)
 val distance_euclide : int * int -> int * int -> int
 
@@ -27,4 +29,7 @@ val generate_graph : voronoi -> bool array array -> unit
 
 (* Vérification du voronoi *)
 val is_complete_voronoi : voronoi -> bool
+
+(* Sélection voronoi *)
+val select_voronoi : voronoi list ref -> voronoi
   
