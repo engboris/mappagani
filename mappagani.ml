@@ -5,16 +5,21 @@ open Color_solver;;
 module GraphicsPlus = Graphics_plus.MakeStyle(Style);;
 open GraphicsPlus;;
 open Style;;
-
+open Examples;;
 (* _________________________________________
                 PARAMETRES
    _________________________________________ *)
 
 let window_title = "Mappagani";;
 let selected_color_label = "Couleur choisie";;
-
 let rightborder : int = 300;;
-let generate_voronoi state : voronoi = select ();;
+
+(* ----------- Dimension des images ----------- *)
+
+let logo_size : (int * int) = (245, 115);;
+let bravo_size : (int * int) = (300, 300);;
+let nosolution_size : (int * int) = (300, 300);;
+let jeutermine_size : (int * int) = (300, 300);;
 
 type program_state =
   | Play
@@ -23,31 +28,21 @@ type program_state =
   | Win
   | NewMap
   | Reset
-  | GameOver;;  
+  | GameOver;;   
 
-(* ----------- Dimension des images ----------- *)
+(* ----------- Gestion sélection voronoi ----------- *)
 
-let logo_size : (int * int) = (245, 115);;
-let bravo_size : (int * int) = (300, 300);;
-let nosolution_size : (int * int) = (300, 300);;
-let jeutermine_size : (int * int) = (300, 300);;  
+let voronoi_list = ref [v1;v2;v3;v4];;                       
 
-(* _________________________________________
-            AFFICHAGE DE LA CARTE
-   _________________________________________ *)
-let voronoi_list = ref [v1;v2;v3;v4];;
-let remove_screen () = auto_synchronize false;
-                       set_color black;
-                       let size_X = size_x () and sizeY = size_y () in
-                       fill_rect 0 0 size_X size_Y;
-                       synchronize ();
-let select state  = try (select_voronoi voronoi_list) with
-               No_voronoi -> (remove_screen ();
-                              draw_picture "images/jeutermine.bmp" nosolution_size (size_X/2-150, size_Y/2-150);
-                             state := GameOver);;
-                              
-
-                            
+let select state  =
+  try select_voronoi voronoi_list with
+    No_voronoi -> (remove_screen ();
+                   let size_X = size_x () and size_Y = size_y () in
+                 draw_picture "images/jeutermine.bmp" nosolution_size (size_X/2-150, size_Y/2-150);
+                 (state := GameOver));;
+  
+let generate_voronoi state = select state;;
+                          
 
 (* _________________________________________
             AFFICHAGE DE LA CARTE

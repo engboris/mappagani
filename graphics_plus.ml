@@ -129,4 +129,15 @@ let draw_picture filename (imageH, imageW) (screen_x, screen_y) =
   draw_image logo screen_x screen_y;
   synchronize ();;
 
+(* _________________________________________
+                  FENETRE
+   _________________________________________ *)
+  
+let remove_screen () =
+  auto_synchronize false;
+  set_color black;
+  let size_X = size_x () and size_Y = size_y () in
+  fill_rect 0 0 size_X size_Y;
+  synchronize ();;
+
 end
