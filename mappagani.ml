@@ -14,14 +14,40 @@ let window_title = "Mappagani";;
 let selected_color_label = "Couleur choisie";;
 
 let rightborder : int = 300;;
-let generate_voronoi () : voronoi = Examples.select_voronoi ();;
+let generate_voronoi state : voronoi = select ();;
+
+type program_state =
+  | Play
+  | Quit
+  | End
+  | Win
+  | NewMap
+  | Reset
+  | GameOver;;  
+
+(* ----------- Dimension des images ----------- *)
+
+let logo_size : (int * int) = (245, 115);;
+let bravo_size : (int * int) = (300, 300);;
+let nosolution_size : (int * int) = (300, 300);;
+let jeutermine_size : (int * int) = (300, 300);;  
 
 (* _________________________________________
             AFFICHAGE DE LA CARTE
    _________________________________________ *)
 let voronoi_list = ref [v1;v2;v3;v4];;
-let select = try select_voronoi voronoi_list with
-               No_voronoi -> draw_blackscreen
+let remove_screen () = auto_synchronize false;
+                       set_color black;
+                       let size_X = size_x () and sizeY = size_y () in
+                       fill_rect 0 0 size_X size_Y;
+                       synchronize ();
+let select state  = try (select_voronoi voronoi_list) with
+               No_voronoi -> (remove_screen ();
+                              draw_picture "images/jeutermine.bmp" nosolution_size (size_X/2-150, size_Y/2-150);
+                             state := GameOver);;
+                              
+
+                            
 
 (* _________________________________________
             AFFICHAGE DE LA CARTE
@@ -69,14 +95,6 @@ let draw_blackscreen voronoi_main liste_pixel regions =
                 FONCTION MAIN
    _________________________________________ *)
 
-type program_state =
-  | Play
-  | Quit
-  | End
-  | Win
-  | NewMap
-  | Reset;;
-
 let update_current_color c board_pos board_size =
   let rec_y = 20 in
   let (x, y) = board_pos in
@@ -90,12 +108,6 @@ let update_current_color c board_pos board_size =
 (* Non exploité : permet d'adapter la taille des fenêtres *)
 let adapt_and_get_screen_size voronoi =
   let (x, y) = voronoi.dim in (x + rightborder, y);;
-
-(* ----------- Dimension des images ----------- *)
-
-let logo_size : (int * int) = (245, 115);;
-let bravo_size : (int * int) = (300, 300);;
-let nosolution_size : (int * int) = (300, 300);;
 
 (* ----------- Menu ----------- *)
 (* Creer et affiche les boutons du menu *)
@@ -190,7 +202,7 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel di
     if (!state = NewMap) then
       (state := Play;
       Array.iteri (fun i _ -> voronoi_main.seeds.(i) <- original.seeds.(i)) voronoi_main.seeds;
-      let new_voronoi = Examples.select_voronoi () in
+      let new_voronoi = select () in
       let regions_list = regions_and_pixelList distance_f new_voronoi in
       let new_regions = fst regions_list in
       let new_adj = adjacences_voronoi new_voronoi new_regions in
@@ -229,7 +241,7 @@ let main () =
   (* Contexte de travail *)
   let state = ref Play in
   let distance_f = distance_taxicab in
-  let voronoi_main = generate_voronoi () in
+  let voronoi_main = generate_voronoi state in
   let regions_list = regions_and_pixelList distance_f voronoi_main in
   let list_pixel = snd regions_list in
   let regions = fst regions_list in
