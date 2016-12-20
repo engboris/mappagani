@@ -39,7 +39,7 @@ let get v = match v with
   | None -> raise No_value;;
 
 let select state  =
-  let Some x = try select_voronoi voronoi_list with
+  let x = try Some (select_voronoi voronoi_list) with
     No_voronoi -> None in
     match x with
     | None -> remove_screen ();
@@ -205,7 +205,8 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel di
     if (!state = NewMap) then
       (state := Play;
       Array.iteri (fun i _ -> voronoi_main.seeds.(i) <- original.seeds.(i)) voronoi_main.seeds;
-      let new_voronoi = get (select ()) in
+      let new_voronoi = select () in
+      if new_voronoi = None then end_game state;;
       let regions_list = regions_and_pixelList distance_f new_voronoi in
       let new_regions = fst regions_list in
       let new_adj = adjacences_voronoi new_voronoi new_regions in
@@ -220,7 +221,7 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel di
       let (new_screen_x, new_screen_y) = new_screen_size in
       if (new_screen_x > 300 && new_screen_y > 300) then
         draw_picture "images/mappagani_logo.bmp" logo_size (new_screen_x-280, new_screen_y-175);
-      game new_voronoi new_regions new_voronoi.dim new_menu new_screen_size state new_liste_pixel distance_f adj)
+      game new_voronoi new_regions new_voronoi.dim new_menu new_screen_size state new_liste_pixel distance_f adj) 
     (* Requete de remise à zéro de la carte *)
     else if (!state = Reset) then
      (state := Play;
