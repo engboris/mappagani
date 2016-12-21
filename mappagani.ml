@@ -206,7 +206,7 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel di
       (state := Play;
       Array.iteri (fun i _ -> voronoi_main.seeds.(i) <- original.seeds.(i)) voronoi_main.seeds;
       let new_voronoi = select () in
-      if new_voronoi = None then end_game state;;
+      if new_voronoi = None then end_game state;
       let regions_list = regions_and_pixelList distance_f new_voronoi in
       let new_regions = fst regions_list in
       let new_adj = adjacences_voronoi new_voronoi new_regions in
