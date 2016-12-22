@@ -29,29 +29,29 @@ type program_state =
   | Reset
   | GameOver;;   
 
+exception No_value;;
+ 
 (* ----------- Gestion sélection voronoi ----------- *)
 
 let voronoi_list = ref [v1;v2;v3;v4];;
 
-exception No_value;;
 let get v = match v with
   | Some a -> a
   | None -> raise No_value;;
 
-let select state  =
-  let x = try Some (select_voronoi voronoi_list) with
-    No_voronoi -> None in
-    match x with
-    | None -> remove_screen ();
-              let size_X = size_x () and size_Y = size_y () in
-              draw_picture "images/jeutermine.bmp" nosolution_size (size_X/2-150, size_Y/2-150);
-              (state := GameOver);
-    | Some a -> ();;
+let check_and_set_gameover state voronoi =
+  match voronoi with
+  | None ->
+     remove_screen ();
+     let size_X = size_x () and size_Y = size_y () in
+     draw_picture "images/jeutermine.bmp" nosolution_size (size_X/2-150, size_Y/2-150);
+     (state := GameOver);
+  | Some a -> ();;  
   
-  
-let generate_voronoi state = select state;;
+let generate_voronoi state =
+  try Some (select_voronoi voronoi_list)
+  with No_voronoi -> None;;
                           
-
 (* _________________________________________
             AFFICHAGE DE LA CARTE
    _________________________________________ *)
@@ -174,7 +174,7 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel di
     synchronize ();
     let e = wait_next_event[Key_pressed; Button_down; Mouse_motion] in
     (* Appui souris / Coloriage de couleurs *)
-    if (button_down ()) then
+    if (!state <> GameOver && button_down ()) then
       (let x_mouse = e.mouse_x and y_mouse = e.mouse_y in
       check_buttons x_mouse y_mouse menu;
       if (coord_in_surface x_mouse y_mouse (0, 0) map_size) then
@@ -190,7 +190,7 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel di
           (newcolor := voronoi_main.seeds.(owner).c;
 	      update_current_color (getCouleur !newcolor) (0, screen_y) map_size));
     (* Appui clavier / Suppression de couleur *)
-    if (e.keypressed && e.key = ' ') then
+    if (!state <> GameOver && e.keypressed && e.key = ' ') then
       (let x_mouse = e.mouse_x and y_mouse = e.mouse_y in
       check_hover x_mouse y_mouse menu;
       if (coord_in_surface x_mouse y_mouse (0, 0) map_size) then
@@ -205,23 +205,26 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel di
     if (!state = NewMap) then
       (state := Play;
       Array.iteri (fun i _ -> voronoi_main.seeds.(i) <- original.seeds.(i)) voronoi_main.seeds;
-      let new_voronoi = select () in
-      if new_voronoi = None then end_game state;
-      let regions_list = regions_and_pixelList distance_f new_voronoi in
-      let new_regions = fst regions_list in
-      let new_adj = adjacences_voronoi new_voronoi new_regions in
-      let new_liste_pixel = snd regions_list in
-      let new_screen_size = adapt_and_get_screen_size new_voronoi in
-      let new_colors_set = generator_color_set new_voronoi in
-      let new_menu = create_menu new_screen_size state new_voronoi new_colors_set new_regions new_liste_pixel distance_f new_adj in
-      resize_window (fst new_screen_size) (snd new_screen_size);
-      set_color background_color;
-      fill_rect 0 0 (fst new_screen_size) (snd new_screen_size);
-      draw_menu new_menu;
-      let (new_screen_x, new_screen_y) = new_screen_size in
-      if (new_screen_x > 300 && new_screen_y > 300) then
-        draw_picture "images/mappagani_logo.bmp" logo_size (new_screen_x-280, new_screen_y-175);
-      game new_voronoi new_regions new_voronoi.dim new_menu new_screen_size state new_liste_pixel distance_f adj) 
+      let new_voronoi = generate_voronoi () in
+      if (new_voronoi <> None) then
+        (let new_voronoi = get new_voronoi in
+        let regions_list = regions_and_pixelList distance_f new_voronoi in
+        let new_regions = fst regions_list in
+        let new_adj = adjacences_voronoi new_voronoi new_regions in
+        let new_liste_pixel = snd regions_list in
+        let new_screen_size = adapt_and_get_screen_size new_voronoi in
+        let new_colors_set = generator_color_set new_voronoi in
+        let new_menu = create_menu new_screen_size state new_voronoi new_colors_set new_regions new_liste_pixel distance_f new_adj in
+        resize_window (fst new_screen_size) (snd new_screen_size);
+        set_color background_color;
+        fill_rect 0 0 (fst new_screen_size) (snd new_screen_size);
+        draw_menu new_menu;
+        let (new_screen_x, new_screen_y) = new_screen_size in
+        if (new_screen_x > 300 && new_screen_y > 300) then
+          draw_picture "images/mappagani_logo.bmp" logo_size (new_screen_x-280, new_screen_y-175);
+        game new_voronoi new_regions new_voronoi.dim new_menu new_screen_size state new_liste_pixel distance_f adj)
+      else
+        check_and_set_gameover state new_voronoi)
     (* Requete de remise à zéro de la carte *)
     else if (!state = Reset) then
      (state := Play;
@@ -245,7 +248,7 @@ let main () =
   (* Contexte de travail *)
   let state = ref Play in
   let distance_f = distance_taxicab in
-  let voronoi_main = generate_voronoi state in
+  let voronoi_main = get (generate_voronoi state) in
   let regions_list = regions_and_pixelList distance_f voronoi_main in
   let list_pixel = snd regions_list in
   let regions = fst regions_list in
