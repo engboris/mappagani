@@ -3,20 +3,6 @@ open Graphics;;
 type seed = { c : color option; x : int; y : int };;
 type voronoi = { dim : int * int; seeds : seed array };;
 
-
-let generate_graph voronoi adj =
-  set_color black;
-  let maxX = Array.length adj - 1 in
-  let maxY = Array.length adj.(0) - 1 in
-  for i = 0 to maxX do 
-     for j = 0 to maxY do 
-        if(adj.(i).(j)) then(
-          moveto voronoi.seeds.(i).x voronoi.seeds.(i).y;
-          lineto voronoi.seeds.(j).x voronoi.seeds.(j).y)
-      done;
-  done;;
-
-
 (***** Fonctions de distance *****)
 let distance_euclide (x1, y1) (x2,y2) =
   let x = (x1 - x2) * (x1 - x2) in

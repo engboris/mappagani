@@ -5,8 +5,29 @@ open Examples;;
 module GraphicsPlus = Graphics_plus.MakeStyle(Style);;
 open GraphicsPlus;;
 open Style;;
+
 (* _________________________________________
-                PARAMETRES
+                TYPES
+   _________________________________________ *)
+
+type program_state =
+  | Play
+  | Quit
+  | End
+  | Win
+  | NewMap
+  | Reset
+  | GameOver;;
+
+type flags = {
+  mutable seedmark : bool;
+  mutable graph : bool
+};;
+
+exception No_value;;
+
+(* _________________________________________
+         PARAMETRES ET INITIALISATION
    _________________________________________ *)
 
 let window_title = "Mappagani";;
@@ -20,18 +41,12 @@ let bravo_size : (int * int) = (300, 300);;
 let nosolution_size : (int * int) = (300, 300);;
 let jeutermine_size : (int * int) = (300, 300);;
 
-type program_state =
-  | Play
-  | Quit
-  | End
-  | Win
-  | NewMap
-  | Reset
-  | GameOver;;   
-
-exception No_value;;
+let init_flags () : flags = {
+  seedmark = false;
+  graph = false
+};;
  
-(* ----------- Gestion sélection voronoi ----------- *)
+(* ----------- Sélection de carte ----------- *)
 
 let voronoi_list = ref [v1;v2;v3;v4];;
 
@@ -56,6 +71,18 @@ let generate_voronoi state =
             AFFICHAGE DE LA CARTE
    _________________________________________ *)
 
+let draw_graph voronoi adj =
+  set_color black;
+  let maxX = Array.length adj - 1 in
+  let maxY = Array.length adj.(0) - 1 in
+  for i = 0 to maxX do 
+     for j = 0 to maxY do 
+        if(adj.(i).(j)) then(
+          moveto voronoi.seeds.(i).x voronoi.seeds.(i).y;
+          lineto voronoi.seeds.(j).x voronoi.seeds.(j).y)
+      done;
+  done;;
+
 let frontiere m i j =
   let v = m.(i).(j) in
     ((i-1 > 0) && (m.(i-1).(j) <> v))
@@ -63,7 +90,13 @@ let frontiere m i j =
   || ((j-1 > 0) && (m.(i).(j-1) <> v))
   || ((j+1 < Array.length m.(0)) && (m.(i).(j+1) <> v));;
 
-let draw_voronoi matrix voronoi =
+let draw_seedmark voronoi =
+  auto_synchronize false;
+  set_color black;
+  Array.iter (fun s -> if s.c <> None then fill_circle s.x s.y 5) voronoi.seeds;
+  synchronize ();;
+
+let draw_voronoi matrix voronoi flags =
   auto_synchronize false;
   set_color black;
   let maxY = Array.length matrix.(0) in
@@ -74,7 +107,9 @@ let draw_voronoi matrix voronoi =
         (set_color black; plot i j')
       else
         set_color (getCouleur (voronoi.seeds.(matrix.(i).(j')).c)); plot i j') line) matrix;
-  synchronize();;
+  if (flags.seedmark) then
+    draw_seedmark voronoi;
+  synchronize ();;
 
 let draw_regions matrix voronoi array_of_list indice =
   auto_synchronize false;
@@ -162,13 +197,13 @@ and refresh_menu screen_size state voronoi_main colors_set regions liste_pixel d
 
 (* ----------- Boucle de jeu ----------- *)
 
-let rec game voronoi_main regions map_size menu screen_size state liste_pixel distance_f adj =
+let rec game voronoi_main regions map_size menu screen_size state liste_pixel distance_f adj flags =
   let original = {dim=voronoi_main.dim; seeds=Array.copy voronoi_main.seeds} in
   let (map_x, map_y) = map_size in
   let (screen_x, screen_y) = screen_size in
   let newcolor = ref None in
   let colors_set = generator_color_set voronoi_main in
-  draw_voronoi regions voronoi_main;
+  draw_voronoi regions voronoi_main flags;
   update_current_color black (0, screen_y) map_size;
   while (!state <> Quit) do
     synchronize ();
@@ -201,6 +236,15 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel di
 	      (voronoi_main.seeds.(owner) <- seedtmp;
         draw_regions regions voronoi_main liste_pixel owner;
       synchronize ()));
+    if (!state <> GameOver && e.keypressed && e.key = 'o') then
+      (flags.seedmark <- not flags.seedmark; draw_voronoi regions voronoi_main flags);
+    if (!state <> GameOver && e.keypressed && e.key = 'g') then
+      begin
+        if flags.graph then
+          (draw_voronoi regions voronoi_main flags; flags.graph <- false)
+        else
+          (draw_graph voronoi_main adj; flags.graph <- true)
+      end;
     (* Requete de nouvelle carte *)
     if (!state = NewMap) then
       (state := Play;
@@ -222,7 +266,7 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel di
         let (new_screen_x, new_screen_y) = new_screen_size in
         if (new_screen_x > 300 && new_screen_y > 300) then
           draw_picture "images/mappagani_logo.bmp" logo_size (new_screen_x-280, new_screen_y-175);
-        game new_voronoi new_regions new_voronoi.dim new_menu new_screen_size state new_liste_pixel distance_f adj)
+        game new_voronoi new_regions new_voronoi.dim new_menu new_screen_size state new_liste_pixel distance_f adj flags)
       else
         check_and_set_gameover state new_voronoi)
     (* Requete de remise à zéro de la carte *)
@@ -232,7 +276,7 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel di
       let new_colors_set = generator_color_set new_voronoi in
       let new_menu = create_menu screen_size state new_voronoi new_colors_set regions liste_pixel distance_f adj in
       draw_menu new_menu;
-      game new_voronoi regions new_voronoi.dim new_menu screen_size state liste_pixel distance_f adj)
+      game new_voronoi regions new_voronoi.dim new_menu screen_size state liste_pixel distance_f adj flags)
     (* Victoire du joueur *)
     else if (!state = Win) then
       (if (!state <> End) then
@@ -257,6 +301,7 @@ let main () =
   let (map_x, map_y) = voronoi_main.dim in
   let (screen_x, screen_y) = adapt_and_get_screen_size voronoi_main in
   let screen_size = (screen_x, screen_y) in
+  let flags = init_flags () in 
   (* Initialisation graphique *)
   set_window_title window_title;
   open_graph (" "^(string_of_int screen_x)^"x"^(string_of_int screen_y));
@@ -269,7 +314,7 @@ let main () =
   let menu = create_menu screen_size state voronoi_main colors_set regions list_pixel distance_f adj in
   draw_menu menu;
   (* Lancement de la boucle principale *)
-  try (game voronoi_main regions (map_x, map_y) menu screen_size state list_pixel distance_f adj)
+  try (game voronoi_main regions (map_x, map_y) menu screen_size state list_pixel distance_f adj flags)
   with Graphic_failure("fatal I/O error") -> ();
   close_graph ();;
 
