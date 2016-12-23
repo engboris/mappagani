@@ -15,13 +15,6 @@ exception NoSolution;;
                  GENERATION
    _________________________________________ *)
 
-let seeds_to_indices seeds : int list =
-  let last_index = (Array.length seeds)-1 in
-  Array.fold_left (fun acc s ->
-    if (acc = []) then last_index::acc
-    else (List.hd acc)-1 :: acc)
-  [] seeds;;
-
 let add_to_all e ls = List.map (fun x -> e::[x]) ls;;
 
 let make_pairs e ls = List.map (fun x -> (e, x)) ls;;

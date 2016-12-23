@@ -18,6 +18,9 @@ val adjacences_voronoi : voronoi -> int array array -> bool array array
 (* Renvoi la liste des voisins d'un seed *)
 val adjacents_to : int -> bool array array -> int list
 
+(* Transforme un tableau de seeds en tableau d'indices *)
+val seeds_to_indices : seed array -> int list
+
 (* Transforme un color option en color *)
 val getCouleur : Graphics.color option -> Graphics.color
 

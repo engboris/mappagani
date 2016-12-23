@@ -1,16 +1,16 @@
-CAMLC=ocamlopt
-LIBS=graphics.cmxa
+CAMLC=ocamlc
+LIBS=graphics.cma
 EXEC=mappagani.exe
 
 all: $(EXEC)
 
-$(EXEC): voronoi.cmx sat_solver.cmx color_solver.cmx style.cmx graphics_plus.cmx examples.cmx mappagani.cmx
+$(EXEC): voronoi.cmo sat_solver.cmo color_solver.cmo style.cmo graphics_plus.cmo examples.cmo display.cmo mappagani.cmo
 		$(CAMLC) $(LIBS) -o $@ $^
 
-%.cmx: %.mli %.ml
+%.cmo: %.mli %.ml
 	$(CAMLC) -c $^
 
-%.cmx: %.ml
+%.cmo: %.ml
 	$(CAMLC) -c $^
 
 .PHONY: clean mrproper
@@ -18,7 +18,7 @@ $(EXEC): voronoi.cmx sat_solver.cmx color_solver.cmx style.cmx graphics_plus.cmx
 clean:
 		rm -rf *.cmi
 		rm -rf *.cmo
-		rm -rf *.cmx
+		rm -rf *.cmo
 		rm -rf *.o
 
 mrproper: clean

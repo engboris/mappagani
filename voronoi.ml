@@ -70,6 +70,13 @@ let adjacences_voronoi voronoi regions =
 
 
 (***** Autre fonction utile pour la partie logique *****)
+let seeds_to_indices seeds : int list =
+  let last_index = (Array.length seeds)-1 in
+  Array.fold_left (fun acc s ->
+    if (acc = []) then last_index::acc
+    else (List.hd acc)-1 :: acc)
+  [] seeds;;
+  
 let getCouleur (c:color option) = match c with
   | None -> 0xf0f0f0
   | Some a -> a;;

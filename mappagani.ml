@@ -5,6 +5,7 @@ open Examples;;
 module GraphicsPlus = Graphics_plus.MakeStyle(Style);;
 open GraphicsPlus;;
 open Style;;
+open Display
 
 (* _________________________________________
                 TYPES
@@ -24,7 +25,7 @@ type flags = {
   mutable graph : bool
 };;
 
-exception No_value;;
+exception NoValue;;
 
 (* _________________________________________
          PARAMETRES ET INITIALISATION
@@ -45,14 +46,14 @@ let init_flags () : flags = {
   seedmark = false;
   graph = false
 };;
- 
+
 (* ----------- Sélection de carte ----------- *)
 
 let voronoi_list = ref [v1;v2;v3;v4];;
 
 let get v = match v with
   | Some a -> a
-  | None -> raise No_value;;
+  | None -> raise NoValue;;
 
 let check_and_set_gameover state voronoi =
   match voronoi with
@@ -66,72 +67,18 @@ let check_and_set_gameover state voronoi =
 let generate_voronoi state =
   try Some (select_voronoi voronoi_list)
   with No_voronoi -> None;;
-                          
-(* _________________________________________
-            AFFICHAGE DE LA CARTE
-   _________________________________________ *)
-
-let draw_graph voronoi adj =
-  set_color black;
-  let maxX = Array.length adj - 1 in
-  let maxY = Array.length adj.(0) - 1 in
-  for i = 0 to maxX do 
-     for j = 0 to maxY do 
-        if(adj.(i).(j)) then(
-          moveto voronoi.seeds.(i).x voronoi.seeds.(i).y;
-          lineto voronoi.seeds.(j).x voronoi.seeds.(j).y)
-      done;
-  done;;
-
-let frontiere m i j =
-  let v = m.(i).(j) in
-    ((i-1 > 0) && (m.(i-1).(j) <> v))
-  || ((i+1 < Array.length m ) && (m.(i+1).(j) <> v))
-  || ((j-1 > 0) && (m.(i).(j-1) <> v))
-  || ((j+1 < Array.length m.(0)) && (m.(i).(j+1) <> v));;
-
-let draw_seedmark voronoi =
-  auto_synchronize false;
-  set_color black;
-  Array.iter (fun s -> if s.c <> None then fill_circle s.x s.y 5) voronoi.seeds;
-  synchronize ();;
-
-let draw_voronoi matrix voronoi flags =
-  auto_synchronize false;
-  set_color black;
-  let maxY = Array.length matrix.(0) in
-  Array.iteri (fun i line ->
-    Array.iteri (fun j _ ->
-      let j' = maxY-1-j in
-      if ((frontiere matrix i j')) then
-        (set_color black; plot i j')
-      else
-        set_color (getCouleur (voronoi.seeds.(matrix.(i).(j')).c)); plot i j') line) matrix;
-  if (flags.seedmark) then
-    draw_seedmark voronoi;
-  synchronize ();;
-
-let draw_regions matrix voronoi array_of_list indice =
-  auto_synchronize false;
-  let color_region = getCouleur (voronoi.seeds.(indice).c) in
-  List.iter (fun e ->
-    let i = fst e in
-    let j = snd e in
-    if((frontiere matrix i j)) then
-      (set_color black; plot i j)
-    else
-      set_color color_region; plot i j) array_of_list.(indice);
-  synchronize();;
-
-let draw_blackscreen voronoi_main liste_pixel regions =
-  List.iter (fun i ->
-    let seedtmp = {c=Some black; x=voronoi_main.seeds.(i).x; y=voronoi_main.seeds.(i).y} in
-    (voronoi_main.seeds.(i) <- seedtmp);
-    draw_regions regions voronoi_main liste_pixel i) (seeds_to_indices voronoi_main.seeds);;
-
+                        
 (* _________________________________________
                 FONCTION MAIN
    _________________________________________ *)
+
+let draw_voronoi_with_flags adj regions voronoi flags =
+  auto_synchronize false;
+  draw_voronoi regions voronoi;
+  if (flags.seedmark) then
+    (draw_seedmark voronoi; synchronize ());
+  if (flags.graph) then
+    (draw_graph voronoi adj; synchronize ());;
 
 let update_current_color c board_pos board_size =
   let rec_y = 20 in
@@ -203,7 +150,7 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel di
   let (screen_x, screen_y) = screen_size in
   let newcolor = ref None in
   let colors_set = generator_color_set voronoi_main in
-  draw_voronoi regions voronoi_main flags;
+  draw_voronoi_with_flags adj regions voronoi_main flags;
   update_current_color black (0, screen_y) map_size;
   while (!state <> Quit) do
     synchronize ();
@@ -237,13 +184,12 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel di
         draw_regions regions voronoi_main liste_pixel owner;
       synchronize ()));
     if (!state <> GameOver && e.keypressed && e.key = 'o') then
-      (flags.seedmark <- not flags.seedmark; draw_voronoi regions voronoi_main flags);
+      (flags.seedmark <- not flags.seedmark; draw_voronoi_with_flags adj regions voronoi_main flags);
     if (!state <> GameOver && e.keypressed && e.key = 'g') then
       begin
-        if flags.graph then
-          (draw_voronoi regions voronoi_main flags; flags.graph <- false)
-        else
-          (draw_graph voronoi_main adj; flags.graph <- true)
+        if flags.graph then flags.graph <- false
+        else flags.graph <- true;
+        draw_voronoi_with_flags adj regions voronoi_main flags;
       end;
     (* Requete de nouvelle carte *)
     if (!state = NewMap) then
