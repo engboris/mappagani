@@ -4,15 +4,15 @@ open Style;;
 
 let draw_graph voronoi adj =
   set_color black;
-  let maxX = Array.length adj - 1 in
-  let maxY = Array.length adj.(0) - 1 in
-  for i = 0 to maxX do 
-     for j = 0 to maxY do 
-        if(adj.(i).(j)) then(
+  Array.iteri (fun i line ->
+    Array.iteri (fun j _ ->
+      if adj.(i).(j) then
+        begin
           moveto voronoi.seeds.(i).x voronoi.seeds.(i).y;
-          lineto voronoi.seeds.(j).x voronoi.seeds.(j).y)
-      done;
-  done;;
+          lineto voronoi.seeds.(j).x voronoi.seeds.(j).y
+        end
+    ) line
+  ) adj;;
 
 let frontiere m i j =
   let v = m.(i).(j) in
@@ -46,11 +46,11 @@ let draw_regions matrix voronoi array_of_list indice =
   List.iter (fun e ->
     let i = fst e in
     let j = snd e in
-    if((frontiere matrix i j)) then
+    if ((frontiere matrix i j)) then
       (set_color black; plot i j)
     else
       set_color color_region; plot i j) array_of_list.(indice);
-  synchronize();;
+  synchronize ();;
 
 let draw_blackscreen voronoi_main liste_pixel regions =
   List.iter (fun i ->
