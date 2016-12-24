@@ -25,29 +25,12 @@ Il est aussi possible de mettre fin au jeu (considéré comme un abandon) en aff
 
 ## Comment jouer
 
-- Cliquez sur une région déjà coloriée pour absorber sa couleur puis appuyez sur une région différente de celles d'origine pour la colorier avec la couleur enregistrée. Une fois la carte complétée sans avoir deux régions côte à côte de même couleur un message de victoire s'affiche.
+- Cliquez sur une région déjà coloriée pour absorber sa couleur puis appuyez sur une région qui n'est pas une région de départ pour la colorier avec la couleur enregistrée. Une fois la carte complétée sans avoir deux régions côte à côte de même couleur un message de victoire s'affiche.
  
-- Vous pouvez supprimer le coloriage d'une région en vous positionnant dessus et en appuyant sur la touche "Espace".
+- Vous pouvez supprimer le coloriage d'une région en vous positionnant dessus et en appuyant sur la touche [Espace].
 
-- À tout moment vous pouvez choisir de recommencer votre coloriage ou d'abandonner en affichant la solution. Ces options sont disponibles sur le menu. 
+- À tout moment vous pouvez choisir de recommencer votre coloriage ou d'abandonner en affichant la solution. Ces options sont disponibles sur le menu.
 
-## Programme Extrémiste de Peaufinage (PEP)
-
-- Retirer toutes les boucles for
-- Rendre le code plus fonctionnel si possible
-- Utiliser "when" pour les conditions dans le pattern matching
-- Déclarer une interface explicite pour chaque code source .ml
-- Mettre la description des fonctions dans les interfaces
-- Jeux de test complets
-- Factoriser le code (pas de répétitions)
-- Utiliser la syntaxe let..in pour plus de clarté
-- Supprimer les espaces en trop (entre les fonctions notamment)
-- Corriger l'indentation
-- Commenter le code : en français
-- Identifiants des variables et fonctions explicites et en anglais
-- Renommage plus approprié pour tous les identifiants
-- Rendre la syntaxe plus claire en générale (saut de ligne avant les match..with)
-- Ajout d'exceptions et gestion des exceptions plus stricte
-- En-tête de commentaire générale pour tous les fichiers + description/spécification
-- Mettre des annotations de typage si cela apporte de la précision
-- Ne pas écrire de lignes trop longues (découper si besoin)
+- Touches supplémentaires :
+  + [G] pour afficher le graphe de liaison des régions
+  + [O] pour afficher le repère des régions d'origine de la carte
