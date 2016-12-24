@@ -1,7 +1,7 @@
 type seed = { c : Graphics.color option; x : int; y : int; }
 type voronoi = { dim : int * int; seeds : seed array; }
 
-exception No_voronoi
+exception NoVoronoi
                  
 (* Distance euclidienne *)
 val distance_euclide : int * int -> int * int -> int

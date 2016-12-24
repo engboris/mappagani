@@ -1,3 +1,13 @@
+(* ==================================================
+ *                 GRAPHICS PLUS
+ * ==================================================
+ *   Super-ensemble de la bibliothèque Graphics d'Ocaml
+ * permettant de gérer des boutons simples, un menu de
+ * boutons et l'affichage d'images bitmap (.bmp).
+ * Les boutons créer peuvent être stylisés et apparaître
+ * comme actifs ou inactifs pour le programme.
+ * -------------------------------------------------- *)
+
 open Graphics;;
 
 module type STYLE = sig
@@ -17,9 +27,21 @@ end
 module MakeStyle (Style : STYLE) = struct
 
 (* _________________________________________
+              AFFICHAGE GLOBAL
+   _________________________________________ *)
+  
+let set_blackscreen () =
+  auto_synchronize false;
+  set_color black;
+  let size_X = size_x () and size_Y = size_y () in
+  fill_rect 0 0 size_X size_Y;
+  synchronize ();;
+
+(* _________________________________________
                   BOUTONS
    _________________________________________ *)
 
+(* ----------- Types ----------- *)
 type button = {
   coord : (int * int);
   size : (int * int);
@@ -30,8 +52,8 @@ type button = {
 
 type menu = button list;;
 
-(* ----------- Functions ----------- *)
-let create_menu_button c s a =
+(* ----------- Fonctions ----------- *)
+let create_menu_button c s a : button =
   {coord = c;
    size = (Style.default_width_menu_buttons, Style.default_height_menu_buttons);
    text = s;
@@ -68,7 +90,7 @@ let draw_button button =
   else
     draw_button_primitive Style.button_background Style.button_inactive_textcolor button;;
 
-let hover button =
+let hover button : unit =
   if (button.active) then
     draw_button_primitive Style.button_hovercolor Style.button_textcolor button
   else
@@ -76,15 +98,15 @@ let hover button =
 
 let unhover = draw_button;;
 
-let check_hover x y buttons =
+let check_hover x y buttons : unit =
   List.iter (fun b -> if coord_in_button x y b then hover b else unhover b) buttons;;
 
-let rec check_buttons x y buttons =
+let rec check_buttons x y buttons : unit =
   List.iter (fun b -> if coord_in_button x y b then b.action ()) buttons;;
 
-let disable_button button = button.active <- false;;
+let disable_button button : unit = button.active <- false;;
 
-let enable_button button = button.active <- true;;
+let enable_button button : unit = button.active <- true;;
 
 (* _________________________________________
                   MENU
@@ -127,17 +149,6 @@ let make_picture filename (w, h) : image =
 let draw_picture filename (imageH, imageW) (screen_x, screen_y) =
   let logo = make_picture filename (imageH, imageW) in
   draw_image logo screen_x screen_y;
-  synchronize ();;
-
-(* _________________________________________
-                  FENETRE
-   _________________________________________ *)
-  
-let remove_screen () =
-  auto_synchronize false;
-  set_color black;
-  let size_X = size_x () and size_Y = size_y () in
-  fill_rect 0 0 size_X size_Y;
   synchronize ();;
 
 end

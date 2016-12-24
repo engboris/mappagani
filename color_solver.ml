@@ -1,3 +1,10 @@
+(* ==================================================
+ *                 COLOR SOLVER
+ * ==================================================
+ *   Gère la résolution du jeu c'est à dire
+ * le coloriage de la carte avec quatre couleurs. 
+ * -------------------------------------------------- *)
+
 open Graphics;;
 open Voronoi;;
 
@@ -17,9 +24,9 @@ exception NoSolution;;
 
 let add_to_all e ls = List.map (fun x -> e::[x]) ls;;
 
-let make_pairs e ls = List.map (fun x -> (e, x)) ls;;
+let make_pairs e ls : ('a * 'b) list = List.map (fun x -> (e, x)) ls;;
 
-let all_color_pairs colors_set =
+let all_color_pairs colors_set : ('a * 'b) list =
   let colors_set_copy = colors_set in
   let rec aux cs =
   match cs with
@@ -44,7 +51,7 @@ let clause_unicity seeds_indices colors_pairs acc : Sat.literal list list =
       seed_choice seed_index color_pair :: a') a seeds_indices) acc colors_pairs;;
 
 (* ----------- Adjacence ----------- *)
-let clause_adjacence seeds_indices (adj : bool array array) colors_set acc : Sat.literal list list =
+let clause_adjacence seeds_indices adj colors_set acc : Sat.literal list list =
   (* Si le seed i a une couleur c, soit i n'a pas la couleur c soit son voisin j ne l'a pas *)
   let seed_adj_exclusion i j c = [(false, (i, c)); (false, (j, c))] in
   (* La restriction s'applique a toute couleur et tout seed *)
@@ -55,6 +62,7 @@ let clause_adjacence seeds_indices (adj : bool array array) colors_set acc : Sat
         seed_adj_exclusion index neighbour color :: a'') a' colors_set) a adj_to_i) acc seeds_indices
 
 (* ----------- Presence ----------- *)
+(* Gestion des couleurs déjà présentes *)
 let clause_presence seeds acc : Sat.literal list list =
   let l = Array.length seeds in
   let rec aux i acc =
@@ -77,7 +85,7 @@ let produce_constraints seeds adj colors_set : Sat.literal list list =
                  RESOLUTION
    _________________________________________ *)
 
-let rec extract_coloring results : Variables.t list =
+let rec extract_coloring (results : Sat.literal list) : Variables.t list =
   List.fold_left (fun acc (b, v) -> if b then v::acc else acc) [] results;;
 
 let generate_coloring distanceF voronoi colors_set regions adj : (int * Graphics.color) list =
