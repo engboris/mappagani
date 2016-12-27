@@ -92,11 +92,11 @@ let generate_voronoi state : voronoi option =
            FONCTIONS AUXILIAIRES
    _________________________________________ *)
 
-let draw_voronoi_with_flags adj regions voronoi flags =
+let draw_voronoi_with_flags adj regions voronoi original flags =
   auto_synchronize false;
   draw_voronoi regions voronoi;
   if (flags.seedmark) then
-    (draw_seedmark voronoi; synchronize ());
+    (draw_seedmark original; synchronize ());
   if (flags.graph) then
     (draw_graph voronoi adj; synchronize ());;
 
@@ -174,7 +174,7 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel di
   let (screen_x, screen_y) = screen_size in
   let newcolor = ref None in
   let colors_set = generator_color_set voronoi_main in
-  draw_voronoi_with_flags adj regions voronoi_main flags;
+  draw_voronoi_with_flags adj regions voronoi_main original flags;
   update_current_color black (0, screen_y) map_size;
   while (!state <> Quit) do
     synchronize ();
@@ -187,7 +187,7 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel di
         if (coord_in_surface x_mouse y_mouse (0, 0) map_size) then
           let owner = regions.(x_mouse).(y_mouse) in
           if (!newcolor <> None && original.seeds.(owner).c = None && !state <> End) then
-  	        let seedtmp = {c=!newcolor; x=voronoi_main.seeds.(owner).x; y=voronoi_main.seeds.(owner).y} in
+  	        let seedtmp = {c=(!newcolor); x=voronoi_main.seeds.(owner).x; y=voronoi_main.seeds.(owner).y} in
   	        (voronoi_main.seeds.(owner) <- seedtmp;
             draw_regions regions voronoi_main liste_pixel owner;
             synchronize ();
@@ -212,12 +212,12 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel di
         synchronize ());
       end;
     if (!state <> GameOver && e.keypressed && e.key = 'o') then
-      (flags.seedmark <- not flags.seedmark; draw_voronoi_with_flags adj regions voronoi_main flags);
+      (flags.seedmark <- not flags.seedmark; draw_voronoi_with_flags adj regions voronoi_main original flags);
     if (!state <> GameOver && e.keypressed && e.key = 'g') then
       begin
         if flags.graph then flags.graph <- false
         else flags.graph <- true;
-        draw_voronoi_with_flags adj regions voronoi_main flags;
+        draw_voronoi_with_flags adj regions voronoi_main original flags;
       end;
     (* ----- Requete de nouvelle carte ----- *)
     if (!state = NewMap) then
@@ -259,11 +259,10 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel di
     (* ----- Victoire du joueur ----- *)
     else if (!state = Win) then
       begin
-        if (!state <> End) then
-          (draw_blackscreen voronoi_main liste_pixel regions;
-          draw_picture "images/bravo.bmp" bravo_size (map_x/2-150, map_y/2-150);
-          state := GameOver;
-          refresh_menu screen_size state voronoi_main colors_set regions liste_pixel distance_f adj);
+        (draw_blackscreen voronoi_main liste_pixel regions;
+        draw_picture "images/bravo.bmp" bravo_size (map_x/2-150, map_y/2-150);
+        state := End;
+        refresh_menu screen_size state voronoi_main colors_set regions liste_pixel distance_f adj);
       end
   done;;
 
