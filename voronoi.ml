@@ -62,12 +62,6 @@ let regions_and_pixelList fonction voronoi =
   m;
   (m, array_of_list_pixel);;
 
-let liste_pixels fonction voronoi =
-  snd (regions_and_pixelList fonction voronoi);;
-
-let regions_voronoi fonction voronoi : int array array =
-  fst (regions_and_pixelList fonction voronoi);;
-
 (* _________________________________________
              MATRICE D'ADJACENCE
    _________________________________________ *)
