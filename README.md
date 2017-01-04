@@ -25,7 +25,7 @@ Il est aussi possible de mettre fin au jeu (considéré comme un abandon) en aff
 
 ## Comment jouer
 
-- Cliquez sur une région déjà coloriée pour absorber sa couleur puis appuyez sur une région qui n'est pas une région de départ pour la colorier avec la couleur enregistrée. Une fois la carte complétée sans avoir deux régions côte à côte de même couleur un message de victoire s'affiche.
+- Cliquez sur une région déjà coloriée pour absorber sa couleur puis appuyez sur une région sans couleur pour la colorier avec la couleur enregistrée. Une fois la carte complétée sans avoir deux régions côte à côte de même couleur un message de victoire s'affiche.
  
 - Vous pouvez supprimer le coloriage d'une région en vous positionnant dessus et en appuyant sur la touche [Espace].
 
