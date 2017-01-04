@@ -159,16 +159,11 @@ let get_list_couleurs seeds : color list =
 
 let generator_color_set voronoi : color list =
   let list_color = get_list_couleurs voronoi.seeds in
-  let color_set = [yellow; magenta; cyan; red; blue; green; black; white] in
   let rec supprime_double l =
   match l with
   | [] -> []
   | h::t -> insert h (supprime_double t) in
-  let rec rajoute_couleurs l color_set = match color_set with
-    | [] -> failwith "plus de 4 couleurs"
-    | h::t when List.length l = 4 -> l
-    | h::t -> rajoute_couleurs (insert h l) t in
-  rajoute_couleurs (supprime_double list_color) color_set;;
+  supprime_double list_color;;
 
 let is_complete_voronoi voronoi : bool =
   Array.fold_left (fun acc s -> (s.c <> None) && acc) true voronoi.seeds;;
