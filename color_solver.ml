@@ -2,7 +2,7 @@
  *                 COLOR SOLVER
  * ==================================================
  *   Gère la résolution du jeu c'est à dire
- * le coloriage de la carte avec quatre couleurs. 
+ * le coloriage de la carte avec quatre couleurs.
  * -------------------------------------------------- *)
 
 open Graphics;;
