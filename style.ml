@@ -3,7 +3,7 @@ open Graphics
 (* ==================================================
  *                 		STYLE
  * ==================================================
- *   Simple définition du style du programme : c'est 
+ *   Simple définition du style du programme : c'est
  * à dire les couleurs utilisées. Ce fichier peut être
  * vu comme une extension (ou masquage) des couleurs
  * du module Graphics d'OCaml.

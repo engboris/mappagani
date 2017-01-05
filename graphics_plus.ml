@@ -29,7 +29,7 @@ module MakeStyle (Style : STYLE) = struct
 (* _________________________________________
               AFFICHAGE GLOBAL
    _________________________________________ *)
-  
+
 let set_blackscreen () =
   auto_synchronize false;
   set_color black;

@@ -30,7 +30,7 @@ type menu = button list;;
               AFFICHAGE GLOBAL
    _________________________________________ *)
 
-(* Colorie l'ensemble de la fenêtre en noir *)                                                            
+(* Colorie l'ensemble de la fenêtre en noir *)
 val set_blackscreen : unit -> unit
 
 (* _________________________________________
@@ -76,5 +76,5 @@ val enable_menu : menu -> unit
 
 (* Affiche une image à l'écran selon les coordonnées indiquées *)
 val draw_picture : string -> (int * int) -> (int * int) -> unit
-                              
+
 end
