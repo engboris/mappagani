@@ -14,7 +14,7 @@ type seed = {
 };;
 
 type voronoi = {
-  dim : int * int; 
+  dim : int * int;
   seeds : seed array
 };;
 
@@ -115,7 +115,7 @@ let seeds_to_indices seeds : int list =
     if (acc = []) then last_index::acc
     else (List.hd acc)-1 :: acc)
   [] seeds;;
-  
+
 let getCouleur (c : color option) =
   match c with
   | None -> 0xf0f0f0
@@ -130,7 +130,7 @@ let rec insert value l =
 
 let adjacents_to i adj : int list =
   let l = Array.length adj in
-  let rec aux j tab  =
+  let rec aux j tab =
     if (j >= l) then tab
     else if (adj.(i).(j)) then aux (j+1) (j::tab)
     else aux (j+1) tab in
