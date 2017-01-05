@@ -3,7 +3,7 @@
  * ==================================================
  *   Fichier principal gérant la boucle d'intéraction
  * avec l'utilisateur et définissant le jeu en lui-même
- * et son interface graphique.  
+ * et son interface graphique.
  *
  * --------------------------------------------------
  * Auteurs :
@@ -82,12 +82,12 @@ let check_and_set_gameover state voronoi : unit =
      let size_X = size_x () and size_Y = size_y () in
      draw_picture "images/jeutermine.bmp" nosolution_size (size_X/2-150, size_Y/2-150);
      (state := GameOver);
-  | Some a -> ();;  
-  
+  | Some a -> ();;
+
 let generate_voronoi state : voronoi option =
   try Some (select_voronoi voronoi_list)
   with NoVoronoi -> None;;
-                        
+
 (* _________________________________________
            FONCTIONS AUXILIAIRES
    _________________________________________ *)
@@ -241,7 +241,7 @@ let rec game voronoi_main regions map_size menu screen_size state liste_pixel di
             draw_menu new_menu;
             if (new_screen_x > 300 && new_screen_y > 300) then
               draw_picture "images/mappagani_logo.bmp" logo_size (new_screen_x-280, new_screen_y-175);
-            game new_voronoi new_regions new_voronoi.dim new_menu new_screen_size state new_liste_pixel distance_f adj flags;
+            game new_voronoi new_regions new_voronoi.dim new_menu new_screen_size state new_liste_pixel distance_f new_adj flags;
           end
         else
           check_and_set_gameover state new_voronoi
@@ -283,7 +283,7 @@ let main () =
   let (map_x, map_y) = voronoi_main.dim in
   let (screen_x, screen_y) = adapt_and_get_screen_size voronoi_main in
   let screen_size = (screen_x, screen_y) in
-  let flags = init_flags () in 
+  let flags = init_flags () in
   (* Initialisation graphique *)
   set_window_title window_title;
   open_graph (" "^(string_of_int screen_x)^"x"^(string_of_int screen_y));
