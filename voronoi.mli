@@ -32,4 +32,3 @@ val is_complete_voronoi : voronoi -> bool
 
 (* Sélection voronoi *)
 val select_voronoi : voronoi list ref -> voronoi
-  

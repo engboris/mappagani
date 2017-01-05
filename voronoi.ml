@@ -122,11 +122,7 @@ let getCouleur (c : color option) =
   | Some a -> a;;
 
 let rec insert value l =
-  match l with
-  | [] -> value::[]
-  | h::t when h = value -> h::t
-  | h::t when value < h -> value::h::t
-  | h::t -> h::(insert value t);;
+  value::(List.filter (fun e -> e <> value) l);;
 
 let adjacents_to i adj : int list =
   let l = Array.length adj in
@@ -143,21 +139,8 @@ let rec fill_seeds voronoi list_color =
     voronoi.seeds.(i) <- {c=Some c'; x=voronoi.seeds.(i).x; y=voronoi.seeds.(i).y};
     fill_seeds voronoi t;;
 
-let get_list_couleurs seeds : color list =
-  let l = Array.length seeds in
-  let rec aux i =
-    if (i >= l) then []
-    else if (seeds.(i).c <> None) then (getCouleur seeds.(i).c)::(aux (i+1))
-    else aux (i+1)
-  in aux 0;;
-
 let generator_color_set voronoi : color list =
-  let list_color = get_list_couleurs voronoi.seeds in
-  let rec supprime_double l =
-  match l with
-  | [] -> []
-  | h::t -> insert h (supprime_double t) in
-  supprime_double list_color;;
+  Array.fold_left (fun acc e -> if e.c <> None then insert (getCouleur e.c) acc else acc) [] voronoi.seeds;;
 
 let is_complete_voronoi voronoi : bool =
   Array.fold_left (fun acc s -> (s.c <> None) && acc) true voronoi.seeds;;
