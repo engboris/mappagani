@@ -11,17 +11,19 @@ Il est aussi possible de mettre fin au jeu (considéré comme un abandon) en aff
 1. Télécharger la version la plus récente de *GNU Make*
  - Linux : https://www.gnu.org/software/make/
  - Windows : http://gnuwin32.sourceforge.net/packages/make.htm (d'autres alternatives plus récentes peuvent exister)
+ 
+2. Il faut posséder la version la plus récente d'OCaml et pouvoir compiler les programmes en code natif avec la commande `ocamlopt`.
 
-2. Ouvrir un terminal (Invite de commande 'cmd' sous Windows) et déplacez vous dans le repertoire contenant les fichiers du projet 'Mappagani'.
+3. Ouvrir un terminal (Invite de commande 'cmd' sous Windows) et déplacez vous dans le repertoire contenant les fichiers du projet 'Mappagani'.
 
-3. Entrer et exécuter la commande <code>make</code>. Le programme est maintenant compilé.
+4. Entrer et exécuter la commande <code>make</code>. Le programme est maintenant compilé.
 
-4. Exécuter le programme avec <code>./mappagani.exe</code> sous *Linux* et <code>mappagani.exe</code> sous Windows.
+5. Exécuter le programme avec <code>./mappagani.exe</code> sous *Linux* et <code>mappagani.exe</code> sous Windows.
 
 **Attention** : le programme fonctionne mal sous Windows. Voici la liste des problèmes qui peuvent apparaître :
 - Pas de redimentionnement lorsqu'on demande une nouvelle carte
-- La fermeture du programme provoque une erreur
-- Le haut de la fenêtre du programme n'est pas visible
+- La fermeture du programme provoque une erreur dans certains cas
+- Le haut de la fenêtre du programme n'est pas toujours visible
 
 ## Comment jouer
 
